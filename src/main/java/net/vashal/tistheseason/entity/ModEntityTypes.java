@@ -18,13 +18,13 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<ToyRobotEntity>> TOYROBOT =
             ENTITY_TYPES.register("toyrobot",
                     () -> EntityType.Builder.of(ToyRobotEntity::new, MobCategory.MONSTER)
-                            .sized(0.4f, 1.5f)
+                            .sized(0.5f, 1f)
                             .build(new ResourceLocation(TisTheSeason.MOD_ID, "toyrobot").toString()));
 
     public static final RegistryObject<EntityType<ToySoldierEntity>> TOYSOLDIER =
             ENTITY_TYPES.register("toysoldier",
                     () -> EntityType.Builder.of(ToySoldierEntity::new, MobCategory.MONSTER)
-                            .sized(0.4f, 1.5f)
+                            .sized(0.5f, 1f)
                             .build(new ResourceLocation(TisTheSeason.MOD_ID, "toysoldier").toString()));
 
 

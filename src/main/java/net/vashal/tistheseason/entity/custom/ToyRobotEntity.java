@@ -38,10 +38,10 @@ public class ToyRobotEntity extends Monster implements IAnimatable {
 
     public static AttributeSupplier setAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 20.00)
-                .add(Attributes.ATTACK_DAMAGE, 3.0f)
+                .add(Attributes.MAX_HEALTH, 10.00)
+                .add(Attributes.ATTACK_DAMAGE, 1.0f)
                 .add(Attributes.ATTACK_SPEED, 1.0f)
-                .add(Attributes.MOVEMENT_SPEED, 0.4f).build();
+                .add(Attributes.MOVEMENT_SPEED, 0.15f).build();
     }
 
     @Override
