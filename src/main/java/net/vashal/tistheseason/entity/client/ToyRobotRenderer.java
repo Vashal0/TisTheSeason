@@ -23,12 +23,12 @@ public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
     }
 
     @Override
-    public RenderType getRenderType(ToyRobotEntity animatable, float partialTick, PoseStack poseStack,
+    public RenderType getRenderType(ToyRobotEntity livingEntity, float partialTick, PoseStack poseStack,
                                     @Nullable MultiBufferSource bufferSource,
                                     @Nullable VertexConsumer buffer, int packedLight,
                                     ResourceLocation texture) {
 
 
-        return super.getRenderType(animatable, partialTick, poseStack, bufferSource, buffer, packedLight, texture);
+        return RenderType.entityTranslucent(getTextureLocation(livingEntity));
     }
 }

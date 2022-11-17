@@ -65,13 +65,30 @@ public class ToyRobotEntity extends Monster implements IAnimatable {
 
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
+
     }
+
 
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller",
                 0, this::predicate));
+        data.addAnimationController(new AnimationController(this, "windController",
+                0, this::windPredicate));
+        data.addAnimationController(new AnimationController(this, "feetController",
+                0, this::feetPredicate));
     }
+
+    private PlayState feetPredicate(AnimationEvent event) {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.feetmovement", ILoopType.EDefaultLoopTypes.LOOP));
+        return PlayState.CONTINUE;
+    }
+
+    private PlayState windPredicate(AnimationEvent event) {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.wind", ILoopType.EDefaultLoopTypes.LOOP));
+        return PlayState.CONTINUE;
+    }
+
 
     @Override
     public AnimationFactory getFactory() {
