@@ -5,10 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -23,8 +20,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.PathFinder;
-import net.minecraftforge.fml.common.Mod;
+import net.vashal.tistheseason.entity.ModEntityTypes;
 import net.vashal.tistheseason.sounds.ModSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -39,11 +35,12 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.UUID;
 
-public class ToyRobotEntity extends TamableAnimal implements IAnimatable {
+
+public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimatable {
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public ToyRobotEntity(EntityType<? extends TamableAnimal> p_33002_, Level p_33003_) {
-        super(p_33002_, p_33003_);
+    public ToyRobotEntity(EntityType<? extends ToyRobotEntity> entityType, Level level) {
+        super(ModEntityTypes.TOYROBOT.get(), level);
     }
 
     public static AttributeSupplier setAttributes() {
@@ -54,6 +51,11 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable {
                 .add(Attributes.MOVEMENT_SPEED, 0.15f).build();
     }
 
+    public static ToyRobotEntity of(Level level, Player player) {
+        ToyRobotEntity toReturn = new ToyRobotEntity(ModEntityTypes.TOYROBOT.get(), level);
+        toReturn.tame(player);
+        return toReturn;
+    }
 
 
     @Override
@@ -125,5 +127,31 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable {
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
         return null;
+    }
+
+    @Override
+    public int getRemainingPersistentAngerTime() {
+        return 0;
+    }
+
+    @Override
+    public void setRemainingPersistentAngerTime(int pRemainingPersistentAngerTime) {
+
+    }
+
+    @Nullable
+    @Override
+    public UUID getPersistentAngerTarget() {
+        return null;
+    }
+
+    @Override
+    public void setPersistentAngerTarget(@Nullable UUID pPersistentAngerTarget) {
+
+    }
+
+    @Override
+    public void startPersistentAngerTimer() {
+
     }
 }
