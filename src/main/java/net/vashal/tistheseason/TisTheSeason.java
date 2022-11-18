@@ -15,6 +15,7 @@ import net.vashal.tistheseason.entity.ModEntityTypes;
 import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
 import net.vashal.tistheseason.items.ModItems;
+import net.vashal.tistheseason.sounds.ModSounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
@@ -35,6 +36,7 @@ public class TisTheSeason {
 
         GeckoLib.initialize();
         ModEntityTypes.register(modEventBus);
+        ModSounds.SOUNDS.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
