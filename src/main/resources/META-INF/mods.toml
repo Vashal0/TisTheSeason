@@ -29,7 +29,7 @@ displayName="Tis the Season" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-credits="Thanks to the folks behind the WinterJam 2022" #optional
+credits="Sound effects obtained from https://www.zapsplat.com" #optional
 # A text field displayed in the mod UI
 authors="Vashal and Luckrunsout" #optional
 # Display Test controls the display for your mod in the server connection screen

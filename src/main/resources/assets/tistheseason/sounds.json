@@ -1,0 +1,22 @@
+{
+  "toywalk": {
+    "category": "master",
+    "sounds": ["tistheseason:toywalk"]
+  },
+  "toydeath": {
+    "category": "master",
+    "sounds": ["tistheseason:toydeath"]
+  },
+
+  "toyhurt": {
+    "category": "master",
+    "sounds": ["tistheseason:toyhurt"]
+  },
+
+  "toyambient": {
+    "category": "master",
+    "sounds": ["tistheseason:toyambient"]
+  }
+}
+
+

@@ -19,6 +19,8 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fml.common.Mod;
+import net.vashal.tistheseason.sounds.ModSounds;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -43,6 +45,8 @@ public class ToyRobotEntity extends Monster implements IAnimatable {
                 .add(Attributes.ATTACK_SPEED, 1.0f)
                 .add(Attributes.MOVEMENT_SPEED, 0.15f).build();
     }
+
+
 
     @Override
     protected void registerGoals() {
@@ -95,17 +99,20 @@ public class ToyRobotEntity extends Monster implements IAnimatable {
         return factory;
     }
 
+
+
+
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, 0.15f, 1.0f);
+        this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15f, 1.0f);
     }
 
-    protected SoundEvent getAmbientSound() { return SoundEvents.CAT_STRAY_AMBIENT; }
+    protected SoundEvent getAmbientSound() { return ModSounds.TOYAMBIENT.get(); }
 
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return SoundEvents.DOLPHIN_HURT; }
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return ModSounds.TOYHURT.get(); }
 
-    protected SoundEvent getDeathSound() { return SoundEvents.DOLPHIN_DEATH; }
+    protected SoundEvent getDeathSound() { return ModSounds.TOYDEATH.get(); }
 
-    protected float getSoundVolume() { return 0.2f; }
+    protected float getSoundVolume() { return 0.8f; }
 
 
 }
