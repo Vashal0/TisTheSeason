@@ -18,10 +18,10 @@ public class ModEntityTypes {
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, TisTheSeason.MOD_ID);
 
     public static final RegistryObject<EntityType<ToyRobotEntity>> TOYROBOT =
-            ENTITY_TYPES.register("toyrobot",
+            ENTITY_TYPES.register(ToyRobotConstants.NAME,
                     () -> EntityType.Builder.of(ToyRobotEntity::new, MobCategory.MONSTER)
-                            .sized(0.5f, 1f)
-                            .build(new ResourceLocation(TisTheSeason.MOD_ID, "toyrobot").toString()));
+                            .sized(ToyRobotConstants.WIDTH, ToyRobotConstants.HEIGHT)
+                            .build(new ResourceLocation(TisTheSeason.MOD_ID, ToyRobotConstants.NAME).toString()));
 
     public static final RegistryObject<EntityType<ToySoldierEntity>> TOYSOLDIER =
             ENTITY_TYPES.register("toysoldier",

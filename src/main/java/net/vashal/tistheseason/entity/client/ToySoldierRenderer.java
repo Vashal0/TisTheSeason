@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
+import net.vashal.tistheseason.entity.ToySoldierConstants;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -14,12 +15,12 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class ToySoldierRenderer extends GeoEntityRenderer<ToySoldierEntity> {
     public ToySoldierRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ToySoldierModel());
-        this.shadowRadius = 0.3f;
+        this.shadowRadius = ToySoldierConstants.SHADOW_RADIUS;
     }
 
     @Override
     public ResourceLocation getTextureLocation(ToySoldierEntity instance) {
-        return new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toysoldier_texture.png");
+        return new ResourceLocation(TisTheSeason.MOD_ID, ToySoldierConstants.TEXTURE_RESOURCE);
     }
 
     @Override

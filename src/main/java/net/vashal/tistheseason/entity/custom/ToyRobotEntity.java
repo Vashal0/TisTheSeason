@@ -23,6 +23,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.entity.ModEntityTypes;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraftforge.fml.common.Mod;
+import net.vashal.tistheseason.entity.ToyRobotConstants;
 import net.vashal.tistheseason.sounds.ModSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.example.registry.SoundRegistry;
@@ -42,17 +45,20 @@ import java.util.UUID;
 public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimatable {
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
+
     public ToyRobotEntity(EntityType<? extends ToyRobotEntity> entityType, Level level) {
         super(ModEntityTypes.TOYROBOT.get(), level);
+
     }
 
 
     public static AttributeSupplier setAttributes() {
+
         return TamableAnimal.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 10.00)
-                .add(Attributes.ATTACK_DAMAGE, 1.0f)
-                .add(Attributes.ATTACK_SPEED, 1.0f)
-                .add(Attributes.MOVEMENT_SPEED, 0.45f).build();
+                .add(Attributes.MAX_HEALTH, ToyRobotConstants.MAX_HEALTH)
+                .add(Attributes.ATTACK_DAMAGE, ToyRobotConstants.ATTACK_DAMAGE)
+                .add(Attributes.ATTACK_SPEED, ToyRobotConstants.ATTACK_SPEED)
+                .add(Attributes.MOVEMENT_SPEED, ToyRobotConstants.MOVEMENT_SPEED).build();
     }
 
     public static ToyRobotEntity of(Level level, Player player) {
@@ -90,9 +96,8 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
             saveActivationStatus(false);
             setOrderedToSit(true);
         }
+
     }
-
-
 
     @Override
     protected void registerGoals() {
@@ -110,19 +115,19 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+
         if (deathTime == 0) {
             if (getActivatedStatus()) {
                 if (event.isMoving()) {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.walk", ILoopType.EDefaultLoopTypes.LOOP));
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WALK, ILoopType.EDefaultLoopTypes.LOOP));
                     return PlayState.CONTINUE;
                 }
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.idle", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_IDLE, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
         }
         return PlayState.STOP;
     }
-
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -139,6 +144,7 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         data.addAnimationController(controller);
     }
 
+
     private void soundListener(SoundKeyframeEvent<ToyRobotEntity> event) {
         ToyRobotEntity toyRobot = this;
         if (toyRobot != null) {
@@ -150,6 +156,7 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         if (deathTime > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.death", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
+
         return PlayState.CONTINUE;
     }
 
@@ -172,7 +179,7 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
     private PlayState feetPredicate(AnimationEvent event) {
         if (deathTime == 0) {
             if (getActivatedStatus()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.feetmovement", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_FEET_MOVEMENT, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
         }
@@ -180,9 +187,10 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
     }
 
     private PlayState windPredicate(AnimationEvent event) {
+
         if (deathTime == 0) {
             if (getActivatedStatus()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.wind", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WIND, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
         }
@@ -258,9 +266,8 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         }
     }
 
-
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15f, 1.0f);
+        this.playSound(SoundEvents.IRON_GOLEM_STEP, ToyRobotConstants.STEP_SOUND_VOLUME, ToyRobotConstants.STEP_SOUND_PITCH);
     }
 
     protected SoundEvent getAmbientSound() { return ModSounds.TOYAMBIENT.get(); }
@@ -269,12 +276,11 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
 
     protected SoundEvent getDeathSound() { return ModSounds.TOYDEATH.get(); }
 
-    protected float getSoundVolume() { return 0.8f; }
-
+    protected float getSoundVolume() { return ToyRobotConstants.SOUND_VOLUME; }
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
+    public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         return null;
     }
 
