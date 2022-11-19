@@ -15,6 +15,7 @@ public class ToyRobotItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         ToyRobotEntity toyRobotEntity = ToyRobotEntity.of(context.getLevel(), context.getPlayer());
         toyRobotEntity.setPos(context.getClickLocation());
+        toyRobotEntity.setTarget(context.getPlayer());
         context.getLevel().addFreshEntity(toyRobotEntity);
         context.getItemInHand().setCount(0);
         return super.useOn(context);

@@ -22,13 +22,18 @@ public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
         return new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot_texture.png");
     }
 
+    public float getDeathMaxRotation(ToyRobotEntity instance) {
+        return 0f;
+    }
+
     @Override
-    public RenderType getRenderType(ToyRobotEntity livingEntity, float partialTick, PoseStack poseStack,
+    public RenderType getRenderType(ToyRobotEntity animatable, float partialTick, PoseStack poseStack,
                                     @Nullable MultiBufferSource bufferSource,
                                     @Nullable VertexConsumer buffer, int packedLight,
                                     ResourceLocation texture) {
 
 
-        return RenderType.entityTranslucent(getTextureLocation(livingEntity));
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 }
+

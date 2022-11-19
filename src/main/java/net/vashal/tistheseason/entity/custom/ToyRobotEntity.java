@@ -1,5 +1,7 @@
 package net.vashal.tistheseason.entity.custom;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,15 +22,16 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.level.NoteBlockEvent;
 import net.vashal.tistheseason.entity.ModEntityTypes;
 import net.vashal.tistheseason.sounds.ModSounds;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.example.registry.SoundRegistry;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -69,7 +72,7 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
                 saveActivationStatus(true);
                 saveWind(getWindCount() - 9);
                 saveTickCount(600);
-                this.setNoAi(false);
+                setOrderedToSit(false);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -85,9 +88,11 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         }
         if (getActivatedTicks() == 0) {
             saveActivationStatus(false);
-            this.setNoAi(true);
+            setOrderedToSit(true);
         }
     }
+
+
 
     @Override
     protected void registerGoals() {
@@ -105,13 +110,15 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (getActivatedStatus()) {
-            if (event.isMoving()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.walk", ILoopType.EDefaultLoopTypes.LOOP));
+        if (deathTime == 0) {
+            if (getActivatedStatus()) {
+                if (event.isMoving()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.walk", ILoopType.EDefaultLoopTypes.LOOP));
+                    return PlayState.CONTINUE;
+                }
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.idle", ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.idle", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }
@@ -123,41 +130,65 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
                 0, this::predicate));
         data.addAnimationController(new AnimationController(this, "windController",
                 0, this::windPredicate));
-        data.addAnimationController(new AnimationController(this, "feetController",
-                0, this::feetPredicate));
         data.addAnimationController(new AnimationController(this, "deactivatedController",
                 0, this::deactivatedPredicate));
+        data.addAnimationController(new AnimationController(this, "deathController",
+                0, this::deathPredicate));
+        AnimationController controller = new AnimationController(this, "feetController", 20, this::feetPredicate);
+        controller.registerSoundListener(this::soundListener);
+        data.addAnimationController(controller);
+    }
+
+    private void soundListener(SoundKeyframeEvent<ToyRobotEntity> event) {
+        ToyRobotEntity toyRobot = this;
+        if (toyRobot != null) {
+            toyRobot.playSound(ModSounds.TOYWALK.get(), 1, 1);
+        }
+    }
+
+    private PlayState deathPredicate(AnimationEvent event) {
+        if (deathTime > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.death", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        }
+        return PlayState.CONTINUE;
     }
 
 
-
     public PlayState deactivatedPredicate(AnimationEvent event) {
-        String animation = "animation.toyrobot.deactivated";
-        if (!getActivatedStatus() && getWindCount() >= 0) {
-            animation = animation + getWindCount();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(animation, ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
+        if (deathTime == 0) {
+            String animation = "animation.toyrobot.deactivated";
+            if (!getActivatedStatus() && getWindCount() >= 0) {
+                animation = animation + getWindCount();
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation, ILoopType.EDefaultLoopTypes.LOOP));
+                return PlayState.CONTINUE;
+            }
         }
         return PlayState.STOP;
     }
 
 
 
+
     private PlayState feetPredicate(AnimationEvent event) {
-        if (getActivatedStatus()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.feetmovement", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
+        if (deathTime == 0) {
+            if (getActivatedStatus()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.feetmovement", ILoopType.EDefaultLoopTypes.LOOP));
+                return PlayState.CONTINUE;
+            }
         }
         return PlayState.STOP;
     }
 
     private PlayState windPredicate(AnimationEvent event) {
-        if (getActivatedStatus()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.wind", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
+        if (deathTime == 0) {
+            if (getActivatedStatus()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.wind", ILoopType.EDefaultLoopTypes.LOOP));
+                return PlayState.CONTINUE;
+            }
         }
         return PlayState.STOP;
     }
+
 
     private static final EntityDataAccessor<Integer> WIND_POSITION = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ACTIVATED_TICKS = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
@@ -218,6 +249,14 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         this.saveActivationStatus(tag.getBoolean("isActivated"));
     }
 
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 60 && !this.level.isClientSide()) {
+            this.level.broadcastEntityEvent(this, (byte) 60);
+            this.remove(Entity.RemovalReason.KILLED);
+        }
+    }
 
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
