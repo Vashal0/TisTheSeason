@@ -1915,6 +1915,326 @@
 					}
 				}
 			}
+		},
+		"animation.toyrobot.deactivated0": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -18]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated1": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -36]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated2": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -54]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated3": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -72]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated4": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -90]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated5": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -108]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated6": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -126]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated7": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -144]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated8": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -162]
+					}
+				}
+			}
+		},
+		"animation.toyrobot.deactivated9": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"body": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"greyeyes": {
+					"position": {
+						"vector": [0, 0, -1.05]
+					}
+				},
+				"neck": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.625, -0.65]
+					}
+				},
+				"windup": {
+					"rotation": {
+						"vector": [0, 0, -180]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2
