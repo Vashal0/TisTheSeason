@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraftforge.fml.common.Mod;
+import net.vashal.tistheseason.entity.ToyRobotConstants;
 import net.vashal.tistheseason.sounds.ModSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -42,19 +43,17 @@ import java.util.UUID;
 public class ToyRobotEntity extends TamableAnimal implements IAnimatable {
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public ToyRobotEntity(EntityType<? extends TamableAnimal> p_33002_, Level p_33003_) {
-        super(p_33002_, p_33003_);
+    public ToyRobotEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
+        super(entityType, level);
     }
 
     public static AttributeSupplier setAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 10.00)
-                .add(Attributes.ATTACK_DAMAGE, 1.0f)
-                .add(Attributes.ATTACK_SPEED, 1.0f)
-                .add(Attributes.MOVEMENT_SPEED, 0.15f).build();
+                .add(Attributes.MAX_HEALTH, ToyRobotConstants.MAX_HEALTH)
+                .add(Attributes.ATTACK_DAMAGE, ToyRobotConstants.ATTACK_DAMAGE)
+                .add(Attributes.ATTACK_SPEED, ToyRobotConstants.ATTACK_SPEED)
+                .add(Attributes.MOVEMENT_SPEED, ToyRobotConstants.MOVEMENT_SPEED).build();
     }
-
-
 
     @Override
     protected void registerGoals() {
@@ -69,15 +68,13 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable {
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.walk", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WALK, ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.idle", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_IDLE, ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
-
     }
-
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -90,26 +87,22 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable {
     }
 
     private PlayState feetPredicate(AnimationEvent event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.feetmovement", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_FEET_MOVEMENT, ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
     private PlayState windPredicate(AnimationEvent event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.wind", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WIND, ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
-
 
     @Override
     public AnimationFactory getFactory() {
         return factory;
     }
 
-
-
-
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15f, 1.0f);
+        this.playSound(SoundEvents.IRON_GOLEM_STEP, ToyRobotConstants.STEP_SOUND_VOLUME, ToyRobotConstants.STEP_SOUND_PITCH);
     }
 
     protected SoundEvent getAmbientSound() { return ModSounds.TOYAMBIENT.get(); }
@@ -118,12 +111,11 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable {
 
     protected SoundEvent getDeathSound() { return ModSounds.TOYDEATH.get(); }
 
-    protected float getSoundVolume() { return 0.8f; }
-
+    protected float getSoundVolume() { return ToyRobotConstants.SOUND_VOLUME; }
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
+    public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         return null;
     }
 }
