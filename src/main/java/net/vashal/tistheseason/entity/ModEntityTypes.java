@@ -1,6 +1,7 @@
 package net.vashal.tistheseason.entity;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -12,6 +13,7 @@ import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 
 public class ModEntityTypes {
+
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, TisTheSeason.MOD_ID);
 
