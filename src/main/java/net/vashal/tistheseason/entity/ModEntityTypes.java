@@ -1,7 +1,6 @@
 package net.vashal.tistheseason.entity;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,7 +18,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<ToyRobotEntity>> TOYROBOT =
             ENTITY_TYPES.register(ToyRobotConstants.NAME,
-                    () -> EntityType.Builder.of(ToyRobotEntity::new, MobCategory.MONSTER)
+                    () -> EntityType.Builder.of(ToyRobotEntity::new, MobCategory.MISC)
                             .sized(ToyRobotConstants.WIDTH, ToyRobotConstants.HEIGHT)
                             .build(new ResourceLocation(TisTheSeason.MOD_ID, ToyRobotConstants.NAME).toString()));
 
