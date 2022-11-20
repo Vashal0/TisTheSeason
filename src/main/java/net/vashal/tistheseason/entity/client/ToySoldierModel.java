@@ -2,7 +2,6 @@ package net.vashal.tistheseason.entity.client;
 
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.entity.ToySoldierConstants;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

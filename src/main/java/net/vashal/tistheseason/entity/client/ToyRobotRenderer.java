@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.entity.ToyRobotConstants;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;

@@ -1,12 +1,11 @@
 package net.vashal.tistheseason.entity.custom;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -22,23 +21,22 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.ModEntityTypes;
-import net.minecraft.world.level.pathfinder.PathFinder;
-import net.minecraftforge.fml.common.Mod;
 import net.vashal.tistheseason.entity.ToyRobotConstants;
 import net.vashal.tistheseason.sounds.ModSounds;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.example.registry.SoundRegistry;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+
 import java.util.UUID;
 
 
@@ -61,23 +59,41 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
                 .add(Attributes.MOVEMENT_SPEED, ToyRobotConstants.MOVEMENT_SPEED).build();
     }
 
-    public static ToyRobotEntity of(Level level, Player player) {
-        ToyRobotEntity toReturn = new ToyRobotEntity(ModEntityTypes.TOYROBOT.get(), level);
-        toReturn.tame(player);
-        return toReturn;
+    @Nullable
+    public static ToyRobotEntity create(Level world, double x, double y, double z) {
+        ToyRobotEntity toyRobot = ModEntityTypes.TOYROBOT.get().create(world);
+        if (toyRobot == null) {
+            return null;
+        }
+        toyRobot.setPos(x, y, z);
+        toyRobot.xo = x;
+        toyRobot.yo = y;
+        toyRobot.zo = z;
+        return toyRobot;
     }
+
+    /* I don't know what i'm doing
+
+    @NotNull
+    @Override
+    public Player getOwner() {
+        Player player = level.getPlayerByUUID(getOwnerUUID());
+        return player;
+    }
+     */
+
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player.level.isClientSide && hand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
-        if (this.isTame() && this.isOwnedBy(player)) {
+        if (this.isOwnedBy(player)) {
             if (getWindCount() < 9 && !getActivatedStatus()) {
-                this.saveWind(getWindCount() + 1);
+                this.setWind(getWindCount() + 1);
                 return InteractionResult.SUCCESS;
             } else if (getWindCount() == 9 && !getActivatedStatus()) {
-                saveActivationStatus(true);
-                saveWind(getWindCount() - 9);
-                saveTickCount(600);
+                setActivationStatus(true);
+                setWind(getWindCount() - 9);
+                setTickCount(600);
                 setOrderedToSit(false);
                 return InteractionResult.SUCCESS;
             }
@@ -85,28 +101,23 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         return super.mobInteract(player, hand);
     }
 
-
-    @Override
     public void tick() {
         super.tick();
         if (getActivatedTicks() > 0) {
-            saveTickCount(getActivatedTicks() - 1);
+            setTickCount(getActivatedTicks() - 1);
         }
         if (getActivatedTicks() == 0) {
-            saveActivationStatus(false);
-            setOrderedToSit(true);
+            this.setOrderedToSit(true);
+            setActivationStatus(false);
         }
-
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0d, 2.0f, 10.0f, false));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0d));
-        this.goalSelector.addGoal(6, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+    //  this.goalSelector.addGoal(2, new ToyRobotFollow(this, 1.0f, 4.0f, 2.0f)); I wanted to use this goal, so I don't have to force them to sit
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1, 2, 10, false));
+        this.goalSelector.addGoal(3, new FloatGoal(this));
 
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
@@ -140,23 +151,15 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         data.addAnimationController(new AnimationController(this, "deathController",
                 0, this::deathPredicate));
         AnimationController controller = new AnimationController(this, "feetController", 20, this::feetPredicate);
-        controller.registerSoundListener(this::soundListener);
         data.addAnimationController(controller);
     }
 
 
-    private void soundListener(SoundKeyframeEvent<ToyRobotEntity> event) {
-        ToyRobotEntity toyRobot = this;
-        if (toyRobot != null) {
-            toyRobot.playSound(ModSounds.TOYWALK.get(), 1, 1);
-        }
-    }
 
     private PlayState deathPredicate(AnimationEvent event) {
         if (deathTime > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.death", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
-
         return PlayState.CONTINUE;
     }
 
@@ -215,7 +218,7 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         this.entityData.define(IS_ACTIVATED, false);
     }
 
-    private void saveWind(int position) {
+    private void setWind(int position) {
         this.entityData.set(WIND_POSITION, position);
     }
 
@@ -224,11 +227,11 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         return windCount;
     }
 
-    private void saveActivationStatus(boolean bool) {
+    private void setActivationStatus(boolean bool) {
         this.entityData.set(IS_ACTIVATED, bool);
     }
 
-    private boolean getActivatedStatus() {
+    public boolean getActivatedStatus() {
         return this.entityData.get(IS_ACTIVATED);
     }
 
@@ -237,7 +240,7 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
         return tickCount;
     }
 
-    private void saveTickCount(int count) {
+    private void setTickCount(int count) {
         this.entityData.set(ACTIVATED_TICKS, count);
     }
 
@@ -252,9 +255,9 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.saveWind(tag.getInt("WindPosition"));
-        this.saveTickCount(tag.getInt("ActivatedTicks"));
-        this.saveActivationStatus(tag.getBoolean("isActivated"));
+        this.setWind(tag.getInt("WindPosition"));
+        this.setTickCount(tag.getInt("ActivatedTicks"));
+        this.setActivationStatus(tag.getBoolean("isActivated"));
     }
 
     @Override
@@ -313,4 +316,5 @@ public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimat
     public boolean canBeLeashed(Player player) {
         return true;
     }
+
 }

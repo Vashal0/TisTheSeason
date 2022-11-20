@@ -1,5 +1,6 @@
 package net.vashal.tistheseason;
 
+import com.mojang.bridge.game.GameVersion;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -38,6 +39,7 @@ public class TisTheSeason {
         ModEntityTypes.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
     }
+
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
