@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -29,11 +31,11 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class ToySoldierEntity extends Monster implements IAnimatable {
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class ToySoldierEntity extends WindUpToys implements IAnimatable {
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public ToySoldierEntity(EntityType<? extends Monster> p_33002_, Level p_33003_) {
-        super(p_33002_, p_33003_);
+    public ToySoldierEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
+        super(entityType, level);
     }
 
     public static AttributeSupplier setAttributes() {
@@ -74,13 +76,13 @@ public class ToySoldierEntity extends Monster implements IAnimatable {
         return factory;
     }
 
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState blockIn) {
         this.playSound(SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, 0.15f, 1.0f);
     }
 
     protected SoundEvent getAmbientSound() { return SoundEvents.CAT_STRAY_AMBIENT; }
 
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return SoundEvents.DOLPHIN_HURT; }
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) { return SoundEvents.DOLPHIN_HURT; }
 
     protected SoundEvent getDeathSound() { return SoundEvents.DOLPHIN_DEATH; }
 

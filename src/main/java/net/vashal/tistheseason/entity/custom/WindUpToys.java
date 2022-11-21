@@ -12,34 +12,65 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
+import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
 import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-
-import java.util.UUID;
-
-public abstract class WindUpToys extends TamableAnimal implements NeutralMob, IAnimatable {
+public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimationTickable {
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public WindUpToys(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
 
     }
 
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+
+    @Nullable
+    public static WindUpToys create(Level world, double x, double y, double z) {
+        WindUpToys toys = TTSEntityTypes.TOYROBOT.get().create(world);
+        if (toys == null) {
+            return null;
+        }
+        toys.setPos(x, y, z);
+        toys.xo = x;
+        toys.yo = y;
+        toys.zo = z;
+        return toys;
+    }
+
     private static final EntityDataAccessor<Integer> WIND_POSITION = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ACTIVATED_TICKS = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> IS_ACTIVATED = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Nullable
+    @Override
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel pLevel, @NotNull AgeableMob pOtherParent) {
+        return null;
+    }
 
     @Override
     protected void defineSynchedData() {
@@ -50,7 +81,7 @@ public abstract class WindUpToys extends TamableAnimal implements NeutralMob, IA
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("WindPosition", this.getWindCount());
         tag.putInt("ActivatedTicks", this.getActivatedTicks());
@@ -58,7 +89,7 @@ public abstract class WindUpToys extends TamableAnimal implements NeutralMob, IA
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setWind(tag.getInt("WindPosition"));
         this.setTickCount(tag.getInt("ActivatedTicks"));
@@ -137,13 +168,69 @@ public abstract class WindUpToys extends TamableAnimal implements NeutralMob, IA
         }
     }
 
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new ToyMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(2, new ToyRobotFollow(this, 1.0f, 2.0f, 12.0f));
+        this.goalSelector.addGoal(3, new FloatGoal(this));
+
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+
+        super.registerGoals();
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        AnimationController<WindUpToys> windController = new AnimationController<>(this, "windController", 0, this::windPredicate); //spins the wind when active
+        AnimationController<WindUpToys> feetController = new AnimationController<>(this, "feetController", 0, this::feetPredicate); //moves the feet when active
+        AnimationController<WindUpToys> deactivatedController = new AnimationController<>(this, "deactivatedController", 0, this::deactivatedPredicate);
+
+        data.addAnimationController(windController);
+        data.addAnimationController(feetController);
+        data.addAnimationController(deactivatedController); //10 frames of different wind positions while 'deactivated'
+    }
+
+    private <E extends IAnimatable> PlayState windPredicate(AnimationEvent<E> event) {
+        if (deathTime == 0) {
+            if (getActivatedStatus()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WIND, ILoopType.EDefaultLoopTypes.LOOP));
+                return PlayState.CONTINUE;
+            }
+        }
+        return PlayState.STOP;
+    }
+
+    private <E extends IAnimatable> PlayState feetPredicate(AnimationEvent<E> event) {
+        if (deathTime == 0) {
+            if (getActivatedStatus()) {
+                this.playSound(TTSSounds.TOY_WALK.get());
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_FEET_MOVEMENT, ILoopType.EDefaultLoopTypes.LOOP));
+                return PlayState.CONTINUE;
+            }
+        }
+        return PlayState.STOP;
+    }
+
+    private <E extends IAnimatable> PlayState deactivatedPredicate(AnimationEvent<E> event) {
+        if (deathTime == 0) {
+            String animation = "animation.toyrobot.deactivated";
+            if (!getActivatedStatus() && getWindCount() >= 0) {
+                animation += getWindCount();
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation, ILoopType.EDefaultLoopTypes.LOOP));
+                return PlayState.CONTINUE;
+            }
+        }
+        return PlayState.STOP;
+    }
+
     //sounds without a special use case
 
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState blockIn) {
         this.playSound(SoundEvents.ANVIL_STEP, ToyRobotConstants.STEP_SOUND_VOLUME, ToyRobotConstants.STEP_SOUND_PITCH);
     }
 
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return TTSSounds.TOY_HURT.get();
     }
 
@@ -155,42 +242,27 @@ public abstract class WindUpToys extends TamableAnimal implements NeutralMob, IA
         return ToyRobotConstants.SOUND_VOLUME;
     }
 
-    //stuff I haven't messed with yet
-
-    @Nullable
-    @Override
-    public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
-        return null;
-    }
-
-    @Override
-    public int getRemainingPersistentAngerTime() {
-        return 0;
-    }
-
-    @Override
-    public void setRemainingPersistentAngerTime(int pRemainingPersistentAngerTime) {
-
-    }
-
-    @Nullable
-    @Override
-    public UUID getPersistentAngerTarget() {
-        return null;
-    }
-
-    @Override
-    public void setPersistentAngerTarget(@Nullable UUID pPersistentAngerTarget) {
-
-    }
-
-    @Override
-    public void startPersistentAngerTimer() {
-
-    }
-
-    public boolean canBeLeashed(Player player) {
+    public boolean canBeLeashed(@NotNull Player player) {
         return true;
     }
 
+    @Override
+    public int tickTimer() {
+        return tickCount;
+    }
+
+    public class ToyMeleeGoal extends MeleeAttackGoal {
+
+        public ToyMeleeGoal(PathfinderMob mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
+            super(mob, speedModifier, followingTargetEvenIfNotSeen);
+        }
+
+        @Override
+        public boolean canUse() {
+            if (!getActivatedStatus()) {
+                return false;
+            }
+            return super.canUse();
+        }
+    }
 }
