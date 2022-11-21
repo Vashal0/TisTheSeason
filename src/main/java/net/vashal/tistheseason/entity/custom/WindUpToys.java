@@ -251,6 +251,8 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         return tickCount;
     }
 
+
+    //prevents attacks while deactivated
     public class ToyMeleeGoal extends MeleeAttackGoal {
 
         public ToyMeleeGoal(PathfinderMob mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
@@ -263,6 +265,14 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
                 return false;
             }
             return super.canUse();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (!getActivatedStatus()) {
+                return false;
+            }
+            return super.canContinueToUse();
         }
     }
 }

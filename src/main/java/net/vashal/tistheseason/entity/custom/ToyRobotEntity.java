@@ -10,6 +10,7 @@ import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -70,25 +71,29 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
     public void registerControllers(AnimationData data) {
         super.registerControllers(data);
         AnimationController<ToyRobotEntity> idleController = new AnimationController<>(this, "idleController", 0, this::idlePredicate);
+        AnimationController<ToyRobotEntity> deathController = new AnimationController<>(this, "deathController", 0, this::deathPredicate);
+        AnimationController<ToyRobotEntity> meleeController = new AnimationController<>(this, "meleeController", 0, this::meleePredicate);
         idleController.registerSoundListener(this::soundListenerIdle);
         data.addAnimationController(idleController); //plays both the 'walking' and idle animations currently
-        AnimationController<ToyRobotEntity> deathController = new AnimationController<>(this, "deathController", 0, this::deathPredicate);
-        data.addAnimationController(deathController); //plays a death timer
+        data.addAnimationController(deathController); //plays a death animation
+        data.addAnimationController(meleeController); //plays a melee attack animation
     }
 
     private <E extends IAnimatable> PlayState idlePredicate(AnimationEvent<E> event) {
         if (deathTime == 0) {
-            if (getActivatedStatus()) {
+            if (getActivatedStatus() && !this.isAggressive()) {
                 if (event.isMoving()) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WALK, ILoopType.EDefaultLoopTypes.LOOP));
                     return PlayState.CONTINUE;
                 }
+
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_IDLE, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
         }
         return PlayState.STOP;
     }
+
 
     private void soundListenerIdle(SoundKeyframeEvent<ToyRobotEntity> event) {
         ToyRobotEntity robot = event.getEntity();
@@ -102,6 +107,15 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
     private <E extends IAnimatable> PlayState deathPredicate(AnimationEvent<E> event) {
         if (deathTime > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.death", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    private <E extends IAnimatable> PlayState meleePredicate(AnimationEvent<E> event) {
+        if (this.swinging && deathTime == 0 && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
+            event.getController().markNeedsReload();
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            this.swinging = false;
         }
         return PlayState.CONTINUE;
     }
