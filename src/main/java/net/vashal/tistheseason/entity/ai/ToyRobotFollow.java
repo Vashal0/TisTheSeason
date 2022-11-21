@@ -3,7 +3,7 @@ package net.vashal.tistheseason.entity.ai;
 import net.minecraft.world.entity.player.Player;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 
-/*
+
 public class ToyRobotFollow extends ToyRobotGoal {
 
     private Player owner;
@@ -18,18 +18,18 @@ public class ToyRobotFollow extends ToyRobotGoal {
 
     @Override
     public boolean canUse() {
-        Player player = toyRobot.getOwner();
-        if (player == null || player.isSpectator()) {
-            return false;
-        } else if (toyRobot.level.dimension() != player.level.dimension()) {
-            return false;
-        } else if (toyRobot.distanceToSqr(owner) < (minDistance * minDistance)) {
-            return false;
-        } else if (!toyRobot.getActivatedStatus()) {
+        if (toyRobot.getOwner() instanceof Player) {
+            this.owner = (Player) toyRobot.getOwner();
+            if (this.owner == null || this.owner.isSpectator()) {
+                return false;
+            } else if (toyRobot.level.dimension() != this.owner.level.dimension()) {
+                return false;
+            } else if (toyRobot.distanceToSqr(this.owner) < (minDistance * minDistance)) {
+                return false;
+            } else return toyRobot.getActivatedStatus();
+        } else {
             return false;
         }
-        owner = player;
-        return true;
     }
 
     public boolean canContinueToUse() {
@@ -49,4 +49,3 @@ public class ToyRobotFollow extends ToyRobotGoal {
     }
 }
 
- */

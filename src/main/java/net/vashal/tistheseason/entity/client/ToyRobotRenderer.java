@@ -11,8 +11,8 @@ import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-import static net.vashal.tistheseason.entity.ToyRobotConstants.SHADOW_RADIUS;
-import static net.vashal.tistheseason.entity.ToyRobotConstants.TEXTURE_RESOURCE;
+import static net.vashal.tistheseason.constants.ToyRobotConstants.SHADOW_RADIUS;
+import static net.vashal.tistheseason.constants.ToyRobotConstants.TEXTURE_RESOURCE;
 
 public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
     public ToyRobotRenderer(EntityRendererProvider.Context renderManager) {

@@ -1,8 +1,6 @@
 package net.vashal.tistheseason;
 
-import com.mojang.bridge.game.GameVersion;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -12,11 +10,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.vashal.tistheseason.entity.ModEntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
-import net.vashal.tistheseason.items.ModItems;
-import net.vashal.tistheseason.sounds.ModSounds;
+import net.vashal.tistheseason.items.TTSItems;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
@@ -29,15 +27,15 @@ public class TisTheSeason {
     public TisTheSeason() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModItems.register(modEventBus);
+        TTSItems.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
         GeckoLib.initialize();
-        ModEntityTypes.register(modEventBus);
-        ModSounds.SOUNDS.register(modEventBus);
+        TTSEntityTypes.register(modEventBus);
+        TTSSounds.SOUNDS.register(modEventBus);
     }
 
 
@@ -51,8 +49,8 @@ public class TisTheSeason {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
 
-            EntityRenderers.register(ModEntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
-            EntityRenderers.register(ModEntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
+            EntityRenderers.register(TTSEntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
+            EntityRenderers.register(TTSEntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
 
         }
     }

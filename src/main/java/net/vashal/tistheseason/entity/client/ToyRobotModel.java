@@ -4,8 +4,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 
-import static net.vashal.tistheseason.entity.ToyRobotConstants.*;
+import static net.vashal.tistheseason.constants.ToyRobotConstants.*;
 
 public class ToyRobotModel extends AnimatedGeoModel<ToyRobotEntity> {
     @Override

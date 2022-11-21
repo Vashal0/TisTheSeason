@@ -16,6 +16,16 @@
   "toyambient": {
     "category": "master",
     "sounds": ["tistheseason:toyambient"]
+  },
+
+  "windturn": {
+    "category": "master",
+    "sounds": ["tistheseason:windturn"]
+  },
+
+  "toygears": {
+    "category": "master",
+    "sounds": ["tistheseason:toygears"]
   }
 }
 

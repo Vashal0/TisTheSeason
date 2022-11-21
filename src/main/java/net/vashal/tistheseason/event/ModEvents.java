@@ -1,7 +1,7 @@
 package net.vashal.tistheseason.event;
 
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.entity.ModEntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,8 +18,8 @@ public class ModEvents {
         public static class ModEventBusEvents {
             @SubscribeEvent
             public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
-                event.put(ModEntityTypes.TOYROBOT.get(), ToyRobotEntity.setAttributes());
-                event.put(ModEntityTypes.TOYSOLDIER.get(), ToySoldierEntity.setAttributes());
+                event.put(TTSEntityTypes.TOYROBOT.get(), ToyRobotEntity.setAttributes());
+                event.put(TTSEntityTypes.TOYSOLDIER.get(), ToySoldierEntity.setAttributes());
             }
         }
     }

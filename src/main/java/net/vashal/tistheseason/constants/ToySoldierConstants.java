@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.entity;
+package net.vashal.tistheseason.constants;
 
 public final class ToySoldierConstants {
 

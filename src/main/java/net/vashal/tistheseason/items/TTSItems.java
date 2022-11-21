@@ -7,15 +7,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.items.custom.ToyRobotItem;
-import net.vashal.tistheseason.entity.ToyRobotConstants;
+import net.vashal.tistheseason.constants.ToyRobotConstants;
+import net.vashal.tistheseason.utils.TTSCreativeModeTab;
 
 
-public class ModItems {
+public class TTSItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, TisTheSeason.MOD_ID);
 
     public static final RegistryObject<Item> TOYROBOT = ITEMS.register(ToyRobotConstants.NAME,
-            () -> new ToyRobotItem(new Item.Properties().tab(ModCreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+            () -> new ToyRobotItem(new Item.Properties().tab(TTSCreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
