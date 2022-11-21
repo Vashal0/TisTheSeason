@@ -11,8 +11,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
-
-import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public class ToyRobotItem extends Item {
 
@@ -21,7 +20,7 @@ public class ToyRobotItem extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
         if (player == null) {
             return InteractionResult.PASS;
@@ -37,6 +36,7 @@ public class ToyRobotItem extends Item {
             }
 
             toyRobot.tame(player);
+            toyRobot.setOwnerUUID(player.getUUID());
             level.addFreshEntity(toyRobot);
             level.gameEvent(player, GameEvent.ENTITY_PLACE, toyRobot.blockPosition());
             stack.shrink(1);

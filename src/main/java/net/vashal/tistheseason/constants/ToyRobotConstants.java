@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.entity;
+package net.vashal.tistheseason.constants;
 
 /*
  * Constants for Toy Robot classes
@@ -31,6 +31,6 @@ public final class ToyRobotConstants {
 
     //Sound constants
     public static final float SOUND_VOLUME = 0.8f;
-    public static final float STEP_SOUND_VOLUME = 0.15f;
-    public static final float STEP_SOUND_PITCH = 1.0f;
+    public static final float STEP_SOUND_VOLUME = 0.1f;
+    public static final float STEP_SOUND_PITCH = 1.5f;
 }

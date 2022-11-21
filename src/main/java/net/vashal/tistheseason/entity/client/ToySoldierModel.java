@@ -5,7 +5,7 @@ import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-import static net.vashal.tistheseason.entity.ToySoldierConstants.*;
+import static net.vashal.tistheseason.constants.ToySoldierConstants.*;
 
 public class ToySoldierModel extends AnimatedGeoModel<ToySoldierEntity> {
     @Override
