@@ -41,6 +41,20 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.UUID;
 
+//TODO add a new melee attack goal so he doesn't move while deactivated
+//TODO add melee attack animation
+//TODO find a way to split parts of the model for 'upgrading'
+//TODO think of uses for the robot for the player to play with
+//TODO add 3-4 variant colors
+
+//TODO placing this here for now but it's not robot specific, add toy workbench block which allows ability to 'customize' toys
+//TODO generify the toys so we can more easily add new toys
+//TODO add new toys
+//TODO clean up creative tab
+//TODO refactor
+//TODO look into how to add custom projectiles
+//TODO Add other holiday items from the google doc which are not toys, especially the hobby horse
+//TODO better understand curio integration
 
 public class ToyRobotEntity extends TamableAnimal implements NeutralMob, IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
