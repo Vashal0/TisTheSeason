@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TisTheSeason.MOD_ID)
@@ -36,7 +37,8 @@ public class TisTheSeason {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BELT.getMessageBuilder().build());
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                () -> SlotTypePreset.BELT.getMessageBuilder().build());
 
         GeckoLib.initialize();
         TTS_EntityTypes.register(modEventBus);
@@ -56,7 +58,6 @@ public class TisTheSeason {
 
             EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
-
         }
     }
 }
