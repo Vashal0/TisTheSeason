@@ -11,7 +11,7 @@ public final class ToyRobotConstants {
 
     //Entity constants
     public static final String MODEL_RESOURCE = "geo/toyrobot.geo.json";
-    public static final String TEXTURE_RESOURCE = "textures/entity/toyrobot_texture.png";
+    public static final String TEXTURE_RESOURCE = "textures/entity/toyrobotdefault.png";
     public static final String ANIMATION_RESOURCE = "animations/toyrobot.animation.json";
     public static final float SHADOW_RADIUS = 0.3f;
 

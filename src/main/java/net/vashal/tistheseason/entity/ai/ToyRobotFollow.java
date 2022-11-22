@@ -1,7 +1,7 @@
 package net.vashal.tistheseason.entity.ai;
 
 import net.minecraft.world.entity.player.Player;
-import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
+import net.vashal.tistheseason.entity.custom.WindUpToys;
 
 
 public class ToyRobotFollow extends ToyRobotGoal {
@@ -10,31 +10,31 @@ public class ToyRobotFollow extends ToyRobotGoal {
     private final float maxDistance;
     private final float minDistance;
 
-    public ToyRobotFollow(ToyRobotEntity robotToy, float speed, float min, float max) {
-        super(robotToy, speed);
+    public ToyRobotFollow(WindUpToys toys, float speed, float min, float max) {
+        super(toys, speed);
         minDistance = min;
         maxDistance = max;
     }
 
     @Override
     public boolean canUse() {
-        if (toyRobot.getOwner() instanceof Player) {
-            this.owner = (Player) toyRobot.getOwner();
+        if (toys.getOwner() instanceof Player) {
+            this.owner = (Player) toys.getOwner();
             if (this.owner == null || this.owner.isSpectator()) {
                 return false;
-            } else if (toyRobot.level.dimension() != this.owner.level.dimension()) {
+            } else if (toys.level.dimension() != this.owner.level.dimension()) {
                 return false;
-            } else if (toyRobot.distanceToSqr(this.owner) < (minDistance * minDistance)) {
+            } else if (toys.distanceToSqr(this.owner) < (minDistance * minDistance)) {
                 return false;
-            } else return toyRobot.getActivatedStatus();
+            } else return toys.getActivatedStatus();
         } else {
             return false;
         }
     }
 
     public boolean canContinueToUse() {
-        return !getNavigator().isDone() && toyRobot.distanceToSqr(owner) > (maxDistance * maxDistance)
-                && toyRobot.getActivatedStatus() && owner.level.dimension() == toyRobot.level.dimension();
+        return !getNavigator().isDone() && toys.distanceToSqr(owner) > (maxDistance * maxDistance)
+                && toys.getActivatedStatus() && owner.level.dimension() == toys.level.dimension();
     }
 
     @Override
