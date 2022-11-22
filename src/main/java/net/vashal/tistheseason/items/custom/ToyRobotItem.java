@@ -53,7 +53,7 @@ public class ToyRobotItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag isAdvanced) {
+    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
         if(Screen.hasShiftDown()) {
             components.add(Component.literal("Wind up your toy robot with right clicks after placing!").withStyle(ChatFormatting.DARK_RED));
         } else {
