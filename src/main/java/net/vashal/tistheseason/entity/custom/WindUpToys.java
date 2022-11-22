@@ -1,5 +1,6 @@
 package net.vashal.tistheseason.entity.custom;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -8,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -18,10 +20,12 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
+import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
 import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,9 +66,10 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         return toys;
     }
 
-    private static final EntityDataAccessor<Integer> WIND_POSITION = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ACTIVATED_TICKS = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> IS_ACTIVATED = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> WIND_POSITION = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ACTIVATED_TICKS = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> IS_ACTIVATED = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.INT);
 
     @Nullable
     @Override
@@ -78,6 +83,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         this.entityData.define(WIND_POSITION, 0);
         this.entityData.define(ACTIVATED_TICKS, 0);
         this.entityData.define(IS_ACTIVATED, false);
+        this.entityData.define(DATA_ID_TYPE_VARIANT, 0);
     }
 
     @Override
@@ -86,6 +92,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         tag.putInt("WindPosition", this.getWindCount());
         tag.putInt("ActivatedTicks", this.getActivatedTicks());
         tag.putBoolean("isActivated", this.getActivatedStatus());
+        tag.putInt("Variant", this.getTypeVariant());
     }
 
     @Override
@@ -94,6 +101,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         this.setWind(tag.getInt("WindPosition"));
         this.setTickCount(tag.getInt("ActivatedTicks"));
         this.setActivationStatus(tag.getBoolean("isActivated"));
+        this.entityData.set(DATA_ID_TYPE_VARIANT, tag.getInt("Variant"));
     }
 
     public void setWind(int position) {
@@ -124,6 +132,9 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) { //every right click turns the wind on the back, after 10 the toy becomes active for 30 seconds
         if (player.level.isClientSide && hand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
+        if (this.getOwner() == null) {
+            this.tame(player);
+        }
         if (this.isOwnedBy(player)) {
             if (getWindCount() < 9 && !getActivatedStatus()) {
                 this.setWind(getWindCount() + 1);
@@ -275,4 +286,27 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
             return super.canContinueToUse();
         }
     }
+
+    // Variant stuff
+
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor levelAccessor, @NotNull DifficultyInstance instance,
+                                        @NotNull MobSpawnType type, @Nullable SpawnGroupData data,
+                                        @Nullable CompoundTag tag) {
+        ToyRobotVariant variant = Util.getRandom(ToyRobotVariant.values(), this.random);
+        setVariant(variant);
+        return super.finalizeSpawn(levelAccessor, instance, type, data, tag);
+    }
+
+    public ToyRobotVariant getVariant() {
+        return ToyRobotVariant.byId(this.getTypeVariant() & 255);
+    }
+
+    private int getTypeVariant() {
+        return this.entityData.get(DATA_ID_TYPE_VARIANT);
+    }
+
+    private void setVariant(ToyRobotVariant variant) {
+        this.entityData.set(DATA_ID_TYPE_VARIANT, variant.getId() & 255);
+    }
+
 }
