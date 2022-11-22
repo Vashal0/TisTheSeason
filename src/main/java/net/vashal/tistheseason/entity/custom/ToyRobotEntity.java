@@ -7,8 +7,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
-import net.vashal.tistheseason.entity.TTSEntityTypes;
-import net.vashal.tistheseason.sounds.TTSSounds;
+import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -50,7 +50,7 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
 
     @Nullable
     public static ToyRobotEntity create(Level world, double x, double y, double z) {
-        ToyRobotEntity toyRobot = TTSEntityTypes.TOYROBOT.get().create(world);
+        ToyRobotEntity toyRobot = TTS_EntityTypes.TOYROBOT.get().create(world);
         if (toyRobot == null) {
             return null;
         }
@@ -65,7 +65,7 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
     public void playModSounds() {
         super.playModSounds();
         if (tickCount % 512 == 0) {
-            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_GEARS.get(), this.getSoundSource(), 0.6f, 1.2f, true);
+            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_GEARS.get(), this.getSoundSource(), 0.6f, 1.2f, true);
         }
     }
 
@@ -100,7 +100,7 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
         ToyRobotEntity robot = event.getEntity();
         if (this.level.isClientSide()) {
             if (event.sound.equals("toyambient")) {
-                this.level.playLocalSound(robot.getX(), robot.getY(), robot.getZ(), TTSSounds.TOY_AMBIENT.get(), robot.getSoundSource(), 1f, 1f, true);
+                this.level.playLocalSound(robot.getX(), robot.getY(), robot.getZ(), TTS_Sounds.TOY_AMBIENT.get(), robot.getSoundSource(), 1f, 1f, true);
             }
         }
     }

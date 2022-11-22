@@ -12,7 +12,7 @@ import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 
-public class TTSEntityTypes {
+public class TTS_EntityTypes {
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, TisTheSeason.MOD_ID);

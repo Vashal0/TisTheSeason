@@ -6,17 +6,20 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.vashal.tistheseason.entity.TTSEntityTypes;
+import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
-import net.vashal.tistheseason.items.TTSItems;
-import net.vashal.tistheseason.sounds.TTSSounds;
+import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TisTheSeason.MOD_ID)
@@ -27,15 +30,17 @@ public class TisTheSeason {
     public TisTheSeason() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        TTSItems.register(modEventBus);
+        TTS_Items.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BELT.getMessageBuilder().build());
+
         GeckoLib.initialize();
-        TTSEntityTypes.register(modEventBus);
-        TTSSounds.SOUNDS.register(modEventBus);
+        TTS_EntityTypes.register(modEventBus);
+        TTS_Sounds.SOUNDS.register(modEventBus);
     }
 
 
@@ -49,8 +54,8 @@ public class TisTheSeason {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
 
-            EntityRenderers.register(TTSEntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
-            EntityRenderers.register(TTSEntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
+            EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
+            EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
 
         }
     }
