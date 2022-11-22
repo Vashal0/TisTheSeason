@@ -23,10 +23,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
-import net.vashal.tistheseason.entity.TTSEntityTypes;
+import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
-import net.vashal.tistheseason.sounds.TTSSounds;
+import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -55,7 +55,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
 
     @Nullable
     public static WindUpToys create(Level world, double x, double y, double z) {
-        WindUpToys toys = TTSEntityTypes.TOYROBOT.get().create(world);
+        WindUpToys toys = TTS_EntityTypes.TOYROBOT.get().create(world);
         if (toys == null) {
             return null;
         }
@@ -138,7 +138,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         if (this.isOwnedBy(player)) {
             if (getWindCount() < 9 && !getActivatedStatus()) {
                 this.setWind(getWindCount() + 1);
-                playSound(TTSSounds.WIND_TURN.get());
+                playSound(TTS_Sounds.WIND_TURN.get());
                 return InteractionResult.SUCCESS;
             } else if (getWindCount() == 9 && !getActivatedStatus()) {
                 setActivationStatus(true);
@@ -174,7 +174,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
     public void playModSounds() { //plays the walking sound much faster than normal
         if (this.level.isClientSide() && deathTime == 0) {
             if (tickCount % 3 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
             }
         }
     }
@@ -215,7 +215,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
     private <E extends IAnimatable> PlayState feetPredicate(AnimationEvent<E> event) {
         if (deathTime == 0) {
             if (getActivatedStatus()) {
-                this.playSound(TTSSounds.TOY_WALK.get());
+                this.playSound(TTS_Sounds.TOY_WALK.get());
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_FEET_MOVEMENT, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
@@ -242,11 +242,11 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTSSounds.TOY_HURT.get();
+        return TTS_Sounds.TOY_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTSSounds.TOY_DEATH.get();
+        return TTS_Sounds.TOY_DEATH.get();
     }
 
     protected float getSoundVolume() {
