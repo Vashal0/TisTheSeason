@@ -18,6 +18,7 @@ import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
 import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.recipe.TTS_Recipes;
 import net.vashal.tistheseason.screen.TTS_MenuTypes;
 import net.vashal.tistheseason.screen.ToyWorkbenchScreen;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
@@ -50,6 +51,7 @@ public class TisTheSeason {
         TTS_Sounds.SOUNDS.register(modEventBus);
         TTS_BlockEntities.register(modEventBus);
         TTS_MenuTypes.register(modEventBus);
+        TTS_Recipes.register(modEventBus);
     }
 
 

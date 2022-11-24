@@ -1,0 +1,11 @@
+{
+  "type": "tistheseason:toy_making",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "output": {
+    "item": "tistheseason:toyrobot"
+  }
+}

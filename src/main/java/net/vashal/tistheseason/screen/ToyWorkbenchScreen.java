@@ -37,7 +37,7 @@ public class ToyWorkbenchScreen extends AbstractContainerScreen<ToyWorkbenchMenu
 
     private void renderProgressArrow(PoseStack poseStack, int x, int y) {
         if(menu.isCrafting()) {
-            blit(poseStack, x + 83, y + 45, 176, 0, menu.getScaledProgress(), 26);
+            blit(poseStack, x + 83, y + 45, 176, 1, menu.getScaledProgress(), 26);
         }
     }
 

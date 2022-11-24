@@ -24,9 +24,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.recipe.ToyWorkbenchRecipe;
 import net.vashal.tistheseason.screen.ToyWorkbenchMenu;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler =  new ItemStackHandler(4) {
@@ -40,7 +43,7 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
 
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 78;
+    private int maxProgress = 80;
 
     public ToyWorkbenchBlockEntity(BlockPos pos, BlockState state) {
         super(TTS_BlockEntities.TOY_WORKBENCH.get(), pos, state);
@@ -106,6 +109,7 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
+        nbt.putInt("toy_workbench.progress", this.progress);
         super.saveAdditional(nbt);
     }
 
@@ -113,6 +117,7 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
     public void load(CompoundTag nbt) {
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+        progress = nbt.getInt("toy_workbench.progress");
     }
 
     public void drops() {
@@ -147,33 +152,42 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
     }
 
     private static void craftItem(ToyWorkbenchBlockEntity entity) {
+        Level level = entity.level;
+        SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
+        for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
+            inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
+        }
+
+        Optional<ToyWorkbenchRecipe> recipe = level.getRecipeManager().getRecipeFor(ToyWorkbenchRecipe.Type.INSTANCE, inventory, level);
 
         if(hasRecipe(entity)) {
-            entity.itemHandler.extractItem(1,1,false);
-            entity.itemHandler.setStackInSlot(2, new ItemStack(TTS_Items.TOYROBOT.get(),
-                    entity.itemHandler.getStackInSlot(2).getCount() + 1));
+            entity.itemHandler.extractItem(2,1,false);
+            entity.itemHandler.setStackInSlot(3, new ItemStack(recipe.get().getResultItem().getItem(),
+                    entity.itemHandler.getStackInSlot(3).getCount() + 1));
 
             entity.resetProgress();
         }
     }
 
     private static boolean hasRecipe(ToyWorkbenchBlockEntity entity) {
+        Level level = entity.level;
         SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
         for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
-        boolean hasDyeInFirstSlot = entity.itemHandler.getStackInSlot(1).getItem() == Items.YELLOW_DYE;
+        Optional<ToyWorkbenchRecipe> recipe = level.getRecipeManager().getRecipeFor(ToyWorkbenchRecipe.Type.INSTANCE, inventory, level);
 
-        return hasDyeInFirstSlot && canInsertAmountIntoOutputSlot(inventory) &&
-                canInsertItemIntoOutputSlot(inventory, new ItemStack(Items.YELLOW_DYE, 1));
+
+        return recipe.isPresent() && canInsertAmountIntoOutputSlot(inventory) &&
+                canInsertItemIntoOutputSlot(inventory, recipe.get().getResultItem());
     }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack itemStack) {
-        return inventory.getItem(2).getItem() == itemStack.getItem() || inventory.getItem(2).isEmpty();
+        return inventory.getItem(3).getItem() == itemStack.getItem() || inventory.getItem(3).isEmpty();
     }
 
     private static boolean canInsertAmountIntoOutputSlot(SimpleContainer inventory) {
-        return inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount();
+        return inventory.getItem(3).getMaxStackSize() > inventory.getItem(3).getCount();
     }
 }
