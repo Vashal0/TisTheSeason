@@ -1,8 +1,13 @@
 package net.vashal.tistheseason;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -11,10 +16,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
+import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.entity.TTS_BlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
-import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
+import net.vashal.tistheseason.entity.client.*;
 import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.items.custom.HobbyHorseItem;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
@@ -32,6 +41,7 @@ public class TisTheSeason {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         TTS_Items.register(modEventBus);
+        TTS_Blocks.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
@@ -43,6 +53,7 @@ public class TisTheSeason {
         GeckoLib.initialize();
         TTS_EntityTypes.register(modEventBus);
         TTS_Sounds.SOUNDS.register(modEventBus);
+        TTS_BlockEntities.register(modEventBus);
     }
 
 

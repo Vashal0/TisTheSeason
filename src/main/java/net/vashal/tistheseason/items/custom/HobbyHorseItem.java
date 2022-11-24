@@ -24,5 +24,4 @@ public class HobbyHorseItem extends TTSCurios {
         attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "speed_bonus", 0.5, AttributeModifier.Operation.MULTIPLY_TOTAL));
         return attributes;
     }
-
 }
