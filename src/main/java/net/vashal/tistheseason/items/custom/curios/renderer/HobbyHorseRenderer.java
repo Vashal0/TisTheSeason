@@ -1,6 +1,7 @@
 package net.vashal.tistheseason.items.custom.curios.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -28,9 +29,12 @@ public class HobbyHorseRenderer implements ICurioRenderer {
         ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
         ICurioRenderer.rotateIfSneaking(matrixStack, livingEntity);
 
-        matrixStack.scale(0.35F, 0.35F, 0.35F);
-        matrixStack.translate(0.0F, 1.1F, -0.4F);
-        matrixStack.mulPose(Direction.DOWN.getRotation());
+        //X scale, Y scale, Z scale
+        matrixStack.scale(1.0f, 1.0f, 1.0f);
+        //X offset, Y offset (higher Y go up, lower Y go down), Z offset
+        matrixStack.translate(0.0f, 0.5f, -0.4f);
+        //some sort of math magic
+        matrixStack.mulPose(new Quaternion(0f, 0f, 1.0f, 0.0f));
 
         Minecraft.getInstance().getItemRenderer()
                 .renderStatic(stack, ItemTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack,
