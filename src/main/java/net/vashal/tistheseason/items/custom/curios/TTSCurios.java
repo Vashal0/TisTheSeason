@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.api.item;
+package net.vashal.tistheseason.items.custom.curios;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

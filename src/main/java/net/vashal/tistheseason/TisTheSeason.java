@@ -15,6 +15,8 @@ import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
 import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.items.custom.curios.HobbyHorseItem;
+import net.vashal.tistheseason.items.custom.curios.renderer.HobbyHorseRenderer;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
@@ -34,6 +36,7 @@ public class TisTheSeason {
         TTS_Items.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::clientSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -48,6 +51,10 @@ public class TisTheSeason {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
+    }
+
+    private void clientSetup(final FMLClientSetupEvent evt) {
+        CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

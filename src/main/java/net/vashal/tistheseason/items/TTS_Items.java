@@ -8,7 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.items.custom.HobbyHorseItem;
+import net.vashal.tistheseason.items.custom.curios.HobbyHorseItem;
 import net.vashal.tistheseason.items.custom.ToyRobotItem;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
