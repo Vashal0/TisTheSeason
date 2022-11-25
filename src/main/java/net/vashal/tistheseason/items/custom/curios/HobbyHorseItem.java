@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.items.custom;
+package net.vashal.tistheseason.items.custom.curios;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
-import net.vashal.tistheseason.api.item.TTSCurios;
+import net.vashal.tistheseason.items.custom.curios.TTSCurios;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.UUID;

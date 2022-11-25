@@ -20,17 +20,6 @@ import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
-//TODO figure out how to generify the Toy Robot Item into extending a Toy Items class
-//TODO find a way to split parts of the model for 'upgrading'
-//TODO think of uses for the robot for the player to play with
-//TODO add 3-4 variant colors
-
-//TODO placing this here for now but it's not robot specific, add toy workbench block which allows ability to 'customize' toys
-//TODO add new toys
-//TODO look into how to add custom projectiles
-//TODO Add other holiday items from the google doc which are not toys, especially the hobby horse
-//TODO better understand curio integration
-
 public class ToyRobotEntity extends WindUpToys implements IAnimatable {
 
     public ToyRobotEntity(EntityType<? extends ToyRobotEntity> entityType, Level level) {

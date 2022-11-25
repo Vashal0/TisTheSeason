@@ -18,6 +18,7 @@ import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
 import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.items.custom.curios.renderer.HobbyHorseRenderer;
 import net.vashal.tistheseason.recipe.TTS_Recipes;
 import net.vashal.tistheseason.screen.TTS_MenuTypes;
 import net.vashal.tistheseason.screen.ToyWorkbenchScreen;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TisTheSeason.MOD_ID)
@@ -40,6 +42,7 @@ public class TisTheSeason {
         TTS_Blocks.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::clientSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -57,6 +60,10 @@ public class TisTheSeason {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
+    }
+
+    private void clientSetup(final FMLClientSetupEvent evt) {
+        CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
