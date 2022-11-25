@@ -1,6 +1,7 @@
 package net.vashal.tistheseason;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -11,12 +12,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.entity.TTS_BlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
 import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.items.custom.curios.HobbyHorseItem;
 import net.vashal.tistheseason.items.custom.curios.renderer.HobbyHorseRenderer;
+import net.vashal.tistheseason.recipe.TTS_Recipes;
+import net.vashal.tistheseason.screen.TTS_MenuTypes;
+import net.vashal.tistheseason.screen.ToyWorkbenchScreen;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
@@ -34,6 +39,7 @@ public class TisTheSeason {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         TTS_Items.register(modEventBus);
+        TTS_Blocks.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -46,6 +52,9 @@ public class TisTheSeason {
         GeckoLib.initialize();
         TTS_EntityTypes.register(modEventBus);
         TTS_Sounds.SOUNDS.register(modEventBus);
+        TTS_BlockEntities.register(modEventBus);
+        TTS_MenuTypes.register(modEventBus);
+        TTS_Recipes.register(modEventBus);
     }
 
 
@@ -65,6 +74,8 @@ public class TisTheSeason {
 
             EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
+
+            MenuScreens.register(TTS_MenuTypes.TOY_WORKBENCH_MENU.get(), ToyWorkbenchScreen::new);
         }
     }
 }
