@@ -28,6 +28,10 @@ public class ToyWorkbenchRecipe implements Recipe<SimpleContainer> {
         this.recipeItems = recipeItems;
     }
 
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return recipeItems;
+    }
 
     @Override
     public boolean matches(SimpleContainer pContainer, Level pLevel) {
@@ -38,10 +42,6 @@ public class ToyWorkbenchRecipe implements Recipe<SimpleContainer> {
         return recipeItems.get(0).test(pContainer.getItem(2));
     }
 
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return recipeItems;
-    }
 
     @Override
     public ItemStack assemble(SimpleContainer pContainer) {
