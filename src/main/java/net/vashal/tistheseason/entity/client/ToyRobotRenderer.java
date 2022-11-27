@@ -11,13 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import java.util.Map;
 
 import static net.vashal.tistheseason.constants.ToyRobotConstants.SHADOW_RADIUS;
-import static net.vashal.tistheseason.constants.ToyRobotConstants.TEXTURE_RESOURCE;
 
 public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
     public static final Map<ToyRobotVariant, ResourceLocation> LOCATION_BY_VARIANT =
@@ -62,7 +62,7 @@ public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ToyRobotEntity instance) {
+    public @NotNull ResourceLocation getTextureLocation(ToyRobotEntity instance) {
         return LOCATION_BY_VARIANT.get(instance.getVariant());
     }
 

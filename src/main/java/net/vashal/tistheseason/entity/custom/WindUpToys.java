@@ -1,18 +1,14 @@
 package net.vashal.tistheseason.entity.custom;
 
-import com.mojang.realmsclient.gui.RealmsDataFetcher;
 import net.minecraft.Util;
-import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,14 +19,12 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
 import net.vashal.tistheseason.items.TTS_Items;
@@ -124,18 +118,6 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         this.entityData.set(ACTIVATED_TICKS, count);
     }
 
-
-    public boolean pickUp(Player player, LivingEntity target, InteractionHand hand) {
-        if (target.getCommandSenderWorld().isClientSide) return false;
-        if (target instanceof Player || !target.canChangeDimensions() || !target.isAlive()) return false;
-        ItemStack stack = new ItemStack(player.getItemInHand(hand).getItem());
-        CompoundTag nbt = new CompoundTag();
-        nbt.putString("entity", EntityType.getKey(target.getType()).toString());
-        target.saveWithoutId(nbt);
-        stack.setTag(nbt);
-        target.remove(Entity.RemovalReason.KILLED);
-        return true;
-    }
 
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) { //every right click turns the wind on the back, after 10 the toy becomes active for 30 seconds
