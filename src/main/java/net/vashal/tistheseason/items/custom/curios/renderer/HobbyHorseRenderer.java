@@ -30,11 +30,11 @@ public class HobbyHorseRenderer implements ICurioRenderer {
         ICurioRenderer.rotateIfSneaking(matrixStack, livingEntity);
 
         //X scale, Y scale, Z scale
-        matrixStack.scale(1.0f, 1.0f, 1.0f);
+        matrixStack.scale(1.1f, 1.1f, 1.1f);
         //X offset, Y offset (higher Y go up, lower Y go down), Z offset
         matrixStack.translate(0.0f, 0.5f, -0.4f);
         //some sort of math magic
-        matrixStack.mulPose(new Quaternion(0f, 0f, 1.0f, 0.0f));
+        matrixStack.mulPose(new Quaternion(0f, -0.1f, 1f, 0.0f));
 
         Minecraft.getInstance().getItemRenderer()
                 .renderStatic(stack, ItemTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack,

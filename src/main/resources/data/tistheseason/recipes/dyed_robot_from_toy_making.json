@@ -2,10 +2,11 @@
   "type": "tistheseason:toy_making",
   "ingredients": [
     {
-      "item": "minecraft:diamond"
+      "item": "minecraft:yellow_dye"
     }
   ],
   "output": {
-    "item": "tistheseason:toyrobot"
+    "item": "tistheseason:toyrobot",
+    "nbt": "{Variant:3}"
   }
 }

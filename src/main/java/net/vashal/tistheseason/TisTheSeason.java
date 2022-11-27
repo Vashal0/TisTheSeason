@@ -19,6 +19,7 @@ import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
 import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.items.custom.curios.renderer.HobbyHorseRenderer;
+import net.vashal.tistheseason.networking.ModMessages;
 import net.vashal.tistheseason.recipe.TTS_Recipes;
 import net.vashal.tistheseason.screen.TTS_MenuTypes;
 import net.vashal.tistheseason.screen.ToyWorkbenchScreen;
@@ -59,6 +60,7 @@ public class TisTheSeason {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        //ModMessages.register();
 
     }
 

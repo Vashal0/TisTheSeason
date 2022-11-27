@@ -1,13 +1,17 @@
 package net.vashal.tistheseason.entity.custom;
 
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.AnimationState;
@@ -35,18 +39,12 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
                 .add(Attributes.MOVEMENT_SPEED, ToyRobotConstants.MOVEMENT_SPEED).build();
     }
 
-
-
     @Nullable
-    public static ToyRobotEntity create(Level world, double x, double y, double z) {
+    public static ToyRobotEntity create(Level world) {
         ToyRobotEntity toyRobot = TTS_EntityTypes.TOYROBOT.get().create(world);
         if (toyRobot == null) {
             return null;
         }
-        toyRobot.setPos(x, y, z);
-        toyRobot.xo = x;
-        toyRobot.yo = y;
-        toyRobot.zo = z;
         return toyRobot;
     }
 

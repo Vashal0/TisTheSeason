@@ -3,10 +3,12 @@ package net.vashal.tistheseason.recipe;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -40,12 +42,13 @@ public class ToyWorkbenchRecipe implements Recipe<SimpleContainer> {
         }
 
         return recipeItems.get(0).test(pContainer.getItem(2));
+
     }
 
 
     @Override
     public ItemStack assemble(SimpleContainer pContainer) {
-        return output;
+        return output.copy();
     }
 
     @Override
@@ -55,7 +58,7 @@ public class ToyWorkbenchRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public ItemStack getResultItem() {
-        return output.copy();
+        return output;
     }
 
     @Override
