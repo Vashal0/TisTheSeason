@@ -128,37 +128,18 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
                     this.tame(player);
                 }
                 if (this.isOwnedBy(player)) {
-                    if (stack.getItem() instanceof DyeItem) {
-                        if (getTypeVariant() == DyeItem.getId(stack.getItem())) {
-                            return InteractionResult.CONSUME;
-                        } else {
-                            setVariant(ToyRobotVariant.byId(DyeItem.getId(stack.getItem())));
-                            stack.shrink(1);
-                        }
-                    } else if (getWindCount() < 9 && !getActivatedStatus()) {
-                        this.setWind(getWindCount() + 1);
-                        playSound(TTS_Sounds.WIND_TURN.get());
-                        return InteractionResult.SUCCESS;
-                    } else if (getWindCount() == 9 && !getActivatedStatus()) {
-                        setActivationStatus(true);
-                        setWind(getWindCount() - 9);
-                        setTickCount(600);
-                        return InteractionResult.SUCCESS;
-                    } else if (getActivatedStatus()) {
-                        if (stack.getItem() instanceof DyeItem) {
-                            if (getTypeVariant() == DyeItem.getId(stack.getItem())) {
-                                return InteractionResult.CONSUME;
-                            } else {
-                                setVariant(ToyRobotVariant.byId(DyeItem.getId(stack.getItem())));
-                                stack.shrink(1);
-                            }
-                        } else {
-                            return InteractionResult.CONSUME;
-                        }
+                    if (getWindCount() < 9 && !getActivatedStatus()) {
+                    this.setWind(getWindCount() + 1);
+                    playSound(TTS_Sounds.WIND_TURN.get());
+                } else if (getWindCount() == 9 && !getActivatedStatus()) {
+                    setActivationStatus(true);
+                    setWind(getWindCount() - 9);
+                    setTickCount(600);
+                    } else {
+                        return InteractionResult.CONSUME;
                     }
-                    return InteractionResult.SUCCESS;
                 }
-
+                return InteractionResult.SUCCESS;
             } else if (stack.isEmpty()) {
                 CompoundTag nbt = new CompoundTag();
                 nbt.putString("toy", EntityType.getKey(this.getType()).toString());
@@ -167,6 +148,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
                 ItemStack stack1 = player.getItemInHand(hand);
                 stack1.setTag(nbt);
                 this.remove(Entity.RemovalReason.KILLED);
+
             }
         }
         return super.mobInteract(player, hand);

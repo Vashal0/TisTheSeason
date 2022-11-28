@@ -1,12 +1,13 @@
 {
   "type": "tistheseason:toy_making",
-  "ingredients": [
-    {
-      "item": "minecraft:yellow_dye"
-    }
-  ],
-  "output": {
-    "item": "tistheseason:toyrobot",
-    "nbt": "{Variant:3}"
+  "toy": {
+    "item": "tistheseason:toyrobot"
+  },
+  "upgrade": {
+    "tag": "forge:dyes"
+  },
+
+  "result": {
+    "item": "tistheseason:toyrobot"
   }
 }

@@ -164,12 +164,20 @@ public class ToyWorkbench extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos,
                                  Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        WorkbenchType workbenchModel = pState.getValue(TYPE);
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
             if(entity instanceof ToyWorkbenchBlockEntity) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (ToyWorkbenchBlockEntity)entity, pPos);
+                if (workbenchModel == WorkbenchType.MAIN) {
+                    NetworkHooks.openScreen(((ServerPlayer) pPlayer), (ToyWorkbenchBlockEntity) entity, pPos);
+                    return InteractionResult.CONSUME;
+                } else {
+                    BlockPos otherpos = pPos.relative(pState.getValue(FACING).getClockWise());
+                    BlockEntity pEntity = pLevel.getBlockEntity(otherpos);
+                    NetworkHooks.openScreen(((ServerPlayer) pPlayer), (ToyWorkbenchBlockEntity) pEntity, otherpos);
+                    }
             } else {
-                throw new IllegalStateException("Our Container provider is missing!");
+                throw new IllegalStateException("Uh Oh");
             }
         }
 

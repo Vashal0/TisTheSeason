@@ -33,9 +33,10 @@ public class ToyWorkbenchMenu extends AbstractContainerMenu {
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
             this.addSlot(new SlotItemHandler(handler, 0, 25, 49));
-            this.addSlot(new SlotItemHandler(handler, 1, 152, 9));
-            this.addSlot(new SlotItemHandler(handler, 2, 58, 49));
-            this.addSlot(new SlotItemHandler(handler, 3, 125, 50));
+            this.addSlot(new SlotItemHandler(handler, 1, 58, 49));
+            this.addSlot(new SlotItemHandler(handler, 2, 125, 50));
+            this.addSlot(new SlotItemHandler(handler, 3, 152, 9));
+
         });
 
         addDataSlots(data);

@@ -1,54 +1,46 @@
 package net.vashal.tistheseason.recipe;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.vashal.tistheseason.TisTheSeason;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 
-
-public class ToyWorkbenchRecipe implements Recipe<SimpleContainer> {
+public class ToyWorkbenchRecipe implements Recipe<Container> {
+    private final Ingredient toy;
+    private final Ingredient upgrade;
+    private final ItemStack result;
     private final ResourceLocation id;
-    private final ItemStack output;
-    private final NonNullList<Ingredient> recipeItems;
 
 
-    public ToyWorkbenchRecipe(ResourceLocation id, ItemStack output,
-                              NonNullList<Ingredient> recipeItems) {
-        this.id = id;
-        this.output = output;
-        this.recipeItems = recipeItems;
+    public ToyWorkbenchRecipe(ResourceLocation pId, Ingredient pBase, Ingredient pAddition, ItemStack pResult) {
+        this.id = pId;
+        this.toy = pBase;
+        this.upgrade = pAddition;
+        this.result = pResult;
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return recipeItems;
+    public boolean matches(Container pInv, @NotNull Level pLevel) {
+        return this.toy.test(pInv.getItem(0)) && this.upgrade.test(pInv.getItem(1));
     }
 
     @Override
-    public boolean matches(SimpleContainer pContainer, Level pLevel) {
-        if(pLevel.isClientSide) {
-            return false;
+    public @NotNull ItemStack assemble (Container container) {
+        ItemStack itemstack = this.result.copy();
+        CompoundTag compoundtag = container.getItem(0).getTag();
+        if (compoundtag != null) {
+            itemstack.setTag(compoundtag.copy());
         }
 
-        return recipeItems.get(0).test(pContainer.getItem(2));
-
-    }
-
-
-    @Override
-    public ItemStack assemble(SimpleContainer pContainer) {
-        return output.copy();
+        return itemstack;
     }
 
     @Override
@@ -57,22 +49,22 @@ public class ToyWorkbenchRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack getResultItem() {
-        return output;
+    public @NotNull ItemStack getResultItem() {
+        return result;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return id;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return Serializer.INSTANCE;
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return Type.INSTANCE;
     }
 
@@ -87,40 +79,26 @@ public class ToyWorkbenchRecipe implements Recipe<SimpleContainer> {
         public static final ResourceLocation ID =
                 new ResourceLocation(TisTheSeason.MOD_ID, "toy_making");
 
-        @Override
-        public ToyWorkbenchRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
-
-            JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(1, Ingredient.EMPTY);
-
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
-            }
-
-            return new ToyWorkbenchRecipe(pRecipeId, output, inputs);
+        public @NotNull ToyWorkbenchRecipe fromJson(@NotNull ResourceLocation pRecipeId, @NotNull JsonObject pJson) {
+            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(pJson, "toy"));
+            Ingredient ingredient1 = Ingredient.fromJson(GsonHelper.getAsJsonObject(pJson, "upgrade"));
+            ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pJson, "result"));
+            return new ToyWorkbenchRecipe(pRecipeId, ingredient, ingredient1, itemstack);
         }
 
         @Override
-        public @Nullable ToyWorkbenchRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
-
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromNetwork(buf));
-            }
-
-            ItemStack output = buf.readItem();
-            return new ToyWorkbenchRecipe(id, output, inputs);
+        public ToyWorkbenchRecipe fromNetwork(@NotNull ResourceLocation pRecipeId, @NotNull FriendlyByteBuf pBuffer) {
+            Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
+            Ingredient ingredient1 = Ingredient.fromNetwork(pBuffer);
+            ItemStack itemstack = pBuffer.readItem();
+            return new ToyWorkbenchRecipe(pRecipeId, ingredient, ingredient1, itemstack);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buf, ToyWorkbenchRecipe recipe) {
-            buf.writeInt(recipe.getIngredients().size());
-
-            for (Ingredient ing : recipe.getIngredients()) {
-                ing.toNetwork(buf);
-            }
-            buf.writeItemStack(recipe.getResultItem(), false);
+        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, ToyWorkbenchRecipe pRecipe) {
+            pRecipe.toy.toNetwork(pBuffer);
+            pRecipe.upgrade.toNetwork(pBuffer);
+            pBuffer.writeItem(pRecipe.result);
         }
     }
 }
