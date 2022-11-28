@@ -1,11 +1,13 @@
 {
   "type": "tistheseason:toy_making",
-  "ingredients": [
-    {
-      "item": "minecraft:diamond"
-    }
-  ],
-  "output": {
+  "toy": {
+    "item": "tistheseason:toyrobot"
+  },
+  "upgrade": {
+    "tag": "forge:dyes"
+  },
+
+  "result": {
     "item": "tistheseason:toyrobot"
   }
 }

@@ -11,31 +11,49 @@ import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import java.util.Map;
 
 import static net.vashal.tistheseason.constants.ToyRobotConstants.SHADOW_RADIUS;
-import static net.vashal.tistheseason.constants.ToyRobotConstants.TEXTURE_RESOURCE;
 
 public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
     public static final Map<ToyRobotVariant, ResourceLocation> LOCATION_BY_VARIANT =
             Util.make(Maps.newEnumMap(ToyRobotVariant.class), (variant) -> {
-                variant.put(ToyRobotVariant.DEFAULT,
-                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toyrobotdefault.png"));
-                variant.put(ToyRobotVariant.WOOD,
-                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toyrobotwood.png"));
-                variant.put(ToyRobotVariant.EVA,
-                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toyroboteva.png"));
-                variant.put(ToyRobotVariant.BEE,
-                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toyrobotbee.png"));
-                variant.put(ToyRobotVariant.DEFAULT_INVERTED,
-                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toyrobotinverted.png"));
-                variant.put(ToyRobotVariant.WOOD_INVERTED,
-                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toyrobotwoodinverted.png"));
-                variant.put(ToyRobotVariant.BEE_INVERTED,
-                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toyrobotbeeinverted.png"));
+                variant.put(ToyRobotVariant.BLUE,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_blue.png"));
+                variant.put(ToyRobotVariant.BROWN,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_brown.png"));
+                variant.put(ToyRobotVariant.PURPLE,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_purple.png"));
+                variant.put(ToyRobotVariant.YELLOW,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_yellow.png"));
+                variant.put(ToyRobotVariant.BLACK,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_black.png"));
+                variant.put(ToyRobotVariant.CYAN,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_cyan.png"));
+                variant.put(ToyRobotVariant.GRAY,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_gray.png"));
+                variant.put(ToyRobotVariant.GREEN,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_green.png"));
+                variant.put(ToyRobotVariant.LIGHT_BLUE,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_light_blue.png"));
+                variant.put(ToyRobotVariant.LIGHT_GRAY,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_light_gray.png"));
+                variant.put(ToyRobotVariant.LIME,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_lime.png"));
+                variant.put(ToyRobotVariant.MAGENTA,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_magenta.png"));
+                variant.put(ToyRobotVariant.ORANGE,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_orange.png"));
+                variant.put(ToyRobotVariant.PINK,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_pink.png"));
+                variant.put(ToyRobotVariant.RED,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_red.png"));
+                variant.put(ToyRobotVariant.WHITE,
+                        new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_white.png"));
             });
 
     public ToyRobotRenderer(EntityRendererProvider.Context renderManager) {
@@ -44,7 +62,7 @@ public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ToyRobotEntity instance) {
+    public @NotNull ResourceLocation getTextureLocation(ToyRobotEntity instance) {
         return LOCATION_BY_VARIANT.get(instance.getVariant());
     }
 

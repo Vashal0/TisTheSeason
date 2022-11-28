@@ -23,6 +23,11 @@ public class ToyWorkbenchScreen extends AbstractContainerScreen<ToyWorkbenchMenu
     }
 
     @Override
+    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+        this.font.draw(pPoseStack, this.title, 22, 9, 4210752);
+    }
+
+    @Override
     protected void renderBg(PoseStack poseStack, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F,1.0F,1.0F,1.0F);

@@ -13,8 +13,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,7 +23,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.recipe.ToyWorkbenchRecipe;
 import net.vashal.tistheseason.screen.ToyWorkbenchMenu;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +74,7 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
 
     @Override
     public Component getDisplayName() {
-        return Component.literal("Toy Workbench");
+        return Component.translatable("Toy Workbench");
     }
 
     @Nullable
@@ -161,9 +160,14 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
         Optional<ToyWorkbenchRecipe> recipe = level.getRecipeManager().getRecipeFor(ToyWorkbenchRecipe.Type.INSTANCE, inventory, level);
 
         if(hasRecipe(entity)) {
-            entity.itemHandler.extractItem(2,1,false);
-            entity.itemHandler.setStackInSlot(3, new ItemStack(recipe.get().getResultItem().getItem(),
-                    entity.itemHandler.getStackInSlot(3).getCount() + 1));
+            ItemStack input = entity.itemHandler.getStackInSlot(1);
+            ItemStack output = recipe.get().assemble(inventory);
+            if (input.getItem() instanceof DyeItem) {
+                output.getOrCreateTag().putInt("Variant", DyeItem.getId(input.getItem()));
+            }
+            entity.itemHandler.extractItem(0,1,false);
+            entity.itemHandler.extractItem(1,1,false);
+            entity.itemHandler.setStackInSlot(2, output);
 
             entity.resetProgress();
         }
@@ -184,10 +188,10 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
     }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack itemStack) {
-        return inventory.getItem(3).getItem() == itemStack.getItem() || inventory.getItem(3).isEmpty();
+        return inventory.getItem(2).getItem() == itemStack.getItem() || inventory.getItem(2).isEmpty();
     }
 
     private static boolean canInsertAmountIntoOutputSlot(SimpleContainer inventory) {
-        return inventory.getItem(3).getMaxStackSize() > inventory.getItem(3).getCount();
+        return inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount();
     }
 }

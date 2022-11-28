@@ -19,13 +19,15 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
+import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +42,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+
 public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -51,19 +54,6 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
     @Override
     public AnimationFactory getFactory() {
         return factory;
-    }
-
-    @Nullable
-    public static WindUpToys create(Level world, double x, double y, double z) {
-        WindUpToys toys = TTS_EntityTypes.TOYROBOT.get().create(world);
-        if (toys == null) {
-            return null;
-        }
-        toys.setPos(x, y, z);
-        toys.xo = x;
-        toys.yo = y;
-        toys.zo = z;
-        return toys;
     }
 
     private static final EntityDataAccessor<Integer> WIND_POSITION = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.INT);
@@ -131,24 +121,39 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
 
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) { //every right click turns the wind on the back, after 10 the toy becomes active for 30 seconds
-        if (player.level.isClientSide && hand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
-        if (this.getOwner() == null) {
-            this.tame(player);
-        }
-        if (this.isOwnedBy(player)) {
-            if (getWindCount() < 9 && !getActivatedStatus()) {
-                this.setWind(getWindCount() + 1);
-                playSound(TTS_Sounds.WIND_TURN.get());
+        if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
+            ItemStack stack = player.getItemInHand(hand);
+            if (!player.isShiftKeyDown()) {
+                if (this.getOwner() == null) {
+                    this.tame(player);
+                }
+                if (this.isOwnedBy(player)) {
+                    if (getWindCount() < 9 && !getActivatedStatus()) {
+                    this.setWind(getWindCount() + 1);
+                    playSound(TTS_Sounds.WIND_TURN.get());
+                } else if (getWindCount() == 9 && !getActivatedStatus()) {
+                    setActivationStatus(true);
+                    setWind(getWindCount() - 9);
+                    setTickCount(600);
+                    } else {
+                        return InteractionResult.CONSUME;
+                    }
+                }
                 return InteractionResult.SUCCESS;
-            } else if (getWindCount() == 9 && !getActivatedStatus()) {
-                setActivationStatus(true);
-                setWind(getWindCount() - 9);
-                setTickCount(600);
-                return InteractionResult.SUCCESS;
+            } else if (stack.isEmpty()) {
+                CompoundTag nbt = new CompoundTag();
+                nbt.putString("toy", EntityType.getKey(this.getType()).toString());
+                this.saveWithoutId(nbt);
+                player.setItemInHand(hand, TTS_Items.TOYROBOT.get().getDefaultInstance());
+                ItemStack stack1 = player.getItemInHand(hand);
+                stack1.setTag(nbt);
+                this.remove(Entity.RemovalReason.KILLED);
+
             }
         }
         return super.mobInteract(player, hand);
     }
+
 
     @Override
     public void tick() { //tracks activated state
@@ -262,7 +267,6 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         return tickCount;
     }
 
-
     //prevents attacks while deactivated
     public class ToyMeleeGoal extends MeleeAttackGoal {
 
@@ -305,7 +309,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         return this.entityData.get(DATA_ID_TYPE_VARIANT);
     }
 
-    private void setVariant(ToyRobotVariant variant) {
+    public void setVariant(ToyRobotVariant variant) {
         this.entityData.set(DATA_ID_TYPE_VARIANT, variant.getId() & 255);
     }
 

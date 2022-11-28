@@ -12,6 +12,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
+import net.vashal.tistheseason.block.custom.InvisibleRedstone;
 import net.vashal.tistheseason.block.custom.ToyWorkbench;
 import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
@@ -24,6 +25,8 @@ public class TTS_Blocks {
             () -> new ToyWorkbench(BlockBehaviour.Properties.of(Material.METAL)
                     .strength(6f).requiresCorrectToolForDrops().noOcclusion()), TTS_CreativeModeTab.TISTHESEASON_TAB);
 
+    public static final RegistryObject<Block> INVISIBLE_REDSTONE = registerBlock("invisible_redstone",
+            () -> new InvisibleRedstone(BlockBehaviour.Properties.of(Material.AIR).noCollission().noLootTable()), TTS_CreativeModeTab.TISTHESEASON_TAB);
 
 
 

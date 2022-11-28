@@ -35,19 +35,9 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
                 .add(Attributes.MOVEMENT_SPEED, ToyRobotConstants.MOVEMENT_SPEED).build();
     }
 
-
-
     @Nullable
-    public static ToyRobotEntity create(Level world, double x, double y, double z) {
-        ToyRobotEntity toyRobot = TTS_EntityTypes.TOYROBOT.get().create(world);
-        if (toyRobot == null) {
-            return null;
-        }
-        toyRobot.setPos(x, y, z);
-        toyRobot.xo = x;
-        toyRobot.yo = y;
-        toyRobot.zo = z;
-        return toyRobot;
+    public static ToyRobotEntity create(Level world) {
+        return TTS_EntityTypes.TOYROBOT.get().create(world);
     }
 
     @Override
