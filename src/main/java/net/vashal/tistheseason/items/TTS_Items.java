@@ -8,9 +8,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.items.custom.curios.HobbyHorseItem;
 import net.vashal.tistheseason.items.custom.ToyRobotItem;
-import net.vashal.tistheseason.constants.ToyRobotConstants;
+import net.vashal.tistheseason.items.custom.curios.HobbyHorseItem;
 import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
 
 
@@ -18,7 +17,7 @@ public class TTS_Items {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, TisTheSeason.MOD_ID);
 
-    public static final RegistryObject<Item> TOYROBOT = ITEMS.register(ToyRobotConstants.NAME,
+    public static final RegistryObject<Item> TOYROBOT = ITEMS.register("toy_robot_item",
             () -> new ToyRobotItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
     public static final RegistryObject<Item> HOBBY_HORSE = ITEMS.register("hobby_horse",

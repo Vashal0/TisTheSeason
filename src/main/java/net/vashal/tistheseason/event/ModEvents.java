@@ -1,11 +1,11 @@
 package net.vashal.tistheseason.event;
 
-import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.vashal.tistheseason.TisTheSeason;
+import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 
 

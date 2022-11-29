@@ -50,6 +50,9 @@ public class TisTheSeason {
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
                 () -> SlotTypePreset.BELT.getMessageBuilder().build());
 
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                () -> SlotTypePreset.HANDS.getMessageBuilder().build());
+
         GeckoLib.initialize();
         TTS_EntityTypes.register(modEventBus);
         TTS_Sounds.SOUNDS.register(modEventBus);
@@ -60,12 +63,13 @@ public class TisTheSeason {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        //ModMessages.register();
-
+        event.enqueueWork(() -> {
+            ModMessages.register();
+        });
     }
 
     private void clientSetup(final FMLClientSetupEvent evt) {
-        CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -76,7 +80,7 @@ public class TisTheSeason {
 
             EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
-
+            CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
             MenuScreens.register(TTS_MenuTypes.TOY_WORKBENCH_MENU.get(), ToyWorkbenchScreen::new);
         }
     }

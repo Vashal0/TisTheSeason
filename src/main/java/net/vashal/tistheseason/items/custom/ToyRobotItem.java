@@ -42,9 +42,23 @@ public class ToyRobotItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
+
+
     public boolean release(Player player, BlockPos pos, Direction facing, Level worldIn, ItemStack stack) {
         if (player.getCommandSenderWorld().isClientSide) return false;
-        if (!containsEntity(stack)) return false;
+        if (!containsEntity(stack)) {
+            WindUpToys toyRobot = new WindUpToys(worldIn);
+            if (stack.hasTag()) {
+                toyRobot.load(stack.getTag());
+            }
+            BlockPos blockPos = pos.relative(facing);
+            assert toyRobot != null;
+            toyRobot.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+            stack.setTag(new CompoundTag());
+            worldIn.addFreshEntity(toyRobot);
+            stack.shrink(1);
+            return false;
+        }
         Entity entity = getEntityFromStack(stack, worldIn, true);
         BlockPos blockPos = pos.relative(facing);
         assert entity != null;

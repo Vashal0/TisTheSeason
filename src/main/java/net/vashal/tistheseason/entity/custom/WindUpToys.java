@@ -19,12 +19,12 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
+import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
 import net.vashal.tistheseason.items.TTS_Items;
@@ -51,6 +51,10 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
 
     }
 
+    public WindUpToys(Level world) {
+        super(TTS_EntityTypes.TOYROBOT.get(), world);
+    }
+
     @Override
     public AnimationFactory getFactory() {
         return factory;
@@ -60,6 +64,8 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
     private static final EntityDataAccessor<Integer> ACTIVATED_TICKS = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> IS_ACTIVATED = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> MUFFLED = SynchedEntityData.defineId(WindUpToys.class, EntityDataSerializers.BOOLEAN);
+
 
     @Nullable
     @Override
@@ -74,6 +80,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         this.entityData.define(ACTIVATED_TICKS, 0);
         this.entityData.define(IS_ACTIVATED, false);
         this.entityData.define(DATA_ID_TYPE_VARIANT, 0);
+        this.entityData.define(MUFFLED, false);
     }
 
     @Override
@@ -83,6 +90,7 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         tag.putInt("ActivatedTicks", this.getActivatedTicks());
         tag.putBoolean("isActivated", this.getActivatedStatus());
         tag.putInt("Variant", this.getTypeVariant());
+        tag.putBoolean("Muffled", this.getMuffled());
     }
 
     @Override
@@ -92,6 +100,14 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         this.setTickCount(tag.getInt("ActivatedTicks"));
         this.setActivationStatus(tag.getBoolean("isActivated"));
         this.entityData.set(DATA_ID_TYPE_VARIANT, tag.getInt("Variant"));
+        this.setMuffled(tag.getBoolean("Muffled"));
+    }
+
+    public boolean getMuffled() {
+        return this.entityData.get(MUFFLED); }
+
+    public void setMuffled(boolean bool) {
+        this.entityData.set(MUFFLED, bool);
     }
 
     public void setWind(int position) {
@@ -160,7 +176,9 @@ public class WindUpToys extends TamableAnimal implements IAnimatable, IAnimation
         super.tick();
         if (getActivatedTicks() > 0) {
             setTickCount(getActivatedTicks() - 1);
-            playModSounds();
+            if (!getMuffled()) {
+                playModSounds();
+            }
         }
         if (getActivatedTicks() == 0) {
             setActivationStatus(false);

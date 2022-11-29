@@ -13,8 +13,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,11 +25,14 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.vashal.tistheseason.networking.ModMessages;
+import net.vashal.tistheseason.networking.packet.ItemStackSyncS2CPacket;
 import net.vashal.tistheseason.recipe.ToyWorkbenchRecipe;
 import net.vashal.tistheseason.screen.ToyWorkbenchMenu;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider {
@@ -35,6 +40,10 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
+            assert level != null;
+            if(!level.isClientSide()) {
+                ModMessages.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
+            }
         }
     };
 
@@ -73,13 +82,13 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return Component.translatable("Toy Workbench");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         return new ToyWorkbenchMenu(id, playerInventory, this, this.data);
     }
 
@@ -113,7 +122,7 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
     }
 
     @Override
-    public void load(CompoundTag nbt) {
+    public void load(@NotNull CompoundTag nbt) {
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
         progress = nbt.getInt("toy_workbench.progress");
@@ -125,10 +134,11 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
             inventory.setItem(i, itemHandler.getStackInSlot(i));
         }
 
+        assert this.level != null;
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
-    public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState state, ToyWorkbenchBlockEntity entity) {
+    public static void tick(Level level, BlockPos blockPos, BlockState state, ToyWorkbenchBlockEntity entity) {
         if(level.isClientSide) {
             return;
         }
@@ -157,13 +167,20 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
+        assert level != null;
         Optional<ToyWorkbenchRecipe> recipe = level.getRecipeManager().getRecipeFor(ToyWorkbenchRecipe.Type.INSTANCE, inventory, level);
 
         if(hasRecipe(entity)) {
             ItemStack input = entity.itemHandler.getStackInSlot(1);
             ItemStack output = recipe.get().assemble(inventory);
             if (input.getItem() instanceof DyeItem) {
-                output.getOrCreateTag().putInt("Variant", DyeItem.getId(input.getItem()));
+                output.getOrCreateTag().putInt("Variant", Objects.requireNonNull(DyeColor.getColor(input)).getId());
+            }
+            if (input.getItem() == Items.IRON_BLOCK) {
+                output.getOrCreateTag().putInt("Variant", 11);
+            }
+            if (input.getItem() == Items.WHITE_WOOL) {
+                output.getOrCreateTag().putBoolean("Muffled", true);
             }
             entity.itemHandler.extractItem(0,1,false);
             entity.itemHandler.extractItem(1,1,false);
@@ -180,6 +197,7 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
+        assert level != null;
         Optional<ToyWorkbenchRecipe> recipe = level.getRecipeManager().getRecipeFor(ToyWorkbenchRecipe.Type.INSTANCE, inventory, level);
 
 
@@ -193,5 +211,23 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
 
     private static boolean canInsertAmountIntoOutputSlot(SimpleContainer inventory) {
         return inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount();
+    }
+
+    public ItemStack getRenderStack() {
+        ItemStack stack;
+
+        if(!itemHandler.getStackInSlot(2).isEmpty()) {
+            stack = itemHandler.getStackInSlot(2);
+        } else {
+            stack = itemHandler.getStackInSlot(0);
+        }
+
+        return stack;
+    }
+
+    public void setHandler(ItemStackHandler itemStackHandler) {
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            itemHandler.setStackInSlot(i, itemStackHandler.getStackInSlot(i));
+        }
     }
 }

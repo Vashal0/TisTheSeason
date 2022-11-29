@@ -1,6 +1,7 @@
 package net.vashal.tistheseason.recipe;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -51,6 +52,14 @@ public class ToyWorkbenchRecipe implements Recipe<Container> {
     @Override
     public @NotNull ItemStack getResultItem() {
         return result;
+    }
+
+    public @NotNull Ingredient getToy() {
+        return toy;
+    }
+
+    public @NotNull Ingredient getUpgrade() {
+        return upgrade;
     }
 
     @Override

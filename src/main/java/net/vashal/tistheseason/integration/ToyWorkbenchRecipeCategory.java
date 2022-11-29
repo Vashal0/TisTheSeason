@@ -66,7 +66,8 @@ public class ToyWorkbenchRecipeCategory implements IRecipeCategory<ToyWorkbenchR
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ToyWorkbenchRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 54, 35).addIngredients(recipe.getIngredients().get(0));
+        builder.addSlot(RecipeIngredientRole.INPUT, 21, 35).addIngredients(recipe.getToy());
+        builder.addSlot(RecipeIngredientRole.INPUT, 54, 35).addIngredients(recipe.getUpgrade());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 121, 36).addItemStack(recipe.getResultItem());
     }
 }

@@ -1,6 +1,8 @@
 {
-  "item.tistheseason.toyrobot": "Toy Robot",
+  "item.tistheseason.toy_robot_item": "Toy Robot",
   "item.tistheseason.toy_robot_spawn_egg": "Toy Robot Spawn Egg",
+  "item.tistheseason.hobby_horse": "Hobby Horse",
+  "item.tistheseason.toy_workbench": "Toy Workbench",
 
   "itemGroup.tistheseasontab": "Tis the Season Tab"
 }

@@ -13,6 +13,7 @@ import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import java.util.Map;
@@ -79,4 +80,5 @@ public class ToyRobotRenderer extends GeoEntityRenderer<ToyRobotEntity> {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 }
+
 

@@ -4,9 +4,8 @@
     "item": "tistheseason:toy_robot_item"
   },
   "upgrade": {
-    "tag": "forge:dyes"
+    "item": "minecraft:white_wool"
   },
-
   "result": {
     "item": "tistheseason:toy_robot_item"
   }

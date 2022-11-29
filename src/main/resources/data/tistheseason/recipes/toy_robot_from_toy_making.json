@@ -1,12 +1,11 @@
 {
   "type": "tistheseason:toy_making",
   "toy": {
-    "item": "tistheseason:toy_robot_item"
+    "item": "minecraft:redstone_block"
   },
   "upgrade": {
-    "tag": "forge:dyes"
+    "item": "minecraft:iron_block"
   },
-
   "result": {
     "item": "tistheseason:toy_robot_item"
   }
