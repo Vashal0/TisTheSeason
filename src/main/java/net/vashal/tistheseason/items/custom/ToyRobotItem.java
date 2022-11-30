@@ -49,10 +49,10 @@ public class ToyRobotItem extends Item {
         if (!containsEntity(stack)) {
             WindUpToys toyRobot = new WindUpToys(worldIn);
             if (stack.hasTag()) {
+                assert stack.getTag() != null;
                 toyRobot.load(stack.getTag());
             }
             BlockPos blockPos = pos.relative(facing);
-            assert toyRobot != null;
             toyRobot.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
             stack.setTag(new CompoundTag());
             worldIn.addFreshEntity(toyRobot);

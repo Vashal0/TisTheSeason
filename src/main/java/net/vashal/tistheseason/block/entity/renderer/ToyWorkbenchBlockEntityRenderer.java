@@ -17,6 +17,9 @@ import net.minecraft.world.level.LightLayer;
 import net.vashal.tistheseason.block.custom.ToyWorkbench;
 import net.vashal.tistheseason.block.entity.ToyWorkbenchBlockEntity;
 import net.vashal.tistheseason.items.TTS_Items;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class ToyWorkbenchBlockEntityRenderer implements BlockEntityRenderer<ToyWorkbenchBlockEntity> {
 
@@ -27,7 +30,7 @@ public class ToyWorkbenchBlockEntityRenderer implements BlockEntityRenderer<ToyW
 
     @Override
     public void render(ToyWorkbenchBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack,
-                       MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
+                       @NotNull MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
         ItemStack itemStack = pBlockEntity.getRenderStack();
@@ -61,7 +64,7 @@ public class ToyWorkbenchBlockEntityRenderer implements BlockEntityRenderer<ToyW
             pPoseStack.translate(0f,0f,-0.1f);
         }
 
-        itemRenderer.renderStatic(itemStack, ItemTransforms.TransformType.GUI, getLightLevel(pBlockEntity.getLevel(),
+        itemRenderer.renderStatic(itemStack, ItemTransforms.TransformType.GUI, getLightLevel(Objects.requireNonNull(pBlockEntity.getLevel()),
                         pBlockEntity.getBlockPos()),
                 OverlayTexture.NO_OVERLAY, pPoseStack, pBufferSource, 1);
         pPoseStack.popPose();

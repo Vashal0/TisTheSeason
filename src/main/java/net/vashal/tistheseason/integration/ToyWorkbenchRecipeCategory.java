@@ -1,13 +1,10 @@
 package net.vashal.tistheseason.integration;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.sun.jna.platform.unix.X11;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.drawable.IDrawableBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -20,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.block.TTS_Blocks;
 import net.vashal.tistheseason.recipe.ToyWorkbenchRecipe;
+import org.jetbrains.annotations.NotNull;
 
 public class ToyWorkbenchRecipeCategory implements IRecipeCategory<ToyWorkbenchRecipe> {
     public final static ResourceLocation UID = new ResourceLocation(TisTheSeason.MOD_ID, "toy_making");
@@ -39,33 +37,33 @@ public class ToyWorkbenchRecipeCategory implements IRecipeCategory<ToyWorkbenchR
     }
 
     @Override
-    public void draw(ToyWorkbenchRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(@NotNull ToyWorkbenchRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
         this.arrow.draw(stack, 79, 31);
         IRecipeCategory.super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
     }
 
     @Override
-    public RecipeType<ToyWorkbenchRecipe> getRecipeType() {
+    public @NotNull RecipeType<ToyWorkbenchRecipe> getRecipeType() {
         return TisJeiPlugin.TOY_MAKING_TYPE;
     }
 
     @Override
-    public Component getTitle() {
+    public @NotNull Component getTitle() {
         return Component.literal("Toy Workbench");
     }
 
     @Override
-    public IDrawable getBackground() {
+    public @NotNull IDrawable getBackground() {
         return this.background;
     }
 
     @Override
-    public IDrawable getIcon() {
+    public @NotNull IDrawable getIcon() {
         return this.icon;
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, ToyWorkbenchRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, ToyWorkbenchRecipe recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 21, 35).addIngredients(recipe.getToy());
         builder.addSlot(RecipeIngredientRole.INPUT, 54, 35).addIngredients(recipe.getUpgrade());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 121, 36).addItemStack(recipe.getResultItem());

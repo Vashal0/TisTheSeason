@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.vashal.tistheseason.TisTheSeason;
+import org.jetbrains.annotations.NotNull;
 
 public class ToyWorkbenchScreen extends AbstractContainerScreen<ToyWorkbenchMenu> {
     private static final ResourceLocation TEXTURE =
@@ -23,12 +24,12 @@ public class ToyWorkbenchScreen extends AbstractContainerScreen<ToyWorkbenchMenu
     }
 
     @Override
-    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+    protected void renderLabels(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY) {
         this.font.draw(pPoseStack, this.title, 22, 9, 4210752);
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(@NotNull PoseStack poseStack, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F,1.0F,1.0F,1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
@@ -47,7 +48,7 @@ public class ToyWorkbenchScreen extends AbstractContainerScreen<ToyWorkbenchMenu
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
+    public void render(@NotNull PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
         renderBackground(pPoseStack);
         super.render(pPoseStack, mouseX, mouseY, delta);
         renderTooltip(pPoseStack, mouseX, mouseY);

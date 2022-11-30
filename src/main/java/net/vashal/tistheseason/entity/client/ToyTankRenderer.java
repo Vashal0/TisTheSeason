@@ -7,25 +7,26 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.constants.ToySoldierConstants;
-import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
+import net.vashal.tistheseason.constants.ToyTankConstants;
+import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-public class ToySoldierRenderer extends GeoEntityRenderer<ToySoldierEntity> {
-    public ToySoldierRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new ToySoldierModel());
-        this.shadowRadius = ToySoldierConstants.SHADOW_RADIUS;
+public class ToyTankRenderer extends GeoEntityRenderer<ToyTankEntity> {
+
+    public ToyTankRenderer(EntityRendererProvider.Context renderManager) {
+        super(renderManager, new ToyTankModel());
+        this.shadowRadius = ToyTankConstants.SHADOW_RADIUS;
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull ToySoldierEntity instance) {
-        return new ResourceLocation(TisTheSeason.MOD_ID, ToySoldierConstants.TEXTURE_RESOURCE);
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ToyTankEntity instance) {
+        return new ResourceLocation(TisTheSeason.MOD_ID, ToyTankConstants.TEXTURE_RESOURCE);
     }
 
     @Override
-    public RenderType getRenderType(ToySoldierEntity animatable, float partialTick, PoseStack poseStack,
+    public RenderType getRenderType(ToyTankEntity animatable, float partialTick, PoseStack poseStack,
                                     @Nullable MultiBufferSource bufferSource,
                                     @Nullable VertexConsumer buffer, int packedLight,
                                     ResourceLocation texture) {

@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.recipe.ToyWorkbenchRecipe;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class TisJeiPlugin implements IModPlugin {
             new RecipeType<>(ToyWorkbenchRecipeCategory.UID, ToyWorkbenchRecipe.class);
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public @NotNull ResourceLocation getPluginUid() {
         return new ResourceLocation(TisTheSeason.MOD_ID, "jei_plugin");
     }
 

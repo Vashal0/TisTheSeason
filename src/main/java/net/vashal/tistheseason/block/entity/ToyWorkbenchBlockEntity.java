@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -40,7 +41,6 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
-            assert level != null;
             if(!level.isClientSide()) {
                 ModMessages.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
             }
@@ -136,6 +136,14 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
 
         assert this.level != null;
         Containers.dropContents(this.level, this.worldPosition, inventory);
+    }
+
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState state, ToyWorkbenchBlockEntity entity) {

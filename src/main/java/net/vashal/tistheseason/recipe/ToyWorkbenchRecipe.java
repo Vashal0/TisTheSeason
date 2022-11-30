@@ -1,7 +1,6 @@
 package net.vashal.tistheseason.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

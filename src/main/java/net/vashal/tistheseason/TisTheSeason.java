@@ -1,9 +1,11 @@
 package net.vashal.tistheseason;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,8 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.vashal.tistheseason.block.TTS_Blocks;
 import net.vashal.tistheseason.block.entity.TTS_BlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.entity.client.ToyRobotRenderer;
-import net.vashal.tistheseason.entity.client.ToySoldierRenderer;
+import net.vashal.tistheseason.entity.client.*;
 import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.items.custom.curios.renderer.HobbyHorseRenderer;
 import net.vashal.tistheseason.networking.ModMessages;
@@ -63,14 +64,14 @@ public class TisTheSeason {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            ModMessages.register();
-        });
+        event.enqueueWork(ModMessages::register);
     }
 
     private void clientSetup(final FMLClientSetupEvent evt) {
 
     }
+
+
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -80,8 +81,16 @@ public class TisTheSeason {
 
             EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
+            EntityRenderers.register(TTS_EntityTypes.TOY_TANK.get(), ToyTankRenderer::new);
+            EntityRenderers.register(TTS_EntityTypes.IRON_BALL.get(), IronBallRenderer::new);
+
             CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
             MenuScreens.register(TTS_MenuTypes.TOY_WORKBENCH_MENU.get(), ToyWorkbenchScreen::new);
+        }
+
+        @SubscribeEvent
+        public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
+            event.registerLayerDefinition(IronBallModel.LAYER_LOCATION, IronBallModel::createBodyLayer);
         }
     }
 }
