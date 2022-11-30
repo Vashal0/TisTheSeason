@@ -43,9 +43,6 @@ public class TTS_EntityTypes {
                     () -> EntityType.Builder.<IronBall>of(IronBall::new, MobCategory.MISC)
                             .sized(0.25F, 0.25F)
                             .noSummon()
-                            .fireImmune()
-                            .setShouldReceiveVelocityUpdates(false)
-                            .setCustomClientFactory((spawnEntity, world) -> null)
                             .build(new ResourceLocation(TisTheSeason.MOD_ID, "ironball").toString()));
 
 

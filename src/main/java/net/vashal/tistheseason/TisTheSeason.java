@@ -68,9 +68,7 @@ public class TisTheSeason {
     }
 
     private void clientSetup(final FMLClientSetupEvent evt) {
-
     }
-
 
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -82,7 +80,7 @@ public class TisTheSeason {
             EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOY_TANK.get(), ToyTankRenderer::new);
-            EntityRenderers.register(TTS_EntityTypes.IRON_BALL.get(), IronBallRenderer::new);
+            EntityRenderers.register(TTS_EntityTypes.IRON_BALL.get(), IronBallTest::new);
 
             CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
             MenuScreens.register(TTS_MenuTypes.TOY_WORKBENCH_MENU.get(), ToyWorkbenchScreen::new);
@@ -90,7 +88,6 @@ public class TisTheSeason {
 
         @SubscribeEvent
         public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
-            event.registerLayerDefinition(IronBallModel.LAYER_LOCATION, IronBallModel::createBodyLayer);
         }
     }
 }
