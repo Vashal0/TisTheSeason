@@ -1,0 +1,12 @@
+{
+  "type": "tistheseason:toy_making",
+  "toy": {
+    "item": "minecraft:wither_skeleton_skull"
+  },
+  "upgrade": {
+    "item": "minecraft:white_wool"
+  },
+  "result": {
+    "item": "tistheseason:hobby_horse"
+  }
+}

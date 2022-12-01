@@ -1,12 +1,13 @@
 package net.vashal.tistheseason.event;
 
-import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.vashal.tistheseason.TisTheSeason;
+import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
+import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 
 
 public class ModEvents {
@@ -20,6 +21,7 @@ public class ModEvents {
             public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
                 event.put(TTS_EntityTypes.TOYROBOT.get(), ToyRobotEntity.setAttributes());
                 event.put(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierEntity.setAttributes());
+                event.put(TTS_EntityTypes.TOY_TANK.get(), ToyTankEntity.setAttributes());
             }
         }
     }

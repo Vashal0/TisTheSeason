@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    {"id":"tistheseason:toy_robot","required":false},
-    {"id":"tistheseason:toy_robot_bee","required":false},
-    {"id":"tistheseason:toy_robot_eva","required":false},
-    {"id":"tistheseason:toy_robot_wood","required":false}
-  ]
-}

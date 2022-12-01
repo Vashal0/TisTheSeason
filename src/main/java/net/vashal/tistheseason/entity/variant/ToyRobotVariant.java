@@ -4,22 +4,22 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public enum ToyRobotVariant {
-    BLACK(0),
-    WHITE(1),
-    ORANGE(2),
-    MAGENTA(3),
-    LIGHT_BLUE(4),
-    YELLOW(5),
-    LIME(6),
-    PINK(7),
-    GRAY(8),
-    LIGHT_GRAY(9),
-    CYAN(10),
-    PURPLE(11),
-    BLUE(12),
-    BROWN(13),
-    GREEN(14),
-    RED(15);
+    WHITE(0),
+    ORANGE(1),
+    MAGENTA(2),
+    LIGHT_BLUE(3),
+    YELLOW(4),
+    LIME(5),
+    PINK(6),
+    GRAY(7),
+    LIGHT_GRAY(8),
+    CYAN(9),
+    PURPLE(10),
+    BLUE(11),
+    BROWN(12),
+    GREEN(13),
+    RED(14),
+    BLACK(15);
 
 
     private static final ToyRobotVariant[] BY_ID = Arrays.stream(values()).sorted(Comparator.comparingInt(ToyRobotVariant::getId)).toArray(ToyRobotVariant[]::new);

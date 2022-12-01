@@ -1,13 +1,13 @@
 {
   "type": "tistheseason:toy_making",
   "toy": {
-    "item": "tistheseason:toyrobot"
+    "item": "tistheseason:toy_robot_item"
   },
   "upgrade": {
     "tag": "forge:dyes"
   },
 
   "result": {
-    "item": "tistheseason:toyrobot"
+    "item": "tistheseason:toy_robot_item"
   }
 }

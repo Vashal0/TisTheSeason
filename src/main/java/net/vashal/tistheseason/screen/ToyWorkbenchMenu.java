@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 import net.vashal.tistheseason.block.TTS_Blocks;
 import net.vashal.tistheseason.block.entity.ToyWorkbenchBlockEntity;
+import org.jetbrains.annotations.NotNull;
 
 public class ToyWorkbenchMenu extends AbstractContainerMenu {
     public final ToyWorkbenchBlockEntity blockEntity;
@@ -73,9 +74,9 @@ public class ToyWorkbenchMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         Slot sourceSlot = slots.get(index);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
+        if (!sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
 
@@ -108,7 +109,7 @@ public class ToyWorkbenchMenu extends AbstractContainerMenu {
 
 
     @Override
-    public boolean stillValid(Player pPlayer) {
+    public boolean stillValid(@NotNull Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
                 pPlayer, TTS_Blocks.TOY_WORKBENCH.get());
     }

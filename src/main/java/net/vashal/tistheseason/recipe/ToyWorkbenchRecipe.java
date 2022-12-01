@@ -53,6 +53,14 @@ public class ToyWorkbenchRecipe implements Recipe<Container> {
         return result;
     }
 
+    public @NotNull Ingredient getToy() {
+        return toy;
+    }
+
+    public @NotNull Ingredient getUpgrade() {
+        return upgrade;
+    }
+
     @Override
     public @NotNull ResourceLocation getId() {
         return id;

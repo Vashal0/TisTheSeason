@@ -6,7 +6,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
-import net.vashal.tistheseason.items.custom.curios.TTSCurios;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.UUID;

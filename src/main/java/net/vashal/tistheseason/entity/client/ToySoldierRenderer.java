@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.constants.ToySoldierConstants;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
@@ -19,7 +20,7 @@ public class ToySoldierRenderer extends GeoEntityRenderer<ToySoldierEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ToySoldierEntity instance) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ToySoldierEntity instance) {
         return new ResourceLocation(TisTheSeason.MOD_ID, ToySoldierConstants.TEXTURE_RESOURCE);
     }
 

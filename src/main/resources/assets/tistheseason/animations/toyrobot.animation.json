@@ -485,7 +485,27 @@
 			"loop": true,
 			"animation_length": 3,
 			"bones": {
-				"windup": {
+				"iron": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"3.0": {
+							"vector": [0, 0, 360]
+						}
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"3.0": {
+							"vector": [0, 0, 360]
+						}
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -820,7 +840,145 @@
 						}
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"0.7083": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [8.61775, -34.05444, -15.14371]
+						},
+						"0.7917": {
+							"vector": [0, -45, -32.5]
+						},
+						"0.8333": {
+							"vector": [0, -60, -32.5]
+						},
+						"0.875": {
+							"vector": [-7.5, -98.75, -32.25]
+						},
+						"0.9167": {
+							"vector": [-15, -107.5, -32]
+						},
+						"0.9583": {
+							"vector": [-15, -113.13, -39.04]
+						},
+						"1.0": {
+							"vector": [-15, -115.2, -41.63],
+							"easing": "easeInExpo"
+						},
+						"1.2917": {
+							"vector": [-15, -124.25, -46.37]
+						},
+						"1.4167": {
+							"vector": [-15, -125.5, -47],
+							"easing": "easeOutCubic"
+						}
+					},
+					"position": {
+						"0.75": {
+							"vector": [0, 0, 0]
+						},
+						"0.7917": {
+							"vector": [0, -2.5, -1],
+							"easing": "easeInExpo"
+						},
+						"0.8333": {
+							"vector": [0, -3, -1],
+							"easing": "easeInSine"
+						},
+						"0.875": {
+							"vector": [0, -3.14, -1.25]
+						},
+						"0.9167": {
+							"vector": [0, -3.275, -1.5]
+						},
+						"0.9583": {
+							"vector": [0, -3.82, -1.46]
+						},
+						"1.0": {
+							"vector": [0, -4.02, -1.45],
+							"easing": "easeInExpo"
+						},
+						"1.2917": {
+							"vector": [0, -4.65, -1.78]
+						},
+						"1.4167": {
+							"vector": [0, -4.74, -1.825],
+							"easing": "easeOutCubic"
+						}
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"0.7083": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [8.61775, -34.05444, -15.14371]
+						},
+						"0.7917": {
+							"vector": [0, -45, -32.5]
+						},
+						"0.8333": {
+							"vector": [0, -60, -32.5]
+						},
+						"0.875": {
+							"vector": [-7.5, -98.75, -32.25]
+						},
+						"0.9167": {
+							"vector": [-15, -107.5, -32]
+						},
+						"0.9583": {
+							"vector": [-15, -113.13, -39.04]
+						},
+						"1.0": {
+							"vector": [-15, -115.2, -41.63],
+							"easing": "easeInExpo"
+						},
+						"1.2917": {
+							"vector": [-15, -124.25, -46.37]
+						},
+						"1.4167": {
+							"vector": [-15, -125.5, -47],
+							"easing": "easeOutCubic"
+						}
+					},
+					"position": {
+						"0.75": {
+							"vector": [0, 0, 0]
+						},
+						"0.7917": {
+							"vector": [0, -2.5, -1],
+							"easing": "easeInExpo"
+						},
+						"0.8333": {
+							"vector": [0, -3, -1],
+							"easing": "easeInSine"
+						},
+						"0.875": {
+							"vector": [0, -3.14, -1.25]
+						},
+						"0.9167": {
+							"vector": [0, -3.275, -1.5]
+						},
+						"0.9583": {
+							"vector": [0, -3.82, -1.46]
+						},
+						"1.0": {
+							"vector": [0, -4.02, -1.45],
+							"easing": "easeInExpo"
+						},
+						"1.2917": {
+							"vector": [0, -4.65, -1.78]
+						},
+						"1.4167": {
+							"vector": [0, -4.74, -1.825],
+							"easing": "easeOutCubic"
+						}
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"0.7083": {
 							"vector": [0, 0, 0]
@@ -916,7 +1074,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -18]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -18]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -18]
 					}
@@ -947,7 +1115,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -36]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -36]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -36]
 					}
@@ -984,9 +1162,19 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
 					"rotation": {
 						"vector": [0, 0, -54]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -36]
+					}
+				},
+				"netherite": {
+					"rotation": {
+						"vector": [0, 0, -36]
 					}
 				}
 			},
@@ -1020,7 +1208,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -72]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -72]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -72]
 					}
@@ -1056,7 +1254,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -90]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -90]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -90]
 					}
@@ -1092,7 +1300,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -108]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -108]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -108]
 					}
@@ -1128,7 +1346,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -126]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -126]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -126]
 					}
@@ -1164,7 +1392,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -144]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -144]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -144]
 					}
@@ -1200,7 +1438,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -162]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -162]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -162]
 					}
@@ -1236,7 +1484,17 @@
 						"vector": [0, -0.625, -0.65]
 					}
 				},
-				"windup": {
+				"iron": {
+					"rotation": {
+						"vector": [0, 0, -180]
+					}
+				},
+				"diamond": {
+					"rotation": {
+						"vector": [0, 0, -180]
+					}
+				},
+				"netherite": {
 					"rotation": {
 						"vector": [0, 0, -180]
 					}

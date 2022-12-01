@@ -38,10 +38,11 @@ import java.util.Locale;
 public class ToyWorkbench extends BaseEntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    protected static final VoxelShape WORKBENCH_NORTH_SHAPE = Block.box(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 16.0D);
-    protected static final VoxelShape WORKBENCH_EAST_SHAPE = Block.box(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 16.0D);
-    protected static final VoxelShape WORKBENCH_WEST_SHAPE = Block.box(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 16.0D);
-    protected static final VoxelShape WORKBENCH_SOUTH_SHAPE = Block.box(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 16.0D);
+    protected static final VoxelShape WORKBENCH_NORTH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
+    protected static final VoxelShape WORKBENCH_EAST_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
+    protected static final VoxelShape WORKBENCH_WEST_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
+    protected static final VoxelShape WORKBENCH_SOUTH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
+
 
     public static final EnumProperty<WorkbenchType> TYPE = EnumProperty.create("model", WorkbenchType.class);
 
@@ -53,6 +54,10 @@ public class ToyWorkbench extends BaseEntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
+
+
+
+
 
     @Override
     public void playerWillDestroy(Level worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
@@ -90,17 +95,13 @@ public class ToyWorkbench extends BaseEntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        switch (state.getValue(FACING)) {
-            case NORTH:
-                return WORKBENCH_NORTH_SHAPE;
-            case SOUTH:
-                return WORKBENCH_SOUTH_SHAPE;
-            case WEST:
-                return WORKBENCH_WEST_SHAPE;
-            default:
-                return WORKBENCH_EAST_SHAPE;
-        }
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+        return switch (state.getValue(FACING)) {
+            case NORTH -> WORKBENCH_NORTH_SHAPE;
+            case SOUTH -> WORKBENCH_SOUTH_SHAPE;
+            case WEST -> WORKBENCH_WEST_SHAPE;
+            default -> WORKBENCH_EAST_SHAPE;
+        };
     }
 
     @Deprecated
@@ -139,19 +140,19 @@ public class ToyWorkbench extends BaseEntityBlock {
 
     @Deprecated
     @Override
-    public float getShadeBrightness(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    public float getShadeBrightness(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos) {
         return 1;
     }
 
     //BE
 
     @Override
-    public RenderShape getRenderShape(BlockState blockstate) {
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState blockstate) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    public void onRemove(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof ToyWorkbenchBlockEntity) {
@@ -162,8 +163,8 @@ public class ToyWorkbench extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos,
-                                 Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    public @NotNull InteractionResult use(BlockState pState, Level pLevel, @NotNull BlockPos pPos,
+                                          @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
         WorkbenchType workbenchModel = pState.getValue(TYPE);
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
@@ -186,13 +187,13 @@ public class ToyWorkbench extends BaseEntityBlock {
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
         return new ToyWorkbenchBlockEntity(pPos, pState);
     }
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level pLevel, @NotNull BlockState pState, @NotNull BlockEntityType<T> pBlockEntityType) {
         return createTickerHelper(pBlockEntityType, TTS_BlockEntities.TOY_WORKBENCH.get(),
                 ToyWorkbenchBlockEntity::tick);
     }

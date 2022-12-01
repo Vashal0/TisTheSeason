@@ -44,7 +44,7 @@ public class ToyRobotEntity extends WindUpToys implements IAnimatable {
     public void playModSounds() {
         super.playModSounds();
         if (tickCount % 512 == 0) {
-            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_GEARS.get(), this.getSoundSource(), 0.6f, 1.2f, true);
+            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_GEARS.get(), this.getSoundSource(), 0.4f, 1.2f, true);
         }
     }
 
