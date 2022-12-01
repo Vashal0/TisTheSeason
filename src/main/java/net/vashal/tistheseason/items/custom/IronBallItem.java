@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.items;
+package net.vashal.tistheseason.items.custom;
 
 import net.minecraft.world.item.Item;
 

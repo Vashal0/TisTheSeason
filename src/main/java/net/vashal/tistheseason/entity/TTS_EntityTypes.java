@@ -12,7 +12,7 @@ import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
-import net.vashal.tistheseason.entity.custom.ToyTankEntity;
+import net.vashal.tistheseason.entity.custom.EvilToyTankEntity;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 
 public class TTS_EntityTypes {
@@ -32,9 +32,9 @@ public class TTS_EntityTypes {
                             .sized(0.5f, 1f)
                             .build(new ResourceLocation(TisTheSeason.MOD_ID, "toysoldier").toString()));
 
-    public static final RegistryObject<EntityType<ToyTankEntity>> TOY_TANK =
+    public static final RegistryObject<EntityType<EvilToyTankEntity>> TOY_TANK =
             ENTITY_TYPES.register(ToyTankConstants.NAME,
-                    () -> EntityType.Builder.of(ToyTankEntity::new, MobCategory.MONSTER)
+                    () -> EntityType.Builder.of(EvilToyTankEntity::new, MobCategory.MONSTER)
                             .sized(ToyTankConstants.WIDTH, ToyTankConstants.HEIGHT)
                             .build(new ResourceLocation(TisTheSeason.MOD_ID, ToyTankConstants.NAME).toString()));
 

@@ -8,12 +8,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.constants.ToyTankConstants;
-import net.vashal.tistheseason.entity.custom.ToyTankEntity;
+import net.vashal.tistheseason.entity.custom.EvilToyTankEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-public class ToyTankRenderer extends GeoEntityRenderer<ToyTankEntity> {
+public class ToyTankRenderer extends GeoEntityRenderer<EvilToyTankEntity> {
 
     public ToyTankRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ToyTankModel());
@@ -21,12 +21,12 @@ public class ToyTankRenderer extends GeoEntityRenderer<ToyTankEntity> {
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull ToyTankEntity instance) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EvilToyTankEntity instance) {
         return new ResourceLocation(TisTheSeason.MOD_ID, ToyTankConstants.TEXTURE_RESOURCE);
     }
 
     @Override
-    public RenderType getRenderType(ToyTankEntity animatable, float partialTick, PoseStack poseStack,
+    public RenderType getRenderType(EvilToyTankEntity animatable, float partialTick, PoseStack poseStack,
                                     @Nullable MultiBufferSource bufferSource,
                                     @Nullable VertexConsumer buffer, int packedLight,
                                     ResourceLocation texture) {

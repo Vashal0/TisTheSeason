@@ -1,0 +1,6 @@
+{
+	"parent": "item/handheld",
+	"textures": {
+		"layer0": "tistheseason:item/wooden_mallet_texture"
+	}
+}

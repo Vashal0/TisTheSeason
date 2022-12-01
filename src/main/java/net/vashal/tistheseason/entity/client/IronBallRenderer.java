@@ -1,31 +1,20 @@
 package net.vashal.tistheseason.entity.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.vashal.tistheseason.entity.projectile.IronBall;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.util.Color;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
-import software.bernie.geckolib3.util.EModelRenderCycle;
-
-import java.util.Collections;
 
 
-public class IronBallTest extends GeoProjectilesRenderer<IronBall> {
+public class IronBallRenderer extends GeoProjectilesRenderer<IronBall> {
 
-    public IronBallTest(EntityRendererProvider.Context renderManagerIn) {
-        super(renderManagerIn, new IronBallTestModel());
+    public IronBallRenderer(EntityRendererProvider.Context renderManagerIn) {
+        super(renderManagerIn, new IronBallModel());
     }
 
     protected int getBlockLightLevel(IronBall entityIn, BlockPos partialTicks) {

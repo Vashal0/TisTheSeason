@@ -5,7 +5,7 @@ import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class IronBallTestModel extends AnimatedGeoModel<IronBall> {
+public class IronBallModel extends AnimatedGeoModel<IronBall> {
 
     @Override
     public ResourceLocation getModelResource(IronBall object) {
