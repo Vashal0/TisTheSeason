@@ -27,7 +27,15 @@ public class TTS_Items {
             () -> new IronBallItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(64)));
 
     public static final RegistryObject<Item> TOY_ROBOT_SPAWN_EGG = ITEMS.register("toy_robot_spawn_egg",
-            () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOYROBOT, 0x22b341, 0x19732e,
+            () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOYROBOT, 0x0096ff, 0xc70039,
+                    new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
+
+    public static final RegistryObject<Item> TOY_SOLDIER_SPAWN_EGG = ITEMS.register("toy_soldier_spawn_egg",
+            () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOYSOLDIER, 0xff5733, 0xffd700,
+                    new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
+
+    public static final RegistryObject<Item> TOY_TANK_SPAWN_EGG = ITEMS.register("toy_tank_spawn_egg",
+            () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOY_TANK, 0x454b1b, 0x023020,
                     new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
 
     public static void register(IEventBus eventBus) {

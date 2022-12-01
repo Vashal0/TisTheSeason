@@ -126,8 +126,8 @@ public class ToyTankEntity extends Monster implements IAnimatable, IAnimationTic
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         super.registerGoals();
     }
 
@@ -140,7 +140,7 @@ public class ToyTankEntity extends Monster implements IAnimatable, IAnimationTic
     }
 
     private <E extends IAnimatable> PlayState idlePredicate(AnimationEvent<E> event) {
-        if (deathTime == 50) {
+        if (deathTime == 0 && this.getAttackState() == 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyTankConstants.ANIMATION_IDLE, ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
