@@ -1,7 +1,6 @@
 package net.vashal.tistheseason;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -80,7 +79,7 @@ public class TisTheSeason {
             EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.TOY_TANK.get(), ToyTankRenderer::new);
-            EntityRenderers.register(TTS_EntityTypes.IRON_BALL.get(), IronBallTest::new);
+            EntityRenderers.register(TTS_EntityTypes.IRON_BALL.get(), IronBallRenderer::new);
 
             CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
             MenuScreens.register(TTS_MenuTypes.TOY_WORKBENCH_MENU.get(), ToyWorkbenchScreen::new);

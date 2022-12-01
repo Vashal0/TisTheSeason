@@ -1,4 +1,4 @@
 package net.vashal.tistheseason.entity.custom;
 
-public class ToyTankEntity {
+public class EvilToySoldierEntity {
 }

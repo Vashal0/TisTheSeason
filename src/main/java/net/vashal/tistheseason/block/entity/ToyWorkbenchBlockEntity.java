@@ -26,6 +26,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.networking.ModMessages;
 import net.vashal.tistheseason.networking.packet.ItemStackSyncS2CPacket;
 import net.vashal.tistheseason.recipe.ToyWorkbenchRecipe;
@@ -79,6 +80,10 @@ public class ToyWorkbenchBlockEntity extends BlockEntity implements MenuProvider
                 return 2;
             }
         };
+    }
+
+    public boolean hasWoodenMallet() {
+        return this.itemHandler.getStackInSlot(3).getItem() == TTS_Items.WOODEN_MALLET.get();
     }
 
     @Override

@@ -113,13 +113,13 @@ public class IronBall extends AbstractArrow implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        AnimationController<IronBall> spinController = new AnimationController<>(this, "idleController", 0, this::spinPredicate);
+        AnimationController<IronBall> spinController = new AnimationController<>(this, "spinController", 0, this::spinPredicate);
         data.addAnimationController(spinController);
     }
 
 
     private <E extends IAnimatable> PlayState spinPredicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animations/animation.iron_ball.spin", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iron_ball.spin", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
