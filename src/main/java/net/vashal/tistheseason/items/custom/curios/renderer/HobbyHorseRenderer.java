@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -16,7 +17,7 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 /**
  * Renderer for the HobbyHorse curio
  */
-public class HobbyHorseRenderer implements ICurioRenderer {
+public class HobbyHorseRenderer<T extends LivingEntity, M extends HumanoidModel<T>> implements ICurioRenderer {
 
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext,
@@ -27,16 +28,13 @@ public class HobbyHorseRenderer implements ICurioRenderer {
         LivingEntity livingEntity = slotContext.entity();
         ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
         ICurioRenderer.rotateIfSneaking(matrixStack, livingEntity);
-
-        //X scale, Y scale, Z scale
+        matrixStack.pushPose();
         matrixStack.scale(1.1f, 1.1f, 1.1f);
-        //X offset, Y offset (higher Y go up, lower Y go down), Z offset
         matrixStack.translate(0.0f, 0.5f, -0.4f);
-        //some sort of math magic
         matrixStack.mulPose(new Quaternion(0f, -0.1f, 1f, 0.0f));
-
         Minecraft.getInstance().getItemRenderer()
                 .renderStatic(stack, ItemTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack,
                         renderTypeBuffer, 0);
+        matrixStack.popPose();
     }
 }

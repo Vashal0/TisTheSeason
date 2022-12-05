@@ -23,52 +23,33 @@ import java.util.Objects;
 
 public class ToyWorkbenchBlockEntityRenderer implements BlockEntityRenderer<ToyWorkbenchBlockEntity> {
 
-    public ToyWorkbenchBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+    private final ItemRenderer itemRenderer;
 
+    public ToyWorkbenchBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+        itemRenderer = Minecraft.getInstance().getItemRenderer();
     }
 
 
     @Override
     public void render(ToyWorkbenchBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack,
                        @NotNull MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-
         ItemStack itemStack = pBlockEntity.getRenderStack();
         pPoseStack.pushPose();
-        pPoseStack.translate(0.68f, 1f, 0.22f);
-        pPoseStack.scale(0.5f, 0.5f, 0.5f);
-        pPoseStack.mulPose(Vector3f.XP.rotationDegrees(-90));
-        pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(180));
+        pPoseStack.translate(0.5f, 0.5f, 0.5f);
+        pPoseStack.mulPose(Vector3f.YN.rotationDegrees(pBlockEntity.getBlockState().getValue(ToyWorkbench.FACING).toYRot()));
+        pPoseStack.pushPose();
+        pPoseStack.translate(0.2f, 0.525f, 0.175f);
+        pPoseStack.mulPose(Vector3f.XP.rotationDegrees(270));
+        pPoseStack.mulPose(Vector3f.ZN.rotationDegrees(90));
 
-        switch (pBlockEntity.getBlockState().getValue(ToyWorkbench.FACING)) {
-            case NORTH -> {
-                pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(90));
-                pPoseStack.translate(0.15f,-0.82f,0f);
-            }
-            case EAST -> {
-                pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(0));
-                pPoseStack.translate(-0.05f,0.1f,0f);
-            }
-            case SOUTH -> {
-                pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(270));
-                pPoseStack.translate(-0.95f,-0.1f,0f);
-            }
-            case WEST -> {
-                pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(180));
-                pPoseStack.translate(-0.75f,-1.02f,0f);
-            }
-        }
-
-        if (itemStack.getItem() == TTS_Items.HOBBY_HORSE.get()) {
-            pPoseStack.mulPose(Vector3f.XP.rotationDegrees(-15));
-            pPoseStack.translate(0f,0f,-0.1f);
-        }
-
-        itemRenderer.renderStatic(itemStack, ItemTransforms.TransformType.GUI, getLightLevel(Objects.requireNonNull(pBlockEntity.getLevel()),
-                        pBlockEntity.getBlockPos()),
+        pPoseStack.scale(0.7f, 0.7f, 0.7f);
+        itemRenderer.renderStatic(itemStack, ItemTransforms.TransformType.GUI, getLightLevel(Objects.requireNonNull(pBlockEntity.getLevel()), pBlockEntity.getBlockPos()),
                 OverlayTexture.NO_OVERLAY, pPoseStack, pBufferSource, 1);
+
+        pPoseStack.popPose();
         pPoseStack.popPose();
     }
+
 
     private int getLightLevel(Level level, BlockPos pos) {
         int bLight = level.getBrightness(LightLayer.BLOCK, pos);

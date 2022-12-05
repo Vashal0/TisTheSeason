@@ -1,7 +1,8 @@
-package net.vashal.tistheseason.entity.client;
+package net.vashal.tistheseason.entity.client.models;
 
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
+import net.vashal.tistheseason.entity.client.renderers.ToyRobotRenderer;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

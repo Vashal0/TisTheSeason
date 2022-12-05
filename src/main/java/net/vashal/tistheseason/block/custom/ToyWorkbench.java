@@ -27,6 +27,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
+import net.vashal.tistheseason.block.TTS_Blocks;
 import net.vashal.tistheseason.block.entity.TTS_BlockEntities;
 import net.vashal.tistheseason.block.entity.ToyWorkbenchBlockEntity;
 import org.jetbrains.annotations.NotNull;

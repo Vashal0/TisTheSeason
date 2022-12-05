@@ -26,7 +26,7 @@ public class TTS_Blocks {
                     .strength(6f).requiresCorrectToolForDrops().noOcclusion()), TTS_CreativeModeTab.TISTHESEASON_TAB);
 
     public static final RegistryObject<Block> INVISIBLE_REDSTONE = registerBlock("invisible_redstone",
-            () -> new InvisibleRedstone(BlockBehaviour.Properties.of(Material.AIR).noCollission().noLootTable()), TTS_CreativeModeTab.TISTHESEASON_TAB);
+            InvisibleRedstone::new, TTS_CreativeModeTab.TISTHESEASON_TAB);
 
 
 

@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.entity.client;
+package net.vashal.tistheseason.entity.client.models;
 
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;

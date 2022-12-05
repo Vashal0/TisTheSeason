@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.entity.client;
+package net.vashal.tistheseason.entity.client.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.constants.ToySoldierConstants;
+import net.vashal.tistheseason.entity.client.models.ToySoldierModel;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

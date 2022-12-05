@@ -1,4 +1,4 @@
-package net.vashal.tistheseason.entity.client;
+package net.vashal.tistheseason.entity.client.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.vashal.tistheseason.entity.client.models.IronBallModel;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 

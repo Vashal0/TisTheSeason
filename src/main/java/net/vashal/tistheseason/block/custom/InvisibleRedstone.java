@@ -9,6 +9,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -18,10 +20,9 @@ import org.jetbrains.annotations.NotNull;
 public class InvisibleRedstone extends Block {
 
 
-    public InvisibleRedstone(Properties pProperties) {
-        super(pProperties);
+    public InvisibleRedstone() {
+        super(Block.Properties.of(Material.AIR).noCollission().noLootTable());
     }
-
 
     @Override
     public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
@@ -45,12 +46,22 @@ public class InvisibleRedstone extends Block {
         return 15;
     }
 
+    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+        return 15;
+    }
+
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.INVISIBLE;
     }
 
     public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return Shapes.empty();
+    }
+
+    @Deprecated
+    @Override
+    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
+        return PushReaction.DESTROY;
     }
 }
 
