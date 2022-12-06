@@ -1,0 +1,79 @@
+package net.vashal.tistheseason.entity.ai;
+
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.vashal.tistheseason.entity.custom.KrampusEntity;
+
+import java.util.EnumSet;
+
+public class KrampusAttackGoal extends Goal {
+    private int statecheck;
+    private final KrampusEntity entity;
+    private double moveSpeedAmp = 1;
+    private int attackTime = -1;
+
+    public KrampusAttackGoal(KrampusEntity mob, double moveSpeedAmpIn, int state) {
+        this.entity = mob;
+        this.moveSpeedAmp = moveSpeedAmpIn;
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.statecheck = state;
+    }
+
+    public boolean canUse() {
+        return this.entity.getTarget() != null;
+    }
+
+    public boolean canContinueToUse() {
+        return this.canUse();
+    }
+
+    public void start() {
+        super.start();
+        this.entity.setAggressive(true);
+    }
+
+    public void stop() {
+        super.stop();
+        this.entity.setAggressive(false);
+        this.entity.setAttackingState(0);
+        this.attackTime = -1;
+    }
+
+    public void tick() {
+        LivingEntity livingentity = this.entity.getTarget();
+        if (livingentity != null) {
+            boolean inLineOfSight = this.entity.getSensing().hasLineOfSight(livingentity);
+            this.attackTime++;
+            this.entity.lookAt(livingentity, 30.0F, 30.0F);
+            final AABB aabb2 = new AABB(this.entity.blockPosition()).inflate(2D);
+            if (inLineOfSight) {
+                this.entity.getNavigation().moveTo(livingentity, this.moveSpeedAmp);
+                if (this.attackTime == 1) {
+                    this.entity.setAttackingState(statecheck);
+                }
+                if (this.attackTime == 6) {
+                    this.entity.getCommandSenderWorld().getEntities(this.entity, aabb2).forEach(e -> {
+                        if ((e instanceof Player)) {
+                            this.entity.doHurtTarget(livingentity);
+                            livingentity.invulnerableTime = 0;
+                        }
+                    });
+                }
+                if (this.attackTime == 2) {
+                    this.entity.getCommandSenderWorld().getEntities(this.entity, aabb2).forEach(e -> {
+                        if ((e instanceof Player)) {
+                            this.entity.setAttackingState(1);
+                        }
+                    });
+                }
+                if (this.attackTime >= 8) {
+                    this.attackTime = -1;
+                    this.entity.setAttackingState(0);
+                }
+            }
+        }
+    }
+
+}

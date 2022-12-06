@@ -26,13 +26,16 @@ public class KrampusRenderer extends GeoEntityRenderer<KrampusEntity> {
         return new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/krampus_texture.png");
     }
 
+    public float getDeathMaxRotation(KrampusEntity instance) {
+        return 0f;
+    }
+
     @Override
     public RenderType getRenderType(KrampusEntity animatable, float partialTick, PoseStack poseStack,
                                     @Nullable MultiBufferSource bufferSource,
                                     @Nullable VertexConsumer buffer, int packedLight,
                                     ResourceLocation texture) {
-
-
         return super.getRenderType(animatable, partialTick, poseStack, bufferSource, buffer, packedLight, texture);
     }
+
 }

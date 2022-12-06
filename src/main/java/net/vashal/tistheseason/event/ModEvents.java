@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.capabilities.Capability;
@@ -76,19 +78,19 @@ public class ModEvents {
                 if (event.getEntity() instanceof Villager) {
                     if (event.getEntity().isBaby()) {
                         player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                            niceScore.removeScore(25);
+                            niceScore.removeScore(100);
                             player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                         });
                     } else {
                         player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                            niceScore.removeScore(10);
+                            niceScore.removeScore(25);
                             player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                         });
                     }
                 } else if (event.getEntity() instanceof Animal) {
                     if (event.getEntity().isBaby()) {
                         player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                            niceScore.removeScore(5);
+                            niceScore.removeScore(25);
                             player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                         });
                     } else {
@@ -106,12 +108,12 @@ public class ModEvents {
             if (event.getSource().getEntity() instanceof Player player) {
                 if (event.getEntity() instanceof Pillager) {
                     player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                        niceScore.addScore(2);
+                        niceScore.addScore(5);
                         player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                     });
                 } else if (event.getEntity() instanceof Monster) {
                     player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                        niceScore.addScore(1);
+                        niceScore.addScore(2);
                         player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                     });
                 }
@@ -163,13 +165,7 @@ public class ModEvents {
             Level level = player.getLevel();
             player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
                 if (niceScore.getCurrentScore() <= -400) {
-                    for (int i = 0; i < 10; i++) {
-                        TTS_EntityTypes.EVIL_ROBOT.get().spawn((ServerLevel) level, null, null, player.blockPosition(),
-                                MobSpawnType.COMMAND, true, false);
-                    }
-                } else if (niceScore.getCurrentScore() <= -100 && niceScore.getCurrentScore() > -400) {
-                    TTS_EntityTypes.TOY_TANK.get().spawn((ServerLevel) level, null, null, player.blockPosition(),
-                            MobSpawnType.COMMAND, true, false);
+                    TTS_EntityTypes.KRAMPUS.get().spawn((ServerLevel) level, null, null, player.blockPosition(), MobSpawnType.COMMAND, true, false);
                     player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                 } else if (niceScore.getCurrentScore() < 0 && niceScore.getCurrentScore() > -100) {
                     player.sendSystemMessage(Component.literal("do better"));
