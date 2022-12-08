@@ -1,9 +1,8 @@
 package net.vashal.tistheseason;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,24 +14,17 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.vashal.tistheseason.block.TTS_Blocks;
-import net.vashal.tistheseason.block.entity.TTS_BlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.entity.client.renderers.*;
 import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.items.custom.curios.renderer.CuriosLayerDefinitions;
-import net.vashal.tistheseason.items.custom.curios.renderer.GloveModel;
-import net.vashal.tistheseason.items.custom.curios.renderer.GloveRenderer;
-import net.vashal.tistheseason.items.custom.curios.renderer.HobbyHorseRenderer;
-import net.vashal.tistheseason.networking.ModMessages;
+import net.vashal.tistheseason.items.custom.curios.renderer.*;
 import net.vashal.tistheseason.recipe.TTS_Recipes;
 import net.vashal.tistheseason.screen.TTS_MenuTypes;
-import net.vashal.tistheseason.screen.ToyWorkbenchScreen;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
-import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TisTheSeason.MOD_ID)
@@ -52,15 +44,22 @@ public class TisTheSeason {
         MinecraftForge.EVENT_BUS.register(this);
 
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
-                () -> SlotTypePreset.BELT.getMessageBuilder().build());
+                () -> SlotTypePreset.BELT.getMessageBuilder().cosmetic().build());
 
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
-                () -> SlotTypePreset.HANDS.getMessageBuilder().build());
+                () -> SlotTypePreset.HANDS.getMessageBuilder().cosmetic().build());
+
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                () -> SlotTypePreset.BODY.getMessageBuilder().cosmetic().build());
+
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                () -> SlotTypePreset.HEAD.getMessageBuilder().cosmetic().build());
+
+        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("feet").priority(220).icon(InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS).cosmetic().build());
 
         GeckoLib.initialize();
         TTS_EntityTypes.register(modEventBus);
         TTS_Sounds.SOUNDS.register(modEventBus);
-        TTS_BlockEntities.register(modEventBus);
         TTS_MenuTypes.register(modEventBus);
         TTS_Recipes.register(modEventBus);
     }
@@ -72,7 +71,6 @@ public class TisTheSeason {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(ModMessages::register);
     }
 
     private void clientSetup(final FMLClientSetupEvent evt) {
@@ -84,21 +82,15 @@ public class TisTheSeason {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-
-            EntityRenderers.register(TTS_EntityTypes.TOYROBOT.get(), ToyRobotRenderer::new);
-            EntityRenderers.register(TTS_EntityTypes.EVIL_ROBOT.get(), EvilRobotRenderer::new);
-            EntityRenderers.register(TTS_EntityTypes.TOYSOLDIER.get(), ToySoldierRenderer::new);
-            EntityRenderers.register(TTS_EntityTypes.TOY_TANK.get(), ToyTankRenderer::new);
-            EntityRenderers.register(TTS_EntityTypes.KRAMPUS.get(), KrampusRenderer::new);
-            EntityRenderers.register(TTS_EntityTypes.IRON_BALL.get(), IronBallRenderer::new);
-            CuriosRendererRegistry.register(TTS_Items.POWER_GLOVE.get(), GloveRenderer::new);
-            CuriosRendererRegistry.register(TTS_Items.HOBBY_HORSE.get(), HobbyHorseRenderer::new);
-            MenuScreens.register(TTS_MenuTypes.TOY_WORKBENCH_MENU.get(), ToyWorkbenchScreen::new);
         }
 
         @SubscribeEvent
         public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
             event.registerLayerDefinition(CuriosLayerDefinitions.GLOVES, GloveModel::createLayer);
+            event.registerLayerDefinition(CuriosLayerDefinitions.SWEATER, SweaterModel::createLayer);
+            event.registerLayerDefinition(CuriosLayerDefinitions.HAT, HatModel::createLayer);
+            event.registerLayerDefinition(CuriosLayerDefinitions.REINDEER_SLIPPERS, ReindeerSlipperModel::createLayer);
+            event.registerLayerDefinition(CuriosLayerDefinitions.SNOWMAN_SLIPPERS, SnowmanSlipperModel::createLayer);
         }
     }
 }

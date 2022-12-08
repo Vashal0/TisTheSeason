@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +17,9 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -124,10 +128,11 @@ public class ModEvents {
         public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {
             Player player = event.getEntity();
             BlockPos pos = event.getPos().relative(Objects.requireNonNull(event.getFace()));
+            BlockPos pPos = event.getPos();
             BlockState state = TTS_Blocks.INVISIBLE_REDSTONE.get().defaultBlockState();
-
-            if (player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) {
-                Level world = event.getLevel();
+            Level world = event.getLevel();
+            Block block = world.getBlockState(pPos).getBlock();
+            if (player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty() && !(block instanceof BaseEntityBlock)) {
                 if (!(world.getBlockState(pos).getMaterial() == Material.AIR && world.getBlockState(pos).getBlock() != TTS_Blocks.INVISIBLE_REDSTONE.get())) {
                     return;
                 }

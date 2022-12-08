@@ -2,7 +2,6 @@ package net.vashal.tistheseason.entity.ai;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.vashal.tistheseason.entity.custom.KrampusEntity;
 
@@ -46,7 +45,7 @@ public class KrampusAttackGoal extends Goal {
         if (livingentity != null) {
             boolean inLineOfSight = this.entity.getSensing().hasLineOfSight(livingentity);
             this.attackTime++;
-            this.entity.lookAt(livingentity, 30.0F, 30.0F);
+            this.entity.lookAt(livingentity, 15.0F, 15.0F);
             final AABB aabb2 = new AABB(this.entity.blockPosition()).inflate(2D);
             if (inLineOfSight) {
                 this.entity.getNavigation().moveTo(livingentity, this.moveSpeedAmp);
@@ -55,7 +54,7 @@ public class KrampusAttackGoal extends Goal {
                 }
                 if (this.attackTime == 6) {
                     this.entity.getCommandSenderWorld().getEntities(this.entity, aabb2).forEach(e -> {
-                        if ((e instanceof Player)) {
+                        if ((e == livingentity)) {
                             this.entity.doHurtTarget(livingentity);
                             livingentity.invulnerableTime = 0;
                         }
@@ -63,7 +62,7 @@ public class KrampusAttackGoal extends Goal {
                 }
                 if (this.attackTime == 2) {
                     this.entity.getCommandSenderWorld().getEntities(this.entity, aabb2).forEach(e -> {
-                        if ((e instanceof Player)) {
+                        if ((e == livingentity)) {
                             this.entity.setAttackingState(1);
                         }
                     });

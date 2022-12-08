@@ -1,9 +1,6 @@
 package net.vashal.tistheseason.items;
 
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -14,8 +11,7 @@ import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.custom.IronBallItem;
 import net.vashal.tistheseason.items.custom.ToyRobotItem;
 import net.vashal.tistheseason.items.custom.WoodenMalletItem;
-import net.vashal.tistheseason.items.custom.curios.HobbyHorseItem;
-import net.vashal.tistheseason.items.custom.curios.PowerGloveItem;
+import net.vashal.tistheseason.items.custom.curios.*;
 import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
 
 
@@ -29,8 +25,23 @@ public class TTS_Items {
     public static final RegistryObject<Item> HOBBY_HORSE = ITEMS.register("hobby_horse",
             () -> new HobbyHorseItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
+    public static final RegistryObject<Item> MARI_HOBBY_HORSE = ITEMS.register("mari_hobby_horse",
+            () -> new MariHobbyHorseItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
     public static final RegistryObject<Item> POWER_GLOVE = ITEMS.register("power_glove_item",
             () -> new PowerGloveItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> SWEATER = ITEMS.register("sweater_item",
+            () -> new SweaterItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> HAT = ITEMS.register("santa_hat_item",
+            () -> new HatItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> REINDEER_SLIPPERS = ITEMS.register("reindeer_slippers",
+            () -> new ReindeerSlipperItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> SNOWMAN_SLIPPERS = ITEMS.register("snowman_slippers",
+            () -> new SnowmanSlipperItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
     public static final RegistryObject<Item> IRON_BALL_ITEM = ITEMS.register("iron_ball_item",
             () -> new IronBallItem(new Item.Properties()));

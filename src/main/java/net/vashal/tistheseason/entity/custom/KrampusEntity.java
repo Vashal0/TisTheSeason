@@ -14,12 +14,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -53,6 +51,16 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
 
     }
 
+    @Override
+    public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements, boolean pTeleport) {
+        this.lerpX = pX;
+        this.lerpY = pY;
+        this.lerpZ = pZ;
+        this.lerpYRot = pYaw;
+        this.lerpXRot = pPitch;
+        this.lerpSteps = pPosRotationIncrements * 2;
+    }
+
     public static AttributeSupplier setAttributes() {
         return Monster.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, KrampusConstants.MAX_HEALTH)
@@ -79,7 +87,7 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     }
 
     private <E extends IAnimatable> PlayState walkPredicate(AnimationEvent<E> event) {
-        if (event.isMoving() && this.entityData.get(ATTACK_STATE) != 1 || !(this.getTarget() instanceof Player) && event.isMoving()) {
+        if (event.isMoving() && this.entityData.get(ATTACK_STATE) != 1) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.walk", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
@@ -110,9 +118,11 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
         return this.getBbHeight() * 0.65F;
     }
 
+
+
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @javax.annotation.Nullable SpawnGroupData pSpawnData, @javax.annotation.Nullable CompoundTag pDataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         RandomSource randomsource = pLevel.getRandom();
         if (randomsource.nextInt(1) == 0) {
@@ -180,8 +190,8 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
         this.goalSelector.addGoal(1, new KrampusAttackGoal(this, 1.0, 2));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
 
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         super.registerGoals();
     }
 
