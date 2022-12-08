@@ -11,7 +11,7 @@ import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.custom.IronBallItem;
 import net.vashal.tistheseason.items.custom.ToyRobotItem;
 import net.vashal.tistheseason.items.custom.WoodenMalletItem;
-import net.vashal.tistheseason.items.custom.curios.HobbyHorseItem;
+import net.vashal.tistheseason.items.custom.curios.*;
 import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
 
 
@@ -24,6 +24,24 @@ public class TTS_Items {
 
     public static final RegistryObject<Item> HOBBY_HORSE = ITEMS.register("hobby_horse",
             () -> new HobbyHorseItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> MARI_HOBBY_HORSE = ITEMS.register("mari_hobby_horse",
+            () -> new MariHobbyHorseItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> POWER_GLOVE = ITEMS.register("power_glove_item",
+            () -> new PowerGloveItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> SWEATER = ITEMS.register("sweater_item",
+            () -> new SweaterItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> HAT = ITEMS.register("santa_hat_item",
+            () -> new HatItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> REINDEER_SLIPPERS = ITEMS.register("reindeer_slippers",
+            () -> new ReindeerSlipperItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> SNOWMAN_SLIPPERS = ITEMS.register("snowman_slippers",
+            () -> new SnowmanSlipperItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
     public static final RegistryObject<Item> IRON_BALL_ITEM = ITEMS.register("iron_ball_item",
             () -> new IronBallItem(new Item.Properties()));
@@ -42,6 +60,19 @@ public class TTS_Items {
     public static final RegistryObject<Item> TOY_TANK_SPAWN_EGG = ITEMS.register("toy_tank_spawn_egg",
             () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOY_TANK, 0x454b1b, 0x023020,
                     new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
+
+    public static final RegistryObject<Item> EVIL_TOY_ROBOT_SPAWN_EGG = ITEMS.register("evil_toy_robot_spawn_egg",
+            () -> new ForgeSpawnEggItem(TTS_EntityTypes.EVIL_ROBOT, 0x0096ff, 0xc70039,
+                    new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
+
+    public static final RegistryObject<Item> EVIL_TOY_SOLDIER_SPAWN_EGG = ITEMS.register("evil_toy_soldier_spawn_egg",
+            () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOYSOLDIER, 0xff5733, 0xffd700,
+                    new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
+
+    public static final RegistryObject<Item> EVIL_TOY_TANK_SPAWN_EGG = ITEMS.register("evil_toy_tank_spawn_egg",
+            () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOY_TANK, 0x454b1b, 0x023020,
+                    new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

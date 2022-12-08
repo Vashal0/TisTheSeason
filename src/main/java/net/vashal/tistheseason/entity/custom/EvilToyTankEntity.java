@@ -133,8 +133,8 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
     public void registerControllers(AnimationData data) {
         AnimationController<EvilToyTankEntity> idleController = new AnimationController<>(this, "idleController", 0, this::idlePredicate);
         AnimationController<EvilToyTankEntity> attackController = new AnimationController<>(this, "attackController", 0, this::attackPredicate);
-        data.addAnimationController(idleController); //plays both the 'walking' and idle animations currently
-        data.addAnimationController(attackController); //plays a melee attack animation
+        data.addAnimationController(idleController);
+        data.addAnimationController(attackController);
     }
 
     private <E extends IAnimatable> PlayState idlePredicate(AnimationEvent<E> event) {
