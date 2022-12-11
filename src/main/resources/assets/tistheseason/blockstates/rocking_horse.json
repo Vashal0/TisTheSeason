@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "facing=north,model=main": {
+      "y": 0,
+      "model": "tistheseason:block/rocking_horse"
+    },
+    "facing=south,model=main": {
+      "y": 180,
+      "model": "tistheseason:block/rocking_horse"
+    },
+    "facing=east,model=main": {
+      "y": 180,
+      "model": "tistheseason:block/rocking_horse"
+    },
+    "facing=west,model=main": {
+      "y": 180,
+      "model": "tistheseason:block/rocking_horse"
+    },
+    "facing=up,model=main": {
+      "y": 0,
+      "model": "tistheseason:block/rocking_horse"
+    },
+    "facing=down,model=main": {
+      "y": 0,
+      "model": "tistheseason:block/rocking_horse"
+    },
+    "model=back": {
+      "model": "tistheseason:block/rocking_horse"
+    }
+  }
+}

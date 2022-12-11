@@ -14,6 +14,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.entity.TTSBlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.items.custom.curios.renderer.*;
@@ -62,6 +63,7 @@ public class TisTheSeason {
         TTS_Sounds.SOUNDS.register(modEventBus);
         TTS_MenuTypes.register(modEventBus);
         TTS_Recipes.register(modEventBus);
+        TTSBlockEntities.register(modEventBus);
     }
 
     public static ResourceLocation location(String path)

@@ -24,4 +24,10 @@ public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
     boolean IsReadyForGift();
 
     void setGiftStatus(boolean bool);
+
+    void addFestiveMultiplier(int stack);
+
+    void removeFestiveMultiplier(int stack);
+
+    int getFestiveMultiplier();
 }

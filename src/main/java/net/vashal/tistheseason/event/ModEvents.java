@@ -1,12 +1,7 @@
 package net.vashal.tistheseason.event;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -15,14 +10,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -32,13 +20,10 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkEvent;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.block.TTS_Blocks;
 import net.vashal.tistheseason.capabilities.INaughtyOrNice;
 import net.vashal.tistheseason.capabilities.IRedstoneTouch;
 import net.vashal.tistheseason.capabilities.NaughtyOrNiceAttacher;
@@ -46,8 +31,6 @@ import net.vashal.tistheseason.capabilities.RedstoneTouchAttacher;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.custom.*;
 import net.vashal.tistheseason.items.TTS_Items;
-
-import java.util.Objects;
 
 
 public class ModEvents {
@@ -99,7 +82,7 @@ public class ModEvents {
                         });
                     } else {
                         player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                            niceScore.removeScore(1);
+                            niceScore.removeScore(2);
                             player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                         });
                     }
@@ -112,43 +95,17 @@ public class ModEvents {
             if (event.getSource().getEntity() instanceof Player player) {
                 if (event.getEntity() instanceof Pillager) {
                     player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                        niceScore.addScore(5);
+                        niceScore.addScore(10);
                         player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                     });
                 } else if (event.getEntity() instanceof Monster) {
                     player.getCapability(NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                        niceScore.addScore(2);
+                        niceScore.addScore(5);
                         player.sendSystemMessage(Component.literal("score: " + niceScore.getCurrentScore()));
                     });
                 }
             }
         }
-
-        @SubscribeEvent
-        public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {
-            Player player = event.getEntity();
-            BlockPos pos = event.getPos().relative(Objects.requireNonNull(event.getFace()));
-            BlockPos pPos = event.getPos();
-            BlockState state = TTS_Blocks.INVISIBLE_REDSTONE.get().defaultBlockState();
-            Level world = event.getLevel();
-            Block block = world.getBlockState(pPos).getBlock();
-            if (player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty() && !(block instanceof BaseEntityBlock)) {
-                if (!(world.getBlockState(pos).getMaterial() == Material.AIR && world.getBlockState(pos).getBlock() != TTS_Blocks.INVISIBLE_REDSTONE.get())) {
-                    return;
-                }
-                player.getCapability(REDSTONE_TOUCH).ifPresent(redstoneTouch -> {
-                    if (redstoneTouch.getCurrentState() == 1) {
-                        world.setBlockAndUpdate(pos, state);
-                        world.scheduleTick(pos, state.getBlock(), 20);
-                        if (!world.isOutsideBuildHeight(pos)) {
-                            world.sendBlockUpdated(pos, state, state, 3);
-                            world.updateNeighborsAt(pos, state.getBlock());
-                        }
-                    }
-                });
-            }
-        }
-
 
         @SubscribeEvent
         public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {

@@ -34,5 +34,6 @@ public class TTS_Sounds {
     public static final RegistryObject<SoundEvent> TOY_GEARS =
             SOUNDS.register("toygears", () -> new SoundEvent(
                     new ResourceLocation(TisTheSeason.MOD_ID, "toygears")));
+
 }
 

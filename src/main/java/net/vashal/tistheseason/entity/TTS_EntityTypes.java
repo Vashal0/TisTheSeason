@@ -1,6 +1,7 @@
 package net.vashal.tistheseason.entity;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Services;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,6 +14,7 @@ import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.custom.*;
 import net.vashal.tistheseason.entity.projectile.IronBall;
+import net.vashal.tistheseason.entity.projectile.WaterStream;
 
 public class TTS_EntityTypes {
 
@@ -55,6 +57,21 @@ public class TTS_EntityTypes {
                             .sized(0.25F, 0.25F)
                             .noSummon()
                             .build(new ResourceLocation(TisTheSeason.MOD_ID, "ironball").toString()));
+
+    public static final RegistryObject<EntityType<WaterStream>> WATER_STREAM =
+            ENTITY_TYPES.register("waterstream",
+                    () -> EntityType.Builder.<WaterStream>of(WaterStream::new, MobCategory.MISC)
+                            .sized(1F, 1F)
+                            .noSummon()
+                            .build(new ResourceLocation(TisTheSeason.MOD_ID, "waterstream").toString()));
+
+    public static RegistryObject<EntityType<DummyEntityForSitting>> DUMMY_ENTITY_TYPE =
+            ENTITY_TYPES.register("dummy",
+                    () -> EntityType.Builder.of(DummyEntityForSitting::new, MobCategory.MISC)
+            .clientTrackingRange(256)
+            .sized(0.0001F, 0.0001F)
+            .build(TisTheSeason.MOD_ID + "dummy"));
+
 
 
     public static void register(IEventBus eventBus) {

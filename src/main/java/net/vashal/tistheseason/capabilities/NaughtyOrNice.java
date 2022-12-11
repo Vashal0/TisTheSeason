@@ -15,6 +15,8 @@ public class NaughtyOrNice implements INaughtyOrNice {
 
     private int minScore = -500;
 
+    private int festiveMultiplier = 1;
+
     private boolean status = false;
 
     public NaughtyOrNice(@Nullable final LivingEntity entity) {
@@ -56,13 +58,13 @@ public class NaughtyOrNice implements INaughtyOrNice {
 
     @Override
     public int addScore(int scoreToAdd) {
-        this.setScore(Math.min(score + scoreToAdd, getMaxScore()));
+        this.setScore(Math.min(score + scoreToAdd * this.festiveMultiplier, getMaxScore()));
         return this.getCurrentScore();
     }
 
     @Override
     public double removeScore(int scoreToRemove) {
-        this.setScore(Math.max(score - scoreToRemove, getMinScore()));
+        this.setScore(Math.max(score - scoreToRemove * this.festiveMultiplier, getMinScore()));
         return this.getCurrentScore();
     }
 
@@ -90,5 +92,19 @@ public class NaughtyOrNice implements INaughtyOrNice {
     @Override
     public boolean IsReadyForGift() {
         return status;
+    }
+
+    @Override
+    public void addFestiveMultiplier(int stack) {
+        this.festiveMultiplier = getFestiveMultiplier() + stack;
+    }
+
+    @Override
+    public void removeFestiveMultiplier(int stack) {
+        this.festiveMultiplier = getFestiveMultiplier() - stack;
+    }
+    @Override
+    public int getFestiveMultiplier() {
+        return this.festiveMultiplier;
     }
 }

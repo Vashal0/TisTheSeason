@@ -2,8 +2,11 @@ package net.vashal.tistheseason.items.custom.curios;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,6 +17,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.common.extensions.IForgeItem;
+import net.vashal.tistheseason.items.TTS_Items;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.UUID;

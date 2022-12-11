@@ -8,9 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.items.custom.IronBallItem;
-import net.vashal.tistheseason.items.custom.ToyRobotItem;
-import net.vashal.tistheseason.items.custom.WoodenMalletItem;
+import net.vashal.tistheseason.items.custom.*;
 import net.vashal.tistheseason.items.custom.curios.*;
 import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
 
@@ -46,8 +44,14 @@ public class TTS_Items {
     public static final RegistryObject<Item> IRON_BALL_ITEM = ITEMS.register("iron_ball_item",
             () -> new IronBallItem(new Item.Properties()));
 
+    public static final RegistryObject<Item> WATER_STREAM = ITEMS.register("water_stream",
+            () -> new WaterStreamItem(new Item.Properties()));
+
     public static final RegistryObject<Item> WOODEN_MALLET = ITEMS.register("wooden_mallet",
             () -> new WoodenMalletItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> SUPER_SOAKER = ITEMS.register("super_soaker",
+            () -> new SuperSoakerItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
     public static final RegistryObject<Item> TOY_ROBOT_SPAWN_EGG = ITEMS.register("toy_robot_spawn_egg",
             () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOYROBOT, 0x0096ff, 0xc70039,

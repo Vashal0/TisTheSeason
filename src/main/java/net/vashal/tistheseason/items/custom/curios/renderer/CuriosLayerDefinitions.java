@@ -22,6 +22,4 @@ public class CuriosLayerDefinitions {
     public static final ModelLayerLocation SNOWMAN_SLIPPERS = new ModelLayerLocation(new ResourceLocation(
             TisTheSeason.MOD_ID, "snowman_slippers"), "snowman_slippers");
 
-    public static final ModelLayerLocation SHEET = new ModelLayerLocation(new ResourceLocation(
-            TisTheSeason.MOD_ID, "sheet"), "sheet");
 }
