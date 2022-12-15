@@ -17,6 +17,7 @@ import net.vashal.tistheseason.block.TTS_Blocks;
 import net.vashal.tistheseason.block.entity.TTSBlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.items.custom.curios.models.*;
 import net.vashal.tistheseason.items.custom.curios.renderer.*;
 import net.vashal.tistheseason.recipe.TTS_Recipes;
 import net.vashal.tistheseason.screen.TTS_MenuTypes;
@@ -89,8 +90,10 @@ public class TisTheSeason {
         @SubscribeEvent
         public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
             event.registerLayerDefinition(CuriosLayerDefinitions.GLOVES, GloveModel::createLayer);
+            event.registerLayerDefinition(CuriosLayerDefinitions.MITTENS, MittenModel::createLayer);
             event.registerLayerDefinition(CuriosLayerDefinitions.SWEATER, SweaterModel::createLayer);
             event.registerLayerDefinition(CuriosLayerDefinitions.HAT, HatModel::createLayer);
+            event.registerLayerDefinition(CuriosLayerDefinitions.SOLDIER_HAT, SoldierHatModel::createLayer);
             event.registerLayerDefinition(CuriosLayerDefinitions.REINDEER_SLIPPERS, ReindeerSlipperModel::createLayer);
             event.registerLayerDefinition(CuriosLayerDefinitions.SNOWMAN_SLIPPERS, SnowmanSlipperModel::createLayer);
         }

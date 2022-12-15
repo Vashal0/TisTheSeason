@@ -9,7 +9,7 @@ public class TTS_CreativeModeTab {
     public static final CreativeModeTab TISTHESEASON_TAB = new CreativeModeTab("tistheseasontab") {
         @Override
         public @NotNull ItemStack makeIcon() {
-            return new ItemStack(TTS_Items.TOYROBOT.get());
+            return new ItemStack(TTS_Items.HAT.get());
         }
     };
 }

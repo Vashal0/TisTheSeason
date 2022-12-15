@@ -16,9 +16,10 @@ public final class ToyRobotConstants {
 
     //Attributes constants
     public static final double MAX_HEALTH = 20.00;
-    public static final float ATTACK_DAMAGE = 3.0f;
+    public static final float ATTACK_DAMAGE = 4.0f;
+    public static final float ARMOR = 5.0f;
     public static final float ATTACK_SPEED = 1.0f;
-    public static final float MOVEMENT_SPEED = .45f;
+    public static final float MOVEMENT_SPEED = .25f;
     public static final float WIDTH = 0.5f;
     public static final float HEIGHT = 1.0f;
 

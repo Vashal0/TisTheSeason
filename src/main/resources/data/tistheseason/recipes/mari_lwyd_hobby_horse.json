@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "@#@",
+    " * ",
+    " $ "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:red_wool"
+    },
+    "*": {
+      "item": "minecraft:skeleton_skull"
+    },
+    "@": {
+      "item": "minecraft:green_wool"
+    },
+    "$": {
+      "item": "tistheseason:hobby_horse_item"
+    }
+  },
+  "result": {
+    "item": "tistheseason:mari_hobby_horse_item"
+  }
+}

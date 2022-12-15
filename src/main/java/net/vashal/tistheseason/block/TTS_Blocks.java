@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.block.custom.InvisibleRedstone;
 import net.vashal.tistheseason.block.custom.PetRockBlock;
-import net.vashal.tistheseason.block.custom.RockingHorseBlock;
+import net.vashal.tistheseason.block.custom.StockingBlock;
 import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
 
@@ -22,11 +22,11 @@ public class TTS_Blocks {
     public static final RegistryObject<Block> INVISIBLE_REDSTONE = registerBlock("invisible_redstone",
             InvisibleRedstone::new);
 
-    public static final RegistryObject<Block> ROCKING_HORSE = registerBlock("rocking_horse",
-            RockingHorseBlock::new);
-
     public static final RegistryObject<Block> PET_ROCK = registerBlock("pet_rock",
             PetRockBlock::new);
+
+    public static final RegistryObject<Block> STOCKING = registerBlock("stocking",
+            StockingBlock::new);
 
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block) {

@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "tistheseason:item/hobby_horse"
+		"0": "tistheseason:item/hobby_horse",
+		"particle": "tistheseason:item/hobby_horse"
 	},
 	"elements": [
 		{
@@ -330,9 +331,9 @@
 			"rotation": [0, 0, 90]
 		},
 		"gui": {
-			"rotation": [-172.24, -68.8, -171.67],
-			"translation": [2.5, 2.25, 0],
-			"scale": [0.6, 0.6, 0.6]
+			"rotation": [0, 90, 0],
+			"translation": [-2, 2.25, 0],
+			"scale": [0.65, 0.65, 0.65]
 		},
 		"head": {
 			"translation": [0, 10, -10]

@@ -9,7 +9,7 @@ public final class ToyTankConstants {
     //Entity constants
     public static final String MODEL_RESOURCE = "geo/toy_tank.geo.json";
     public static final String ANIMATION_RESOURCE = "animations/toy_tank.animation.json";
-    public static final String TEXTURE_RESOURCE = "textures/entity/toy_tank_texture.png";
+    public static final String TEXTURE_RESOURCE = "textures/entity/toy_tank.png";
     public static final float SHADOW_RADIUS = 0.3f;
 
     //Attributes constants

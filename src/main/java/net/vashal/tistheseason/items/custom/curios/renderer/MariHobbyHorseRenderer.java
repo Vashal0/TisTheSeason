@@ -28,9 +28,9 @@ public class MariHobbyHorseRenderer implements ICurioRenderer {
         ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
         ICurioRenderer.rotateIfSneaking(matrixStack, livingEntity);
         matrixStack.pushPose();
-        matrixStack.scale(1.2f, 1.2f, 1.2f);
-        matrixStack.translate(0.0f, 0.4f, -0.4f);
-        matrixStack.mulPose(new Quaternion(0f, -0.1f, 1f, 0.0f));
+        matrixStack.scale(1.1f, 1.1f, 1.1f);
+        matrixStack.translate(0.0f, 0.6f, -0.5f);
+        matrixStack.mulPose(new Quaternion(0f, -0.3f, 1f, 0.0f));
         Minecraft.getInstance().getItemRenderer()
                 .renderStatic(stack, ItemTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack,
                         renderTypeBuffer, 0);

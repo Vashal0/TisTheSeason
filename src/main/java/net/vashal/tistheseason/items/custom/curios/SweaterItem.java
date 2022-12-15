@@ -6,6 +6,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.vashal.tistheseason.capabilities.TTSCapabilities;
 import net.vashal.tistheseason.event.ModEvents;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -28,7 +29,7 @@ public class SweaterItem extends TTSCurios {
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         super.onEquip(slotContext, prevStack, stack);
         if (slotContext.entity() instanceof Player player) {
-            player.getCapability(ModEvents.NAUGHTY_OR_NICE).ifPresent(niceScore -> niceScore.addFestiveMultiplier(1));
+            player.getCapability(TTSCapabilities.NAUGHTY_OR_NICE).ifPresent(niceScore -> niceScore.addFestiveMultiplier(1));
         }
     }
 
@@ -36,7 +37,7 @@ public class SweaterItem extends TTSCurios {
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         super.onUnequip(slotContext, newStack, stack);
         if (slotContext.entity() instanceof Player player) {
-            player.getCapability(ModEvents.NAUGHTY_OR_NICE).ifPresent(niceScore -> niceScore.removeFestiveMultiplier(1));
+            player.getCapability(TTSCapabilities.NAUGHTY_OR_NICE).ifPresent(niceScore -> niceScore.removeFestiveMultiplier(1));
         }
     }
 }

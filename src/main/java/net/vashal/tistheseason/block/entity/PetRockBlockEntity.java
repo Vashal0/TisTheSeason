@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PetRockBlockEntity extends BlockEntity implements IAnimatable, Nameable {
-    public static final String TAG_NAME = "name";
     public Component name = Component.literal("");
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -61,15 +60,26 @@ public class PetRockBlockEntity extends BlockEntity implements IAnimatable, Name
     @Override
     public void load(@NotNull CompoundTag compound) {
         super.load(compound);
-        name = Component.translatable(compound.getString(TAG_NAME));
+        name = Component.translatable(compound.getString("Name"));
     }
 
     @Override
     public void saveAdditional(@NotNull CompoundTag compound) {
         super.saveAdditional(compound);
-        compound.putString(TAG_NAME, name.getString());
+        compound.putString("Name", name.getString());
     }
 
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        this.saveAdditional(tag);
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        super.handleUpdateTag(tag);
+    }
 
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {

@@ -16,7 +16,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
-import net.vashal.tistheseason.entity.custom.WindUpToys;
+import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -47,7 +47,8 @@ public class ToyRobotItem extends Item {
     public boolean release(Player player, BlockPos pos, Direction facing, Level worldIn, ItemStack stack) {
         if (player.getCommandSenderWorld().isClientSide) return false;
         if (!containsEntity(stack)) {
-            WindUpToys toyRobot = new WindUpToys(worldIn);
+            ToyRobotEntity toyRobot = new ToyRobotEntity(worldIn);
+            toyRobot.setVariant(ToyRobotVariant.byId(11));
             if (stack.hasTag()) {
                 assert stack.getTag() != null;
                 toyRobot.load(stack.getTag());
@@ -76,19 +77,20 @@ public class ToyRobotItem extends Item {
     }
 
     @Nullable
-    public WindUpToys getEntityFromStack(ItemStack stack, Level world, boolean withInfo) {
+    public ToyRobotEntity getEntityFromStack(ItemStack stack, Level world, boolean withInfo) {
         if (stack.hasTag()) {
             assert stack.getTag() != null;
             EntityType<?> type = EntityType.byString(stack.getTag().getString("toy")).orElse(null);
-            if (type != null ) {
-                WindUpToys toys = ToyRobotEntity.create(world);
-                if (withInfo) {
-                    assert toys != null;
-                    toys.load(stack.getTag());
-                } else if (!type.canSummon()) {
-                    return null;
+            if (type != null) {
+                ToyRobotEntity toys = ToyRobotEntity.create(world);
+                if (toys != null) {
+                    if (withInfo) {
+                        toys.load(stack.getTag());
+                    } else if (!type.canSummon()) {
+                        return null;
+                    }
+                    return toys;
                 }
-                return toys;
             }
         }
         return null;
@@ -97,7 +99,7 @@ public class ToyRobotItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
         if(Screen.hasShiftDown()) {
-            components.add(Component.literal("Wind up your toy robot with right clicks after placing!").withStyle(ChatFormatting.DARK_RED));
+            components.add(Component.literal("Wind up your toy with right clicks after placing!").withStyle(ChatFormatting.DARK_RED));
         } else {
             components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.AQUA));
         }

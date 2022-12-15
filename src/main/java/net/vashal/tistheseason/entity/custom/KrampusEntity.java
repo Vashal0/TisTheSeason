@@ -1,12 +1,12 @@
 package net.vashal.tistheseason.entity.custom;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -15,8 +15,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
@@ -123,7 +123,7 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         RandomSource randomsource = pLevel.getRandom();
         if (randomsource.nextInt(1) == 0) {
@@ -135,6 +135,19 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
             villager.startRiding(this);
         }
         return pSpawnData;
+    }
+
+    public void tryToSpawnToysFor(ServerLevel pServerLevel, KrampusEntity krampus) {
+        BlockPos blockpos = krampus.blockPosition();
+        TTS_EntityTypes.EVIL_TOY_TANK.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
+        TTS_EntityTypes.EVIL_ROBOT.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
+        TTS_EntityTypes.EVIL_TOY_SOLDIER.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
+    }
+
+
+
+    public boolean removeWhenFarAway(double pDistanceToClosestPlayer) {
+        return false;
     }
 
     private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(KrampusEntity.class, EntityDataSerializers.INT);
@@ -189,10 +202,10 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new KrampusAttackGoal(this, 1.0, 2));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new FloatGoal(this));
 
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
         super.registerGoals();
     }
 
@@ -200,11 +213,11 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     //sounds without a special use case
 
     protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState blockIn) {
-        this.playSound(SoundEvents.ANVIL_STEP, KrampusConstants.STEP_SOUND_VOLUME, KrampusConstants.STEP_SOUND_PITCH);
+        this.playSound(SoundEvents.CHAIN_PLACE, KrampusConstants.STEP_SOUND_VOLUME, KrampusConstants.STEP_SOUND_PITCH);
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.TOY_HURT.get();
+        return SoundEvents.GOAT_HURT;
     }
 
     protected SoundEvent getDeathSound() {

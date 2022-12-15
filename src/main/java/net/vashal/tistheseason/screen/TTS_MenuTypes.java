@@ -14,6 +14,9 @@ public class TTS_MenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, TisTheSeason.MOD_ID);
 
+    public static final RegistryObject<MenuType<StockingContainerMenu>> STOCKING_CONTAINER_MENU =
+            registerMenuType(StockingContainerMenu::new, "stocking_container_menu");
+
     public static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory, String name) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }

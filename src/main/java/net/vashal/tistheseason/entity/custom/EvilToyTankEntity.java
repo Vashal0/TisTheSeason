@@ -1,5 +1,6 @@
 package net.vashal.tistheseason.entity.custom;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -8,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -22,12 +24,14 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyTankAttackGoal;
 import net.vashal.tistheseason.entity.projectile.IronBall;
+import net.vashal.tistheseason.entity.variant.ToyTankVariant;
 import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +67,7 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
 
     @Nullable
     public static EvilToyTankEntity create(Level world) {
-        return TTS_EntityTypes.TOY_TANK.get().create(world);
+        return TTS_EntityTypes.EVIL_TOY_TANK.get().create(world);
     }
 
 
@@ -73,23 +77,27 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
     }
 
     private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(EvilToyTankEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(ToySoldierEntity.class, EntityDataSerializers.INT);
 
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(DATA_ID_TYPE_VARIANT, 0);
         this.entityData.define(ATTACK_STATE, 0);
     }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("Variant", this.getTypeVariant());
         tag.putInt("AttackState", this.getAttackState());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.entityData.set(DATA_ID_TYPE_VARIANT, tag.getInt("Variant"));
         this.setAttackState(tag.getInt("AttackState"));
     }
 
@@ -198,6 +206,26 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
 
     protected float getStandingEyeHeight(@NotNull Pose pPose, @NotNull EntityDimensions pSize) {
         return 0.25F;
+    }
+
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor levelAccessor, @NotNull DifficultyInstance instance,
+                                        @NotNull MobSpawnType type, @Nullable SpawnGroupData data,
+                                        @Nullable CompoundTag tag) {
+        ToyTankVariant variant = Util.getRandom(ToyTankVariant.values(), this.random);
+        setVariant(variant);
+        return super.finalizeSpawn(levelAccessor, instance, type, data, tag);
+    }
+
+    public ToyTankVariant getVariant() {
+        return ToyTankVariant.byId(this.getTypeVariant() & 255);
+    }
+
+    private int getTypeVariant() {
+        return this.entityData.get(DATA_ID_TYPE_VARIANT);
+    }
+
+    public void setVariant(ToyTankVariant variant) {
+        this.entityData.set(DATA_ID_TYPE_VARIANT, variant.getId() & 255);
     }
 }
 

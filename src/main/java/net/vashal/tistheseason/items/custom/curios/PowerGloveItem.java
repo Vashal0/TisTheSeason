@@ -12,6 +12,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.capabilities.TTSCapabilities;
 import net.vashal.tistheseason.event.ModEvents;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -24,22 +25,20 @@ public class PowerGloveItem extends TTSCurios {
         addListener(EventPriority.HIGH, PlayerInteractEvent.RightClickBlock.class, this::onRightClick);
     }
 
-
     @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        super.curioTick(slotContext, stack);
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
+        super.onEquip(slotContext, prevStack, stack);
         if (slotContext.entity() instanceof Player player) {
-            player.getCapability(ModEvents.REDSTONE_TOUCH).ifPresent(state -> {
+            player.getCapability(TTSCapabilities.REDSTONE_TOUCH).ifPresent(state -> {
                 state.setState(1);
             });
         }
     }
-
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         super.onUnequip(slotContext, newStack, stack);
         if (slotContext.entity() instanceof Player player) {
-            player.getCapability(ModEvents.REDSTONE_TOUCH).ifPresent(state -> {
+            player.getCapability(TTSCapabilities.REDSTONE_TOUCH).ifPresent(state -> {
                 state.setState(0);
             });
         }
@@ -57,7 +56,7 @@ public class PowerGloveItem extends TTSCurios {
             if (!(world.getBlockState(pos).getMaterial() == Material.AIR && world.getBlockState(pos).getBlock() != TTS_Blocks.INVISIBLE_REDSTONE.get())) {
                 return;
             }
-            player.getCapability(ModEvents.REDSTONE_TOUCH).ifPresent(redstoneTouch -> {
+            player.getCapability(TTSCapabilities.REDSTONE_TOUCH).ifPresent(redstoneTouch -> {
                 if (redstoneTouch.getCurrentState() == 1) {
                     world.setBlockAndUpdate(pos, state);
                     world.scheduleTick(pos, state.getBlock(), 20);
