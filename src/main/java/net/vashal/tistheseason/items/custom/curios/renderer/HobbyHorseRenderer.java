@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -17,7 +16,7 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 /**
  * Renderer for the HobbyHorse curio
  */
-public class HobbyHorseRenderer<T extends LivingEntity, M extends HumanoidModel<T>> implements ICurioRenderer {
+public class HobbyHorseRenderer implements ICurioRenderer {
 
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext,

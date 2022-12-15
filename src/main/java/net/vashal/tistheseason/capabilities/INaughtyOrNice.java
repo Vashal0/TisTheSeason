@@ -1,7 +1,9 @@
 package net.vashal.tistheseason.capabilities;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.vashal.tistheseason.block.entity.StockingBlockEntity;
 
 public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
 
@@ -24,4 +26,19 @@ public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
     boolean IsReadyForGift();
 
     void setGiftStatus(boolean bool);
+
+    boolean hasStocking();
+
+    void addFestiveMultiplier(int stack);
+
+    void removeFestiveMultiplier(int stack);
+
+    int getFestiveMultiplier();
+
+    void setStocking(BlockPos stocking);
+
+    void removeStocking();
+
+    BlockPos getStocking();
+
 }

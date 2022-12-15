@@ -28,7 +28,7 @@ public class RedstoneTouchAttacher {
         @NotNull
         @Override
         public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-            return ModEvents.REDSTONE_TOUCH.orEmpty(cap, this.optionalData);
+            return TTSCapabilities.REDSTONE_TOUCH.orEmpty(cap, this.optionalData);
         }
 
         void invalidate() {

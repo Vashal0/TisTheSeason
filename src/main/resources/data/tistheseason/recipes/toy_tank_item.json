@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#*#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "tistheseason:toy_parts"
+    },
+    "*": {
+      "item": "minecraft:tnt"
+    }
+  },
+  "result": {
+    "item": "tistheseason:toy_tank_item"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#*#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "tistheseason:toy_parts"
+    },
+    "*": {
+      "item": "minecraft:iron_block"
+    }
+  },
+  "result": {
+    "item": "tistheseason:toy_robot_item"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "$$$",
+    "$@$"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:white_wool"
+    },
+    "$": {
+      "item": "minecraft:red_wool"
+    },
+    "@": {
+      "item": "minecraft:leather_helmet"
+    }
+  },
+  "result": {
+    "item": "tistheseason:santa_hat_item"
+  }
+}

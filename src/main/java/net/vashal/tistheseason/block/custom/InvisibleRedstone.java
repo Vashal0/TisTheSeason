@@ -46,7 +46,7 @@ public class InvisibleRedstone extends Block {
         return 15;
     }
 
-    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+    public int getDirectSignal(@NotNull BlockState blockState, @NotNull BlockGetter blockAccess, @NotNull BlockPos pos, @NotNull Direction side) {
         return 15;
     }
 

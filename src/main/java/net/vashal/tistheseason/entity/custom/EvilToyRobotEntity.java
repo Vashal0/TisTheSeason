@@ -12,9 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -25,11 +23,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.entity.ai.ToyRobotAttackGoal;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -58,7 +54,7 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
                 .add(Attributes.ATTACK_DAMAGE, ToyRobotConstants.ATTACK_DAMAGE)
                 .add(Attributes.ATTACK_SPEED, ToyRobotConstants.ATTACK_SPEED)
                 .add(Attributes.FOLLOW_RANGE, 35)
-                .add(Attributes.MOVEMENT_SPEED, 0.45).build();
+                .add(Attributes.MOVEMENT_SPEED, 0.35).build();
     }
 
     @Nullable
@@ -218,4 +214,6 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
     protected float getStandingEyeHeight(@NotNull Pose pPose, @NotNull EntityDimensions pSize) {
         return 0.75F;
     }
+
+    //
 }

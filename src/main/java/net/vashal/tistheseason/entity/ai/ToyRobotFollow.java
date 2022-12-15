@@ -1,7 +1,7 @@
 package net.vashal.tistheseason.entity.ai;
 
 import net.minecraft.world.entity.player.Player;
-import net.vashal.tistheseason.entity.custom.WindUpToys;
+import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 
 
 public class ToyRobotFollow extends ToyRobotGoal {
@@ -10,7 +10,7 @@ public class ToyRobotFollow extends ToyRobotGoal {
     private final float maxDistance;
     private final float minDistance;
 
-    public ToyRobotFollow(WindUpToys toys, float speed, float min, float max) {
+    public ToyRobotFollow(ToyRobotEntity toys, float speed, float min, float max) {
         super(toys, speed);
         minDistance = min;
         maxDistance = max;

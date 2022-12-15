@@ -7,19 +7,19 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-import net.vashal.tistheseason.entity.custom.WindUpToys;
+import net.vashal.tistheseason.entity.custom.ToyRobotEntity;
 
 import java.util.EnumSet;
 
 public abstract class ToyRobotGoal extends Goal {
 
-    protected final WindUpToys toys;
+    protected final ToyRobotEntity toys;
     protected final float moveSpeed;
     private int timeToRecalcPath;
     private float oldWaterCost;
 
 
-    protected ToyRobotGoal(WindUpToys toy, float speed) {
+    protected ToyRobotGoal(ToyRobotEntity toy, float speed) {
         toys = toy;
         moveSpeed = speed;
         setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));

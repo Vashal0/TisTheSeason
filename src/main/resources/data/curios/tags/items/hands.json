@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "tistheseason:power_glove_item"
+    "tistheseason:power_glove_item",
+    "tistheseason:mittens"
   ]
 }
