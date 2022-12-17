@@ -1,5 +1,6 @@
 package net.vashal.tistheseason.items;
 
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -7,6 +8,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
+import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.custom.StockingBlock;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.custom.*;
 import net.vashal.tistheseason.items.custom.curios.*;
@@ -61,6 +64,9 @@ public class TTS_Items {
 
     public static final RegistryObject<Item> WATER_STREAM = ITEMS.register("water_stream",
             () -> new WaterStreamItem(new Item.Properties()));
+
+    public static final RegistryObject<BlockItem> STOCKING_ITEM = ITEMS.register("stocking_item",
+            () -> new StockingBlockItem(TTS_Blocks.STOCKING.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> TOY_PARTS = ITEMS.register("toy_parts",
             () -> new ToyPartsItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(64)));

@@ -1,6 +1,9 @@
 package net.vashal.tistheseason.items.custom;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -10,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -22,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class SuperSoakerItem extends Item {
 
@@ -116,5 +121,16 @@ public class SuperSoakerItem extends Item {
             }
         }
         return new InteractionResultHolder<>(InteractionResult.PASS, itemStack);
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
+        if(Screen.hasShiftDown()) {
+            components.add(Component.literal("Puts out fires and damages water weak mobs, refill by right clicking a water source").withStyle(ChatFormatting.AQUA));
+            components.add(Component.literal("Also knocks back players!").withStyle(ChatFormatting.GOLD));
+        } else {
+            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD));
+        }
+        super.appendHoverText(itemStack, level, components, isAdvanced);
     }
 }

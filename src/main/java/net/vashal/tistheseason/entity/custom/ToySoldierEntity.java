@@ -264,11 +264,9 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
             setTickCount(getActivatedTicks() - 1);
             if (tickCount % 20 == 0) {
                 if (getTypeVariant() == 1) {
-                    applyEffects(level, pos, MobEffects.HEALTH_BOOST);
-                    applyEffects(level, pos, MobEffects.REGENERATION);
+                    applyEffects(level, pos, MobEffects.DAMAGE_RESISTANCE);
                 } else if (getTypeVariant() == 0) {
                     applyEffects(level, pos, MobEffects.NIGHT_VISION);
-                    applyEffects(level, pos, MobEffects.MOVEMENT_SPEED);
                 }
 
             }
@@ -368,7 +366,7 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
             AABB aabb = (new AABB(pPos)).inflate(8);
             List<Player> list = pLevel.getEntitiesOfClass(Player.class, aabb);
             for (Player player : list) {
-                player.addEffect(new MobEffectInstance(effect, 400, 1, true, false));
+                player.addEffect(new MobEffectInstance(effect, 400, 0, true, false));
             }
         }
     }

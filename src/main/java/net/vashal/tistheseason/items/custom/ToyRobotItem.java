@@ -99,9 +99,10 @@ public class ToyRobotItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
         if(Screen.hasShiftDown()) {
-            components.add(Component.literal("Wind up your toy with right clicks after placing!").withStyle(ChatFormatting.DARK_RED));
+            components.add(Component.literal("Wind up your toy with right clicks after placing! \nUse dye to swap to 16 different variants \nUse White Wool to muffle the clicking, shears to remove").withStyle(ChatFormatting.DARK_RED));
         } else {
-            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.AQUA));
+            components.add(Component.literal("Shift-Right-Click with an empty hand to pick up").withStyle(ChatFormatting.DARK_AQUA));
+            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.BOLD));
         }
         super.appendHoverText(itemStack, level, components, isAdvanced);
     }

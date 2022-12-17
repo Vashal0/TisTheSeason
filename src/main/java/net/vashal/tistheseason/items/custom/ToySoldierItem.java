@@ -96,9 +96,10 @@ public class ToySoldierItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
         if(Screen.hasShiftDown()) {
-            components.add(Component.literal("Wind up your toy with right clicks after placing!").withStyle(ChatFormatting.DARK_RED));
+            components.add(Component.literal("Wind up your toy with right clicks after placing!\nEach type of toy soldier provides a different aura with their music").withStyle(ChatFormatting.GOLD));
         } else {
-            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.AQUA));
+            components.add(Component.literal("Shift-Right-Click with an empty hand to pick up").withStyle(ChatFormatting.YELLOW));
+            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
         }
         super.appendHoverText(itemStack, level, components, isAdvanced);
     }

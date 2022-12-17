@@ -1,5 +1,6 @@
 package net.vashal.tistheseason.entity.projectile;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvent;
@@ -10,11 +11,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 import net.vashal.tistheseason.items.TTS_Items;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -58,7 +61,17 @@ public class IronBall extends AbstractArrow implements IAnimatable {
     @Override
     protected void onHitBlock(@NotNull BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
+        if (this.getOwner() instanceof ToyTankEntity tank) {
+            if (tank.getTurretMode()) {
+                this.explode();
+            }
+        }
+        this.remove(RemovalReason.KILLED);
         this.setSoundEvent(SoundEvents.METAL_HIT);
+    }
+
+    protected void explode() {
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, Explosion.BlockInteraction.BREAK);
     }
 
     @Override

@@ -64,6 +64,9 @@ public class TTSCapabilities {
                 newNiceScore.setMinScore(oldNiceScore.getMinScore());
                 newNiceScore.setScore(oldNiceScore.getCurrentScore());
                 newNiceScore.setStocking(oldNiceScore.getStocking());
+                newNiceScore.setTime(oldNiceScore.getTime());
+                newNiceScore.setGiftStatus(oldNiceScore.isReadyForGift());
+
             }));
 
             getRedstoneTouch(oldPlayer).ifPresent(oldRedstoneTouch -> getRedstoneTouch(event.getEntity()).ifPresent(newRedstoneTouch -> {

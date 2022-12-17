@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.ai.EvilToyTankAttackGoal;
 import net.vashal.tistheseason.entity.ai.ToyTankAttackGoal;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import net.vashal.tistheseason.entity.variant.ToyTankVariant;
@@ -127,7 +128,7 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new ToyTankAttackGoal(this, 1.0D, 60, 10.0F));
+        this.goalSelector.addGoal(1, new EvilToyTankAttackGoal(this, 1.0D, 60, 10.0F));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));

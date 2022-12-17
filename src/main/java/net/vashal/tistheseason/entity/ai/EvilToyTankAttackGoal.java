@@ -5,14 +5,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.vashal.tistheseason.entity.custom.EvilToyTankEntity;
-import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class ToyTankAttackGoal extends RangedAttackGoal {
+public class EvilToyTankAttackGoal extends RangedAttackGoal {
     private final Mob mob;
-    private final ToyTankEntity toyTank;
+    private final EvilToyTankEntity toyTank;
     @Nullable
     private LivingEntity target;
     private int attackTime = -1;
@@ -23,11 +22,11 @@ public class ToyTankAttackGoal extends RangedAttackGoal {
     private final float attackRadius;
     private final float attackRadiusSqr;
 
-    public ToyTankAttackGoal(ToyTankEntity pToyTank, double pSpeedModifier, int pAttackInterval, float pAttackRadius) {
+    public EvilToyTankAttackGoal(EvilToyTankEntity pToyTank, double pSpeedModifier, int pAttackInterval, float pAttackRadius) {
         this(pToyTank, pSpeedModifier, pAttackInterval, pAttackInterval, pAttackRadius);
     }
 
-    public ToyTankAttackGoal(ToyTankEntity pToyTank, double pSpeedModifier, int pAttackIntervalMin, int pAttackIntervalMax, float pAttackRadius) {
+    public EvilToyTankAttackGoal(EvilToyTankEntity pToyTank, double pSpeedModifier, int pAttackIntervalMin, int pAttackIntervalMax, float pAttackRadius) {
         super(pToyTank, pSpeedModifier, pAttackIntervalMin, pAttackIntervalMax, pAttackRadius);
         this.toyTank = pToyTank;
         this.mob = pToyTank;

@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.block.entity.PetRockRenderer;
+import net.vashal.tistheseason.block.entity.StockingRenderer;
 import net.vashal.tistheseason.block.entity.TTSBlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.client.renderers.*;
@@ -36,6 +37,7 @@ public class ClientEvents {
             EntityRenderers.register(TTS_EntityTypes.IRON_BALL.get(), IronBallRenderer::new);
             EntityRenderers.register(TTS_EntityTypes.WATER_STREAM.get(), WaterStreamRenderer::new);
             event.registerBlockEntityRenderer(TTSBlockEntities.PET_ROCK.get(), PetRockRenderer::new);
+            event.registerBlockEntityRenderer(TTSBlockEntities.STOCKING.get(), StockingRenderer::new);
             CuriosRendererRegistry.register(TTS_Items.POWER_GLOVE.get(), GloveRenderer::new);
             CuriosRendererRegistry.register(TTS_Items.MITTENS.get(), MittenRenderer::new);
             CuriosRendererRegistry.register(TTS_Items.HAT.get(), HatRenderer::new);

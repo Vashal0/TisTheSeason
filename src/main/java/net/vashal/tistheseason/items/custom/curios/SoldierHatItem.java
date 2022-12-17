@@ -1,14 +1,22 @@
 package net.vashal.tistheseason.items.custom.curios;
 
 import com.google.common.collect.Multimap;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.vashal.tistheseason.capabilities.TTSCapabilities;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public class SoldierHatItem extends TTSCurios {
@@ -38,5 +46,11 @@ public class SoldierHatItem extends TTSCurios {
         if (slotContext.entity() instanceof Player player) {
             player.getCapability(TTSCapabilities.NAUGHTY_OR_NICE).ifPresent(niceScore -> niceScore.removeFestiveMultiplier(1));
         }
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
+        components.add(Component.literal("Cosmetic").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD));
+        super.appendHoverText(itemStack, level, components, isAdvanced);
     }
 }

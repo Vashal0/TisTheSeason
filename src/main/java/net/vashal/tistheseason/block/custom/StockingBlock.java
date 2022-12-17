@@ -2,12 +2,8 @@ package net.vashal.tistheseason.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
@@ -21,32 +17,25 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.vashal.tistheseason.block.entity.StockingBlockEntity;
 import net.vashal.tistheseason.capabilities.TTSCapabilities;
-import net.vashal.tistheseason.event.ModEvents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public class StockingBlock extends BaseEntityBlock implements EntityBlock {
 
-    public static final ResourceLocation CONTENTS = new ResourceLocation("contents");
-    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     protected static final VoxelShape STOCKING_NORTH_SHAPE = Block.box(4.0D, 0.0D, 13.0D, 12.0D, 14.0D, 16.0D);
@@ -56,26 +45,64 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
 
 
     public StockingBlock() {
-        super(Properties.of(Material.WOOL).noOcclusion().noCollission());
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false));
+        super(Properties.of(Material.WOOL).noOcclusion().noCollission().strength(2));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPEN);
+        builder.add(FACING);
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        BlockState blockstate = this.defaultBlockState();
+        LevelReader levelreader = context.getLevel();
+        BlockPos blockpos = context.getClickedPos();
+        Direction[] adirection = context.getNearestLookingDirections();
+
+        for(Direction direction : adirection) {
+            if (direction.getAxis().isHorizontal()) {
+                Direction direction1 = direction.getOpposite();
+                blockstate = blockstate.setValue(FACING, direction1);
+                if (blockstate.canSurvive(levelreader, blockpos)) {
+                    return blockstate;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean canSurvive(@NotNull BlockState pState, LevelReader pLevel, @NotNull BlockPos pPos) {
+        if (pLevel.getBlockEntity(pPos) instanceof Container stocking) {
+            if (!stocking.isEmpty()) {
+                return true;
+            }
+        }
+        return pLevel.getBlockState(pPos.relative(pState.getValue(FACING).getOpposite())).getMaterial().isSolid();
+    }
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (player.isCreative()) {
+            return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+        }
+        if ((level.getBlockEntity(pos) instanceof StockingBlockEntity stocking)) {
+            if (stocking.getOwner() != null) {
+                if (!stocking.isOwnedBy(player)) {
+                    return false;
+                }
+            }
+        }
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 
     @Override
     public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return switch (state.getValue(FACING)) {
-            case NORTH -> STOCKING_NORTH_SHAPE;
+            case EAST -> STOCKING_EAST_SHAPE;
             case SOUTH -> STOCKING_SOUTH_SHAPE;
             case WEST -> STOCKING_WEST_SHAPE;
-            default -> STOCKING_EAST_SHAPE;
+            default -> STOCKING_NORTH_SHAPE;
         };
     }
 
@@ -83,20 +110,15 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
         return pFacing == pState.getValue(FACING).getOpposite() && !pState.canSurvive(pLevel, pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
     }
 
-    @Deprecated
-    @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getMaterial().isSolid();
-    }
 
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
-        return RenderShape.MODEL;
+        return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
     @Deprecated
     @Override
-    public float getShadeBrightness(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    public float getShadeBrightness(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos) {
         return 1;
     }
 
@@ -126,12 +148,17 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
     }
     @Override
     public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
-        return PushReaction.DESTROY;
+        return PushReaction.BLOCK;
     }
     @Override
     public void onRemove(BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
             worldIn.updateNeighbourForOutputSignal(pos, state.getBlock());
+            BlockEntity blockentity = worldIn.getBlockEntity(pos);
+            if (blockentity instanceof Container) {
+                Containers.dropContents(worldIn, pos, (Container)blockentity);
+                worldIn.updateNeighbourForOutputSignal(pos, this);
+            }
             super.onRemove(state, worldIn, pos, newState, isMoving);
         }
     }
@@ -175,7 +202,7 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
                             if (niceScore.hasStocking()) {
                                 if (worldIn.getBlockEntity(niceScore.getStocking()) instanceof StockingBlockEntity stocking) {
                                     stocking.clearOwner();
-                                    stocking.setOwner(placer.getUUID());
+                                    entity.setOwner(placer.getUUID());
                                 }
                             }
                             niceScore.removeStocking();
@@ -194,28 +221,5 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
     @Override
     public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull PathComputationType type) {
         return false;
-    }
-    //TODO aasdf
-    @Override
-    public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootContext.Builder builder) {
-        if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof StockingBlockEntity tile) {
-            builder = builder.withDynamicDrop(CONTENTS, (context, stackConsumer) -> {
-                for (int i = 0; i < tile.getContainerSize(); ++i) {
-                    stackConsumer.accept(tile.getItem(i));
-                }
-            });
-        }
-        return super.getDrops(state, builder);
-    }
-    @Override
-    public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state) {
-        ItemStack itemstack = super.getCloneItemStack(level, pos, state);
-        if (level.getBlockEntity(pos) instanceof StockingBlockEntity tile) {
-            CompoundTag compoundTag = tile.saveWithoutMetadata();
-            if (!compoundTag.isEmpty()) {
-                itemstack.addTagElement("BlockEntityTag", compoundTag);
-            }
-        }
-        return itemstack;
     }
 }

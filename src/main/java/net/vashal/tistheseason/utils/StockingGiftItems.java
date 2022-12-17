@@ -18,7 +18,7 @@ public class StockingGiftItems {
         this.goodGifts = new ArrayList<>();
     }
 
-    public void addGoodGifts() {
+    public void addGifts() {
         this.goodGifts.add(TTS_Items.TOY_SOLDIER_ITEM.get());
         this.goodGifts.add(TTS_Items.TOY_TANK_ITEM.get());
         this.goodGifts.add(TTS_Items.TOY_ROBOT_ITEM.get());

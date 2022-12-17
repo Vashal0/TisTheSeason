@@ -23,7 +23,7 @@ public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
 
     double removeScore(final int scoreToRemove);
 
-    boolean IsReadyForGift();
+    boolean isReadyForGift();
 
     void setGiftStatus(boolean bool);
 
@@ -40,5 +40,10 @@ public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
     void removeStocking();
 
     BlockPos getStocking();
+
+    int getTime();
+
+    void setTime(int max);
+
 
 }
