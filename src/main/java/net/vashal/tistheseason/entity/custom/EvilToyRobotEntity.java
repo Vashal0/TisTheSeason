@@ -186,11 +186,10 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
 
     private <E extends IAnimatable> PlayState meleePredicate(AnimationEvent<E> event) {
         if (this.entityData.get(ATTACK_STATE) == 1 && deathTime == 0) {
-            event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-            this.swinging = false;
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.melee", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     private <E extends IAnimatable> PlayState windPredicate(AnimationEvent<E> event) {

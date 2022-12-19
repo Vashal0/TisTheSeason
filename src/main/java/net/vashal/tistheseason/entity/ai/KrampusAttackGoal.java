@@ -51,6 +51,7 @@ public class KrampusAttackGoal extends Goal {
                     this.entity.getCommandSenderWorld().getEntities(this.entity, aabb2).forEach(e -> {
                         if ((e == livingentity)) {
                             this.entity.doHurtTarget(livingentity);
+                            livingentity.invulnerableTime = 0;
                         }
                     });
                 }

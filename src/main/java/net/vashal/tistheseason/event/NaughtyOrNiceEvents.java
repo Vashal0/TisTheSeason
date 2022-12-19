@@ -129,7 +129,7 @@ public class NaughtyOrNiceEvents {
                         item.remove(Entity.RemovalReason.KILLED);
                     }
                     player.getCapability(TTSCapabilities.NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                        if (niceScore.getTime() > 18000) {
+                        if (niceScore.getTime() > 200) { //TODO CHANGE BACK TO 18000
                             if (!niceScore.isReadyForGift()) {
                                 if (niceScore.getCurrentScore() > 250) {
                                     player.displayClientMessage(Component.translatable("Santa: Ho Ho Ho! You've been very good this year!"), true);
@@ -170,7 +170,7 @@ public class NaughtyOrNiceEvents {
             gifts.addGifts();
             if (!event.updateLevel()) {
                 player.getCapability(TTSCapabilities.NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                    if (niceScore.hasStocking()) {
+                    if (niceScore.getStocking() != null) {
                         if (level.getBlockEntity(niceScore.getStocking()) instanceof StockingBlockEntity stocking && niceScore.isReadyForGift()) {
                             if (stocking.isOwnedBy(player)) {
                                 if (niceScore.getCurrentScore() < -250) {
@@ -182,7 +182,7 @@ public class NaughtyOrNiceEvents {
                                     for (int i = 0; i < stocking.getContainerSize() - 1; i++) {
                                         if (stocking.getItem(i).isEmpty()) {
                                             ItemStack stack = ItemStack.EMPTY;
-                                            if (new Random().nextInt((1)+1) == 1) {
+                                            if (new Random().nextInt((2)+1) != 0) {
                                                 int result = new Random().nextInt(20 - 1) + 1;
                                                 if (result > gifts.getBadGifts().size() - 1) {
                                                     result = gifts.getBadGifts().size() - 1;
@@ -198,7 +198,7 @@ public class NaughtyOrNiceEvents {
                                         if (stocking.getItem(i).isEmpty()) {
                                             ItemStack stack = ItemStack.EMPTY;
                                             int randomCandy = new Random().nextInt((2)+1);
-                                            if (new Random().nextInt((1)+1) == 1) {
+                                            if (new Random().nextInt((2)+1) != 0) {
                                                 int result = new Random().nextInt(40 - 1) + 1;
                                                 if (result > gifts.getMediumGifts().size() - 1) {
                                                     result = gifts.getMediumGifts().size() - 1 - randomCandy;
@@ -220,14 +220,14 @@ public class NaughtyOrNiceEvents {
                                         if (stocking.getItem(i).isEmpty()) {
                                             ItemStack stack = ItemStack.EMPTY;
                                             int randomCandy = new Random().nextInt((3)+1);
-                                            if (new Random().nextInt((1)+1) == 1) {
-                                                int result = new Random().nextInt(30 - 1) + 1;
+                                            if (new Random().nextInt((2)+1) != 0) {
+                                                int result = new Random().nextInt(50 - 1) + 1;
                                                 if (result > gifts.getGoodGifts().size() - 1) {
                                                     result = gifts.getGoodGifts().size() - 1 - randomCandy;
                                                 }
                                                 stack = gifts.getGoodGifts().get(result).getDefaultInstance();
                                                 if (stack.getItem() == TTSItems.CANDY_CANE.get() || stack.getItem() ==  TTSItems.CARAMEL.get()) {
-                                                    stack.setCount(new Random().nextInt(12 - 1) + 1);
+                                                    stack.setCount(new Random().nextInt(32 - 1) + 1);
                                                 }
                                             }
                                             stocking.setItem(i, stack);
@@ -243,7 +243,7 @@ public class NaughtyOrNiceEvents {
                 });
 
                 player.getCapability(TTSCapabilities.NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                    if (niceScore.hasStocking()) {
+                    if (niceScore.getStocking() != null) {
                         if (level.getBlockEntity(niceScore.getStocking()) instanceof StockingBlockEntity stockingBlock && niceScore.isReadyForGift()) {
                             if (stockingBlock.isOwnedBy(player)) {
                                 niceScore.setMaxScore(500);
@@ -257,9 +257,8 @@ public class NaughtyOrNiceEvents {
                         } else if (!(level.getBlockEntity(niceScore.getStocking()) instanceof StockingBlockEntity)) {
                             player.displayClientMessage(Component.translatable("Santa: I couldn't find your stocking, make sure to place one and I'll try again."), true);
                         }
-                    } else {
-                        player.displayClientMessage(Component.translatable("Santa: I couldn't find your stocking3, make sure to place one and I'll try again."), true);
-                    }
+                    } //else {
+                        //player.displayClientMessage(Component.translatable("Santa: I couldn't find your stocking3, make sure to place one and I'll try again."), true); i don't know why this even triggers, but it seems to work either way
                 });
             }
         }

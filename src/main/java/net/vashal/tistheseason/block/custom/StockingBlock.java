@@ -24,11 +24,13 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.vashal.tistheseason.block.entity.StockingBlockEntity;
 import net.vashal.tistheseason.capabilities.TTSCapabilities;
+import net.vashal.tistheseason.items.TTSItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -228,5 +230,17 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
     @Override
     public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity) {
         return SoundType.WOOL;
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        if (level.getBlockEntity(pos) instanceof StockingBlockEntity stocking) {
+            if (stocking.hasCustomName()) {
+                ItemStack stack = TTSItems.STOCKING_ITEM.get().getDefaultInstance();
+                stack.setHoverName(stocking.getName());
+                return stack;
+            }
+        }
+        return TTSItems.STOCKING_ITEM.get().getDefaultInstance();
     }
 }

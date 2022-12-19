@@ -98,7 +98,7 @@ public class TTSItems {
             () -> new SuperSoakerItem(new Item.Properties().tab(TTSCreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
     public static final RegistryObject<Item> POP_GUN = ITEMS.register("pop_gun",
-            () -> new PopGunItem(new Item.Properties().tab(TTSCreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+            () -> new PopGunItem(new Item.Properties().tab(TTSCreativeModeTab.TISTHESEASON_TAB).stacksTo(1).durability(100)));
 
     public static final RegistryObject<Item> TOY_ROBOT_SPAWN_EGG = ITEMS.register("eggs/toy_robot_spawn_egg",
             () -> new ForgeSpawnEggItem(TTSEntityTypes.TOY_ROBOT, 0x0096ff, 0xc70039,
