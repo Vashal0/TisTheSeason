@@ -153,6 +153,8 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
         return PlayState.STOP;
     }
 
+
+
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(@NotNull ServerLevel pLevel, @NotNull AgeableMob pOtherParent) {

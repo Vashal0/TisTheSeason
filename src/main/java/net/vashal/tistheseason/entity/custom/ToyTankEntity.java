@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
+import net.vashal.tistheseason.constants.ToySoldierConstants;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyTankAttackGoal;
@@ -271,8 +272,17 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
     public void registerControllers(AnimationData data) {
         AnimationController<ToyTankEntity> idleController = new AnimationController<>(this, "idleController", 0, this::idlePredicate);
         AnimationController<ToyTankEntity> attackController = new AnimationController<>(this, "attackController", 0, this::attackPredicate);
+        AnimationController<ToyTankEntity> deathController = new AnimationController<>(this, "deathController", 0, this::deathPredicate);
+        data.addAnimationController(deathController);
         data.addAnimationController(idleController);
         data.addAnimationController(attackController);
+    }
+
+    private <E extends IAnimatable> PlayState deathPredicate(AnimationEvent<E> event) {
+        if (deathTime > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyTankConstants.ANIMATION_DEATH, ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+        }
+        return PlayState.CONTINUE;
     }
 
     private <E extends IAnimatable> PlayState idlePredicate(AnimationEvent<E> event) {
