@@ -1,5 +1,5 @@
 # TisTheSeason
-WIP mod for winterjam
+Mod for winterjam
 
 
  - ## [Features](#features)
@@ -7,24 +7,12 @@ WIP mod for winterjam
 
 ### Features
 
-### TODOs
-#### Add Features /4
-#### LIE DOWN /0
-#### TRY NOT TO CRY /0
-#### CRY A LOT /0
-#### Driveable children's toy car
-#### Fix Pet Rock
-#### Toy Tank shoots real explosions on command
-#### revisit "letter to santa"
-#### add hero of the village gain to naughty or nice
-#### add sounds to toy soldier
-#### add more sounds to toy tank
-#### add sounds to krampus
-#### add supplementaries optional compat
-#### Finish Krampus
-#### Hot Cocoa
-#### Blockstate for Stocking
-#### 1 More Curio
-#### Clean up everything
-#### ship it
+####Your actions have consequences good and bad, and Santa is always watching
+####Write a letter addressed to Santa if you feel you've done enough this year and go to sleep
+####Wake up Christmas morning with a filled stocking and hope he brought what you asked for!
+####Although if you've been naughty, don't complain if you didn't
 
+### Features
+####10+ Toys or Toy-like items to receive from Santa on Christmas morning
+####A variety of other Xmas themed items
+####Several 'Living' Toys for you to befriend
