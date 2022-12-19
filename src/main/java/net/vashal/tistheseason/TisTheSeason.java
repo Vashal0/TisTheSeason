@@ -13,14 +13,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.TTSBlocks;
 import net.vashal.tistheseason.block.entity.TTSBlockEntities;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
+import net.vashal.tistheseason.items.TTSItems;
 import net.vashal.tistheseason.items.custom.curios.client.models.*;
 import net.vashal.tistheseason.items.custom.curios.client.renderer.CuriosLayerDefinitions;
-import net.vashal.tistheseason.screen.TTS_MenuTypes;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.screen.TTSMenuTypes;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -36,8 +36,8 @@ public class TisTheSeason {
     public TisTheSeason() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        TTS_Items.register(modEventBus);
-        TTS_Blocks.register(modEventBus);
+        TTSItems.register(modEventBus);
+        TTSBlocks.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -59,9 +59,9 @@ public class TisTheSeason {
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("feet").priority(220).icon(InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS).cosmetic().build());
 
         GeckoLib.initialize();
-        TTS_EntityTypes.register(modEventBus);
-        TTS_Sounds.SOUNDS.register(modEventBus);
-        TTS_MenuTypes.register(modEventBus);
+        TTSEntityTypes.register(modEventBus);
+        TTSSounds.SOUNDS.register(modEventBus);
+        TTSMenuTypes.register(modEventBus);
         TTSBlockEntities.register(modEventBus);
     }
 

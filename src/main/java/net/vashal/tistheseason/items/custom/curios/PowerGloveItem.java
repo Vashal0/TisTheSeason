@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.TTSBlocks;
 import net.vashal.tistheseason.capabilities.TTSCapabilities;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
@@ -52,7 +52,7 @@ public class PowerGloveItem extends TTSCurios {
         Player player = event.getEntity();
         BlockPos pPos = event.getPos();
         BlockPos pos = pPos.relative(Objects.requireNonNull(event.getFace()));
-        BlockState state = TTS_Blocks.INVISIBLE_REDSTONE.get().defaultBlockState();
+        BlockState state = TTSBlocks.INVISIBLE_REDSTONE.get().defaultBlockState();
         Level world = event.getLevel();
         BlockState state1 = world.getBlockState(pPos);
         BlockState state2 = world.getBlockState(pos);

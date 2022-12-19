@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.items.TTSItems;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -23,9 +23,9 @@ public class LollipopItem extends Item {
 
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull LivingEntity pEntityLiving) {
         ItemStack itemstack = super.finishUsingItem(pStack, pLevel, pEntityLiving);
-        int random = new Random().nextInt((16-1)+1);
+        int random = new Random().nextInt((8-1)+1);
         if (random != 0) {
-            return pEntityLiving instanceof Player && ((Player) pEntityLiving).getAbilities().instabuild ? itemstack : new ItemStack(TTS_Items.LOLLIPOP.get());
+            return pEntityLiving instanceof Player && ((Player) pEntityLiving).getAbilities().instabuild ? itemstack : new ItemStack(TTSItems.LOLLIPOP.get());
         }
         return pStack;
     }

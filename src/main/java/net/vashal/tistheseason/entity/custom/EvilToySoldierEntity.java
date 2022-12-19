@@ -29,9 +29,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.constants.ToySoldierConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.variant.ToySoldierVariant;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -50,7 +50,7 @@ import java.util.List;
 
 public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(ToySoldierEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(EvilToySoldierEntity.class, EntityDataSerializers.INT);
 
     public EvilToySoldierEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -67,7 +67,7 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
 
     @Nullable
     public static EvilToySoldierEntity create(Level world) {
-        return TTS_EntityTypes.EVIL_TOY_SOLDIER.get().create(world);
+        return TTSEntityTypes.EVIL_TOY_SOLDIER.get().create(world);
     }
 
 
@@ -115,10 +115,10 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
     public void playModSounds() { //plays the walking sound much faster than normal
         if (this.level.isClientSide() && deathTime == 0) {
             if (tickCount % 3 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_WALK.get(), this.getSoundSource(), 0.025f, 0.6f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_WALK.get(), this.getSoundSource(), 0.025f, 0.6f, true);
             }
             if (tickCount % 6 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.DRUM.get(), this.getSoundSource(), 0.5f, 2f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.DRUM.get(), this.getSoundSource(), 0.5f, 2f, true);
             }
         }
     }
@@ -180,7 +180,7 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
 
     private <E extends IAnimatable> PlayState feetPredicate(AnimationEvent<E> event) {
         if (deathTime == 0) {
-                this.playSound(TTS_Sounds.TOY_WALK.get());
+                this.playSound(TTSSounds.TOY_WALK.get());
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ToySoldierConstants.ANIMATION_FEET_MOVEMENT, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
@@ -196,11 +196,11 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.TOY_HURT.get();
+        return TTSSounds.TOY_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.TOY_DEATH.get();
+        return TTSSounds.TOY_DEATH.get();
     }
 
     protected float getSoundVolume() {

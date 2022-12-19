@@ -21,7 +21,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.network.PacketDistributor;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import net.vashal.tistheseason.items.custom.client.PopGunRenderer;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -124,7 +124,7 @@ public class PopGunItem extends Item implements IAnimatable, ISyncable {
     private <ENTITY extends IAnimatable> void soundListener(SoundKeyframeEvent<ENTITY> event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            player.playSound(TTS_Sounds.CORK.get(), 1, 1);
+            player.playSound(TTSSounds.CORK.get(), 1, 1);
         }
     }
 

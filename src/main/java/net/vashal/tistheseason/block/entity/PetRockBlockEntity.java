@@ -77,7 +77,7 @@ public class PetRockBlockEntity extends BlockEntity implements IAnimatable, Name
     @Override
     public @NotNull Component getName() {
         return Component.translatable("block.tistheseason.pet_rock");
-    }
+    } //requires further testing
 
     @Nonnull
     @Override

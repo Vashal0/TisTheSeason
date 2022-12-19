@@ -25,9 +25,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.ai.EvilToyRobotAttackGoal;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -61,11 +61,11 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
                 .add(Attributes.MOVEMENT_SPEED, 0.35).build();
     }
 
-    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(EvilToyRobotEntity.class, EntityDataSerializers.INT);
 
     @Nullable
     public static EvilToyRobotEntity create(Level world) {
-        return TTS_EntityTypes.EVIL_ROBOT.get().create(world);
+        return TTSEntityTypes.EVIL_ROBOT.get().create(world);
     }
 
 
@@ -110,10 +110,10 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
     public void playModSounds() { //plays the walking sound much faster than normal
         if (this.level.isClientSide() && deathTime == 0) {
             if (tickCount % 3 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
             }
             if (tickCount % 512 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_GEARS.get(), this.getSoundSource(), 0.4f, 1.2f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_GEARS.get(), this.getSoundSource(), 0.4f, 1.2f, true);
             }
         }
     }
@@ -156,16 +156,13 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
     }
 
     private <E extends IAnimatable> PlayState idlePredicate(AnimationEvent<E> event) {
-        if (deathTime == 0) {
-            if (!this.isAggressive()) {
+        if (deathTime == 0 && this.entityData.get(ATTACK_STATE) == 0) {
                 if (event.isMoving()) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WALK, ILoopType.EDefaultLoopTypes.LOOP));
                     return PlayState.CONTINUE;
                 }
-
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_IDLE, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
-            }
         }
         return PlayState.STOP;
     }
@@ -175,7 +172,7 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
         EvilToyRobotEntity robot = event.getEntity();
         if (this.level.isClientSide()) {
             if (event.sound.equals("toyambient")) {
-                this.level.playLocalSound(robot.getX(), robot.getY(), robot.getZ(), TTS_Sounds.TOY_AMBIENT.get(), robot.getSoundSource(), 1f, 1f, true);
+                this.level.playLocalSound(robot.getX(), robot.getY(), robot.getZ(), TTSSounds.TOY_AMBIENT.get(), robot.getSoundSource(), 1f, 1f, true);
             }
         }
     }
@@ -188,7 +185,7 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
     }
 
     private <E extends IAnimatable> PlayState meleePredicate(AnimationEvent<E> event) {
-        if (this.swinging && deathTime == 0) {
+        if (this.entityData.get(ATTACK_STATE) == 1 && deathTime == 0) {
             event.getController().markNeedsReload();
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             this.swinging = false;
@@ -220,11 +217,11 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.TOY_HURT.get();
+        return TTSSounds.TOY_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.TOY_DEATH.get();
+        return TTSSounds.TOY_DEATH.get();
     }
 
     protected float getSoundVolume() {

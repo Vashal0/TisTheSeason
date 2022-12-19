@@ -16,7 +16,7 @@ import net.vashal.tistheseason.entity.custom.*;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import net.vashal.tistheseason.entity.projectile.WaterStream;
 
-public class TTS_EntityTypes {
+public class TTSEntityTypes {
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, TisTheSeason.MOD_ID);

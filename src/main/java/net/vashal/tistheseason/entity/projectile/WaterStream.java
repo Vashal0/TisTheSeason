@@ -25,8 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
+import net.vashal.tistheseason.items.TTSItems;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -44,14 +44,14 @@ import javax.annotation.Nullable;
 public class WaterStream extends AbstractArrow implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private int life;
-    private final ItemStack waterStream = new ItemStack(TTS_Items.WATER_STREAM.get());
+    private final ItemStack waterStream = new ItemStack(TTSItems.WATER_STREAM.get());
 
     public WaterStream(EntityType<? extends WaterStream> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public WaterStream(Level pLevel, LivingEntity pShooter) {
-        super(TTS_EntityTypes.WATER_STREAM.get(), pShooter, pLevel);
+        super(TTSEntityTypes.WATER_STREAM.get(), pShooter, pLevel);
         this.pickup = Pickup.DISALLOWED;
     }
 
@@ -141,6 +141,10 @@ public class WaterStream extends AbstractArrow implements IAnimatable {
 
     }
 
+    @Override
+    public boolean isCritArrow() {
+        return false;
+    }
 
     public void tick() {
         super.tick();

@@ -28,12 +28,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyTankConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.ai.EvilToyTankAttackGoal;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import net.vashal.tistheseason.entity.variant.ToyTankVariant;
-import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.items.TTSItems;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.AnimationState;
@@ -68,7 +68,7 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
 
     @Nullable
     public static EvilToyTankEntity create(Level world) {
-        return TTS_EntityTypes.EVIL_TOY_TANK.get().create(world);
+        return TTSEntityTypes.EVIL_TOY_TANK.get().create(world);
     }
 
 
@@ -78,7 +78,7 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
     }
 
     private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(EvilToyTankEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(ToySoldierEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(EvilToyTankEntity.class, EntityDataSerializers.INT);
 
 
     @Override
@@ -171,11 +171,11 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.TOY_HURT.get();
+        return TTSSounds.TOY_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.TOY_DEATH.get();
+        return TTSSounds.TOY_DEATH.get();
     }
 
     protected float getSoundVolume() {
@@ -195,7 +195,7 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
 
     @Override
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
-        IronBall ironBall = new IronBall(this.level, this, new ItemStack(TTS_Items.IRON_BALL_ITEM.get()));
+        IronBall ironBall = new IronBall(this.level, this, new ItemStack(TTSItems.IRON_BALL_ITEM.get()));
         double d0 = pTarget.getX() - this.getX();
         double d1 = pTarget.getY(0.3333333333) - ironBall.getY();
         double d2 = pTarget.getZ() - this.getZ();

@@ -25,12 +25,12 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.TTSBlocks;
 import net.vashal.tistheseason.block.entity.StockingBlockEntity;
 import net.vashal.tistheseason.capabilities.TTSCapabilities;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.custom.KrampusEntity;
-import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.items.TTSItems;
 import net.vashal.tistheseason.utils.StockingGiftItems;
 import org.jetbrains.annotations.NotNull;
 
@@ -174,7 +174,7 @@ public class NaughtyOrNiceEvents {
                         if (level.getBlockEntity(niceScore.getStocking()) instanceof StockingBlockEntity stocking && niceScore.isReadyForGift()) {
                             if (stocking.isOwnedBy(player)) {
                                 if (niceScore.getCurrentScore() < -250) {
-                                    KrampusEntity krampus = TTS_EntityTypes.KRAMPUS.get().spawn((ServerLevel) level, null, null, null, stocking.getBlockPos(), MobSpawnType.COMMAND, true, false);
+                                    KrampusEntity krampus = TTSEntityTypes.KRAMPUS.get().spawn((ServerLevel) level, null, null, null, stocking.getBlockPos(), MobSpawnType.COMMAND, true, false);
                                     if (krampus != null) {
                                         krampus.tryToSpawnToysFor((ServerLevel) level, krampus);
                                     }
@@ -204,7 +204,7 @@ public class NaughtyOrNiceEvents {
                                                     result = gifts.getMediumGifts().size() - 1 - randomCandy;
                                                 }
                                                 stack = gifts.getMediumGifts().get(result).getDefaultInstance();
-                                                if (stack.getItem() == TTS_Items.CANDY_CANE.get() || stack.getItem() ==  TTS_Items.CARAMEL.get()) {
+                                                if (stack.getItem() == TTSItems.CANDY_CANE.get() || stack.getItem() ==  TTSItems.CARAMEL.get()) {
                                                     stack.setCount(new Random().nextInt(12 - 1) + 1);
                                                 }
                                             }
@@ -212,7 +212,7 @@ public class NaughtyOrNiceEvents {
                                         }
                                     }
                                     if (stocking.getItem(13).isEmpty()) {
-                                        stocking.setItem(13, TTS_Blocks.PET_ROCK.get().asItem().getDefaultInstance());
+                                        stocking.setItem(13, TTSBlocks.PET_ROCK.get().asItem().getDefaultInstance());
                                     }
 
                                 } else if (niceScore.getCurrentScore() > 250) {
@@ -226,7 +226,7 @@ public class NaughtyOrNiceEvents {
                                                     result = gifts.getGoodGifts().size() - 1 - randomCandy;
                                                 }
                                                 stack = gifts.getGoodGifts().get(result).getDefaultInstance();
-                                                if (stack.getItem() == TTS_Items.CANDY_CANE.get() || stack.getItem() ==  TTS_Items.CARAMEL.get()) {
+                                                if (stack.getItem() == TTSItems.CANDY_CANE.get() || stack.getItem() ==  TTSItems.CARAMEL.get()) {
                                                     stack.setCount(new Random().nextInt(12 - 1) + 1);
                                                 }
                                             }
@@ -234,7 +234,7 @@ public class NaughtyOrNiceEvents {
                                         }
                                     }
                                     if (stocking.getItem(13).isEmpty()) {
-                                        stocking.setItem(13, gifts.getGoodGifts().get(new Random().nextInt((gifts.getGoodGifts().size() - 2) - 1) + 1).getDefaultInstance());
+                                        stocking.setItem(13, gifts.getGoodGifts().get(new Random().nextInt((gifts.getGoodGifts().size() - 4) - 1) + 1).getDefaultInstance());
                                     }
                                 }
                             }

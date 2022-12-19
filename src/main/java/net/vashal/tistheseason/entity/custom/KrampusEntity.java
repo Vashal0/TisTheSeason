@@ -28,9 +28,9 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.KrampusConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.ai.KrampusAttackGoal;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -78,7 +78,7 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
 
     @Nullable
     public static KrampusEntity create(Level world) {
-        return TTS_EntityTypes.KRAMPUS.get().create(world);
+        return TTSEntityTypes.KRAMPUS.get().create(world);
     }
 
 
@@ -115,7 +115,7 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
         KrampusEntity krampus = event.getEntity();
         if (this.level.isClientSide()) {
             if (event.sound.equals("krampus_hit")) {
-                this.level.playLocalSound(krampus.getX(), krampus.getY(), krampus.getZ(), TTS_Sounds.KRAMPUS_HIT.get(), krampus.getSoundSource(), 0.8f, 0.8f, true);
+                this.level.playLocalSound(krampus.getX(), krampus.getY(), krampus.getZ(), TTSSounds.KRAMPUS_HIT.get(), krampus.getSoundSource(), 0.8f, 0.8f, true);
             }
         }
     }
@@ -149,7 +149,7 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     @Override
     public void startSeenByPlayer(@NotNull ServerPlayer pServerPlayer) {
         setRoarTime(1);
-        this.playSound(TTS_Sounds.KRAMPUS.get());
+        this.playSound(TTSSounds.KRAMPUS.get());
         super.startSeenByPlayer(pServerPlayer);
     }
 
@@ -177,9 +177,9 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
 
     public void tryToSpawnToysFor(ServerLevel pServerLevel, KrampusEntity krampus) {
         BlockPos blockpos = krampus.blockPosition();
-        TTS_EntityTypes.EVIL_TOY_TANK.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
-        TTS_EntityTypes.EVIL_ROBOT.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
-        TTS_EntityTypes.EVIL_TOY_SOLDIER.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
+        TTSEntityTypes.EVIL_TOY_TANK.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
+        TTSEntityTypes.EVIL_ROBOT.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
+        TTSEntityTypes.EVIL_TOY_SOLDIER.get().spawn(pServerLevel, null, null, null, blockpos, MobSpawnType.EVENT, false, false);
     }
 
 
@@ -252,7 +252,7 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
         }
         if (this.getHealth() < this.getMaxHealth() / 2 && !this.getBonusRoar()) {
             this.setBonusRoar(true);
-            this.playSound(TTS_Sounds.KRAMPUS.get(), 1.1f, 0.8f);
+            this.playSound(TTSSounds.KRAMPUS.get(), 1.1f, 0.8f);
         }
     }
 
@@ -290,15 +290,15 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     }
 
     protected SoundEvent getAmbientSound() {
-        return TTS_Sounds.GROWL.get();
+        return TTSSounds.GROWL.get();
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.KRAMPUS_HURT.get();
+        return TTSSounds.KRAMPUS_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.SNARL.get();
+        return TTSSounds.SNARL.get();
     }
 
     protected float getSoundVolume() {

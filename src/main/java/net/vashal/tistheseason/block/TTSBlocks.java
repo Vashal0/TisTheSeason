@@ -12,10 +12,10 @@ import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.block.custom.InvisibleRedstone;
 import net.vashal.tistheseason.block.custom.PetRockBlock;
 import net.vashal.tistheseason.block.custom.StockingBlock;
-import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.utils.TTS_CreativeModeTab;
+import net.vashal.tistheseason.items.TTSItems;
+import net.vashal.tistheseason.utils.TTSCreativeModeTab;
 
-public class TTS_Blocks {
+public class TTSBlocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, TisTheSeason.MOD_ID);
 
@@ -38,9 +38,9 @@ public class TTS_Blocks {
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
 
         if (name.equals("invisible_redstone")) {
-            return TTS_Items.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+            return TTSItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
         } else {
-            return TTS_Items.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
+            return TTSItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(TTSCreativeModeTab.TISTHESEASON_TAB)));
         }
     }
 

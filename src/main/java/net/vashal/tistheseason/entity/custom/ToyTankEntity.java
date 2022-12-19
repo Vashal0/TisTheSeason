@@ -19,8 +19,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -35,13 +33,13 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyTankConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyTankAttackGoal;
 import net.vashal.tistheseason.entity.ai.TurretTankAttackGoal;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import net.vashal.tistheseason.entity.variant.ToyTankVariant;
-import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.items.TTSItems;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.AnimationState;
@@ -68,13 +66,13 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
     }
 
     public ToyTankEntity(Level world) {
-        super(TTS_EntityTypes.TOY_TANK.get(), world);
+        super(TTSEntityTypes.TOY_TANK.get(), world);
     }
 
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND && this.isOwnedBy(player)) {
-            if (this.getOwner() == null) {
+            if (this.getOwnerUUID() == null) {
                 this.tame(player);
             }
             if (this.isOwnedBy(player)) {
@@ -89,7 +87,7 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
                     CompoundTag nbt = new CompoundTag();
                     nbt.putString("toy", EntityType.getKey(this.getType()).toString());
                     this.saveWithoutId(nbt);
-                    player.setItemInHand(hand, TTS_Items.TOY_TANK_ITEM.get().getDefaultInstance());
+                    player.setItemInHand(hand, TTSItems.TOY_TANK_ITEM.get().getDefaultInstance());
                     ItemStack stack1 = player.getItemInHand(hand);
                     stack1.setTag(nbt);
                     this.remove(Entity.RemovalReason.KILLED);
@@ -143,7 +141,7 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
 
     @Nullable
     public static ToyTankEntity create(Level world) {
-        return TTS_EntityTypes.TOY_TANK.get().create(world);
+        return TTSEntityTypes.TOY_TANK.get().create(world);
     }
 
 
@@ -261,9 +259,7 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
         this.goalSelector.addGoal(1, new TurretTankAttackGoal(this, 1.0D, 60));
         this.goalSelector.addGoal(2, new ToyTankAttackGoal(this, 1.0D, 60, 10.0F));
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 2.0D, 8, 3, false));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(6, new FloatGoal(this));
+        this.goalSelector.addGoal(5, new FloatGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -303,11 +299,11 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.TOY_HURT.get();
+        return TTSSounds.TOY_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.TOY_DEATH.get();
+        return TTSSounds.TOY_DEATH.get();
     }
 
     protected float getSoundVolume() {
@@ -327,7 +323,7 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
 
     @Override
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
-        IronBall ironBall = new IronBall(this.level, this, new ItemStack(TTS_Items.IRON_BALL_ITEM.get()));
+        IronBall ironBall = new IronBall(this.level, this, new ItemStack(TTSItems.IRON_BALL_ITEM.get()));
         double d0 = pTarget.getX() - this.getX();
         double d1 = pTarget.getY(0.3333333333) - ironBall.getY();
         double d2 = pTarget.getZ() - this.getZ();
@@ -338,7 +334,7 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
     }
 
     public void performRangedAttack(BlockPos pTarget) {
-        IronBall ironBall = new IronBall(this.level, this, new ItemStack(TTS_Items.IRON_BALL_ITEM.get()));
+        IronBall ironBall = new IronBall(this.level, this, new ItemStack(TTSItems.IRON_BALL_ITEM.get()));
         double d0 = (pTarget.getX()+0.5) - this.getX();
         double d1 = pTarget.getY() - ironBall.getY();
         double d2 = (pTarget.getZ()+0.5) - this.getZ();

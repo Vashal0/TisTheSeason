@@ -31,12 +31,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.ai.ToyRobotAttackGoal;
 import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
-import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.items.TTSItems;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -69,7 +69,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     }
 
     public ToyRobotEntity(Level world) {
-        super(TTS_EntityTypes.TOY_ROBOT.get(), world);
+        super(TTSEntityTypes.TOY_ROBOT.get(), world);
     }
 
 
@@ -84,7 +84,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
 
     @Nullable
     public static ToyRobotEntity create(Level world) {
-        return TTS_EntityTypes.TOY_ROBOT.get().create(world);
+        return TTSEntityTypes.TOY_ROBOT.get().create(world);
     }
 
 
@@ -112,7 +112,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
 
     private <E extends IAnimatable> PlayState idlePredicate(AnimationEvent<E> event) {
         if (deathTime == 0 && this.entityData.get(ATTACK_STATE) == 0) {
-            if (getActivatedStatus() && !this.isAggressive()) {
+            if (getActivatedStatus()) {
                 if (event.isMoving()) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WALK, ILoopType.EDefaultLoopTypes.LOOP));
                     return PlayState.CONTINUE;
@@ -130,7 +130,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
         ToyRobotEntity robot = event.getEntity();
         if (this.level.isClientSide()) {
             if (event.sound.equals("toyambient")) {
-                this.level.playLocalSound(robot.getX(), robot.getY(), robot.getZ(), TTS_Sounds.TOY_AMBIENT.get(), robot.getSoundSource(), 0.5f, 1f, true);
+                this.level.playLocalSound(robot.getX(), robot.getY(), robot.getZ(), TTSSounds.TOY_AMBIENT.get(), robot.getSoundSource(), 0.5f, 1f, true);
             }
         }
     }
@@ -235,7 +235,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) { //every right click turns the wind on the back, after 10 the toy becomes active for 30 seconds
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            if (this.getOwner() == null) {
+            if (this.getOwnerUUID() == null) {
                 this.tame(player);
             }
             if (this.isOwnedBy(player)) {
@@ -243,7 +243,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
                 if (!player.isShiftKeyDown() && stack.isEmpty()) {
                     if (getWindCount() < 9 && !getActivatedStatus()) {
                         this.setWind(getWindCount() + 1);
-                        playSound(TTS_Sounds.WIND_TURN.get());
+                        playSound(TTSSounds.WIND_TURN.get());
                     } else if (getWindCount() == 9 && !getActivatedStatus()) {
                         setActivationStatus(true);
                         setWind(getWindCount() - 9);
@@ -256,7 +256,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
                     CompoundTag nbt = new CompoundTag();
                     nbt.putString("toy", EntityType.getKey(this.getType()).toString());
                     this.saveWithoutId(nbt);
-                    player.setItemInHand(hand, TTS_Items.TOY_ROBOT_ITEM.get().getDefaultInstance());
+                    player.setItemInHand(hand, TTSItems.TOY_ROBOT_ITEM.get().getDefaultInstance());
                     ItemStack stack1 = player.getItemInHand(hand);
                     stack1.setTag(nbt);
                     stack1.getOrCreateTag().putInt("ActivatedTicks", 0);
@@ -322,10 +322,10 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     public void playModSounds() { //plays the walking sound much faster than normal
         if (this.level.isClientSide() && deathTime == 0) {
             if (tickCount % 3 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
             }
             if (tickCount % 512 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_GEARS.get(), this.getSoundSource(), 0.4f, 1.2f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_GEARS.get(), this.getSoundSource(), 0.4f, 1.2f, true);
             }
         }
     }
@@ -359,7 +359,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     private <E extends IAnimatable> PlayState feetPredicate(AnimationEvent<E> event) {
         if (deathTime == 0) {
             if (getActivatedStatus()) {
-                this.playSound(TTS_Sounds.TOY_WALK.get());
+                this.playSound(TTSSounds.TOY_WALK.get());
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_FEET_MOVEMENT, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
@@ -386,11 +386,11 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.TOY_HURT.get();
+        return TTSSounds.TOY_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.TOY_DEATH.get();
+        return TTSSounds.TOY_DEATH.get();
     }
 
     protected float getSoundVolume() {

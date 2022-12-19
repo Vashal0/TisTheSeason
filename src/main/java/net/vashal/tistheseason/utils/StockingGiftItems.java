@@ -2,8 +2,8 @@ package net.vashal.tistheseason.utils;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.vashal.tistheseason.block.TTS_Blocks;
-import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.block.TTSBlocks;
+import net.vashal.tistheseason.items.TTSItems;
 
 import java.util.ArrayList;
 
@@ -19,26 +19,26 @@ public class StockingGiftItems {
     }
 
     public void addGifts() {
-        this.goodGifts.add(TTS_Items.TOY_SOLDIER_ITEM.get());
-        this.goodGifts.add(TTS_Items.TOY_TANK_ITEM.get());
-        this.goodGifts.add(TTS_Items.TOY_ROBOT_ITEM.get());
-        this.goodGifts.add(TTS_Items.HOBBY_HORSE.get());
-        this.goodGifts.add(TTS_Items.POWER_GLOVE.get());
-        this.goodGifts.add(TTS_Items.SUPER_SOAKER.get());
-        this.goodGifts.add(TTS_Items.REINDEER_SLIPPERS.get());
-        this.goodGifts.add(TTS_Items.SNOWMAN_SLIPPERS.get());
-        this.goodGifts.add(TTS_Items.POP_GUN.get());
-        this.goodGifts.add(TTS_Items.CARAMEL.get());
-        this.goodGifts.add(TTS_Items.LOLLIPOP.get());
-        this.goodGifts.add(TTS_Items.ENCHANTED_CANDY_CANE.get());
-        this.goodGifts.add(TTS_Items.CANDY_CANE.get());
-        this.mediumGifts.add(TTS_Blocks.PET_ROCK.get().asItem());
-        this.mediumGifts.add(TTS_Items.HOBBY_HORSE.get());
-        this.mediumGifts.add(TTS_Items.POWER_GLOVE.get());
-        this.mediumGifts.add(TTS_Items.SUPER_SOAKER.get());
-        this.mediumGifts.add(TTS_Items.CARAMEL.get());
-        this.mediumGifts.add(TTS_Items.LOLLIPOP.get());
-        this.mediumGifts.add(TTS_Items.CANDY_CANE.get());
+        this.goodGifts.add(TTSItems.TOY_SOLDIER_ITEM.get());
+        this.goodGifts.add(TTSItems.TOY_TANK_ITEM.get());
+        this.goodGifts.add(TTSItems.TOY_ROBOT_ITEM.get());
+        this.goodGifts.add(TTSItems.HOBBY_HORSE.get());
+        this.goodGifts.add(TTSItems.POWER_GLOVE.get());
+        this.goodGifts.add(TTSItems.SUPER_SOAKER.get());
+        this.goodGifts.add(TTSItems.REINDEER_SLIPPERS.get());
+        this.goodGifts.add(TTSItems.SNOWMAN_SLIPPERS.get());
+        this.goodGifts.add(TTSItems.POP_GUN.get());
+        this.goodGifts.add(TTSItems.CARAMEL.get());
+        this.goodGifts.add(TTSItems.LOLLIPOP.get());
+        this.goodGifts.add(TTSItems.ENCHANTED_CANDY_CANE.get());
+        this.goodGifts.add(TTSItems.CANDY_CANE.get());
+        this.mediumGifts.add(TTSBlocks.PET_ROCK.get().asItem());
+        this.mediumGifts.add(TTSItems.HOBBY_HORSE.get());
+        this.mediumGifts.add(TTSItems.POWER_GLOVE.get());
+        this.mediumGifts.add(TTSItems.SUPER_SOAKER.get());
+        this.mediumGifts.add(TTSItems.CARAMEL.get());
+        this.mediumGifts.add(TTSItems.LOLLIPOP.get());
+        this.mediumGifts.add(TTSItems.CANDY_CANE.get());
         this.badGifts.add(Items.CHARCOAL);
         this.badGifts.add(Items.COAL_ORE);
         this.badGifts.add(Items.DEEPSLATE_COAL_ORE);

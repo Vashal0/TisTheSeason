@@ -18,10 +18,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.custom.*;
-import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.items.TTSItems;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -38,19 +38,19 @@ import javax.annotation.Nonnull;
 public class IronBall extends AbstractArrow implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private int life;
-    private ItemStack ironBallItem = new ItemStack(TTS_Items.IRON_BALL_ITEM.get());
+    private ItemStack ironBallItem = new ItemStack(TTSItems.IRON_BALL_ITEM.get());
 
     public IronBall(EntityType<? extends IronBall> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public IronBall(Level pLevel, LivingEntity pShooter) {
-        super(TTS_EntityTypes.IRON_BALL.get(), pShooter, pLevel);
+        super(TTSEntityTypes.IRON_BALL.get(), pShooter, pLevel);
         this.pickup = Pickup.DISALLOWED;
     }
 
     public IronBall(Level pLevel, LivingEntity pShooter, ItemStack pStack) {
-        super(TTS_EntityTypes.IRON_BALL.get(), pShooter, pLevel);
+        super(TTSEntityTypes.IRON_BALL.get(), pShooter, pLevel);
         this.ironBallItem = pStack.copy();
     }
 
@@ -78,8 +78,13 @@ public class IronBall extends AbstractArrow implements IAnimatable {
         this.setSoundEvent(SoundEvents.METAL_HIT);
     }
 
+    @Override
+    public boolean isCritArrow() {
+        return false;
+    }
+
     protected void explode() {
-        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, Explosion.BlockInteraction.BREAK);
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 3.0F, Explosion.BlockInteraction.BREAK);
     }
 
     @Override
@@ -140,7 +145,7 @@ public class IronBall extends AbstractArrow implements IAnimatable {
                 }
             }
             if (entity1 instanceof Player) {
-                this.playSound(TTS_Sounds.CORK.get(), 1F, 1.0F);
+                this.playSound(TTSSounds.CORK.get(), 1F, 1.0F);
                 this.remove(RemovalReason.KILLED);
             } else {
                 this.playSound(SoundEvents.GENERIC_EXPLODE, 0.1F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));

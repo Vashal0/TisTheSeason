@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 @SuppressWarnings("deprecation")
 public class PetRockBlock extends BaseEntityBlock implements EntityBlock {
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private static final VoxelShape SHAPE = box(6, 0, 6, 10, 2, 10);
 
     public PetRockBlock() {
