@@ -17,9 +17,8 @@ import net.vashal.tistheseason.block.TTS_Blocks;
 import net.vashal.tistheseason.block.entity.TTSBlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.items.custom.curios.models.*;
-import net.vashal.tistheseason.items.custom.curios.renderer.*;
-import net.vashal.tistheseason.recipe.TTS_Recipes;
+import net.vashal.tistheseason.items.custom.curios.client.models.*;
+import net.vashal.tistheseason.items.custom.curios.client.renderer.CuriosLayerDefinitions;
 import net.vashal.tistheseason.screen.TTS_MenuTypes;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.slf4j.Logger;
@@ -63,7 +62,6 @@ public class TisTheSeason {
         TTS_EntityTypes.register(modEventBus);
         TTS_Sounds.SOUNDS.register(modEventBus);
         TTS_MenuTypes.register(modEventBus);
-        TTS_Recipes.register(modEventBus);
         TTSBlockEntities.register(modEventBus);
     }
 
@@ -74,6 +72,7 @@ public class TisTheSeason {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+
     }
 
     private void clientSetup(final FMLClientSetupEvent evt) {

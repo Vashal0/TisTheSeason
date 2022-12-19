@@ -13,7 +13,7 @@ import net.vashal.tistheseason.block.entity.TTSBlockEntities;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.client.renderers.*;
 import net.vashal.tistheseason.items.TTS_Items;
-import net.vashal.tistheseason.items.custom.curios.renderer.*;
+import net.vashal.tistheseason.items.custom.curios.client.renderer.*;
 import net.vashal.tistheseason.screen.StockingGUI;
 import net.vashal.tistheseason.screen.TTS_MenuTypes;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;

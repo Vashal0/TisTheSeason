@@ -2,7 +2,6 @@ package net.vashal.tistheseason.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -35,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressWarnings("deprecation")
 public class PetRockBlock extends BaseEntityBlock implements EntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -87,7 +87,7 @@ public class PetRockBlock extends BaseEntityBlock implements EntityBlock {
 
     @Deprecated
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, LevelReader worldIn, BlockPos pos) {
         return worldIn.getBlockState(pos.below()).getMaterial().isSolid();
     }
 

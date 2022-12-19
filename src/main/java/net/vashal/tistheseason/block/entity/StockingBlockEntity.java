@@ -10,14 +10,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemStackHandler;
-import net.vashal.tistheseason.constants.ToySoldierConstants;
-import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import net.vashal.tistheseason.screen.StockingContainerMenu;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -77,6 +73,7 @@ public class StockingBlockEntity extends RandomizableContainerBlockEntity implem
     @Override
     public boolean canOpen(@NotNull Player pPlayer) {
         if (pPlayer.isCreative()) return true;
+        if (this.getOwner() == null) return true;
         return this.isOwnedBy(pPlayer);
 
     }

@@ -1,0 +1,15 @@
+{
+  "parent":"forge:item/default",
+  "loader":"forge:separate_transforms",
+  "base": {
+    "parent": "tistheseason:item/super_soaker"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "tistheseason:item/super_soaker_sprite"
+      }
+    }
+  }
+}

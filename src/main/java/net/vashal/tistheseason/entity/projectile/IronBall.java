@@ -1,6 +1,5 @@
 package net.vashal.tistheseason.entity.projectile;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvent;
@@ -9,16 +8,20 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
-import net.vashal.tistheseason.entity.custom.ToyTankEntity;
+import net.vashal.tistheseason.entity.custom.*;
 import net.vashal.tistheseason.items.TTS_Items;
+import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -39,6 +42,11 @@ public class IronBall extends AbstractArrow implements IAnimatable {
 
     public IronBall(EntityType<? extends IronBall> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    public IronBall(Level pLevel, LivingEntity pShooter) {
+        super(TTS_EntityTypes.IRON_BALL.get(), pShooter, pLevel);
+        this.pickup = Pickup.DISALLOWED;
     }
 
     public IronBall(Level pLevel, LivingEntity pShooter, ItemStack pStack) {
@@ -84,6 +92,11 @@ public class IronBall extends AbstractArrow implements IAnimatable {
         return SoundEvents.METAL_HIT;
     }
 
+    @Override
+    public void setBaseDamage(double pBaseDamage) {
+        super.setBaseDamage(pBaseDamage);
+    }
+
 
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
@@ -99,15 +112,42 @@ public class IronBall extends AbstractArrow implements IAnimatable {
             }
         }
         boolean flag = entity.getType() == EntityType.ENDERMAN;
-        if (entity.hurt(damagesource, 4.0f)) {
-            if (flag) {
-                return;
+        if (this.isOnFire() && !flag) {
+            entity.setSecondsOnFire(5);
+        }
+        if (entity instanceof LivingEntity livingEntity) {
+            if (entity1 instanceof Player) {
+                if (entity.hurt(damagesource, (float) (this.getBaseDamage() * 2) + 4)) {
+                    if (this.getKnockback() > 0) {
+                        double d0 = Math.max(0.0D, 1.0D - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+                        Vec3 vec3 = this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D).normalize().scale((double) this.getKnockback() * 0.6D * d0);
+                        if (vec3.lengthSqr() > 0.0D) {
+                            livingEntity.push(vec3.x, 0.1D, vec3.z);
+                        }
+                    }
+                    if (flag) {
+                        return;
+                    }
+                }
+            } else {
+                if (entity instanceof KrampusEntity || entity instanceof EvilToyRobotEntity || entity instanceof EvilToyTankEntity || entity instanceof EvilToySoldierEntity) {
+                    return;
+                }
+                if (entity.hurt(damagesource, (float) this.getBaseDamage() * 4)) {
+                    if (flag) {
+                        return;
+                    }
+                }
             }
-            this.playSound(SoundEvents.GENERIC_EXPLODE, 0.1F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-            this.remove(RemovalReason.KILLED);
+            if (entity1 instanceof Player) {
+                this.playSound(TTS_Sounds.CORK.get(), 1F, 1.0F);
+                this.remove(RemovalReason.KILLED);
+            } else {
+                this.playSound(SoundEvents.GENERIC_EXPLODE, 0.1F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+                this.remove(RemovalReason.KILLED);
+            }
         }
     }
-
 
     public void tick() {
         super.tick();

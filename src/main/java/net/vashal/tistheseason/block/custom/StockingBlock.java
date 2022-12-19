@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.*;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
@@ -89,6 +90,7 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
         if ((level.getBlockEntity(pos) instanceof StockingBlockEntity stocking)) {
             if (stocking.getOwner() != null) {
                 if (!stocking.isOwnedBy(player)) {
+                    player.displayClientMessage(Component.translatable("I can't break that, that's someone else's stocking"), true);
                     return false;
                 }
             }
@@ -221,5 +223,10 @@ public class StockingBlock extends BaseEntityBlock implements EntityBlock {
     @Override
     public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull PathComputationType type) {
         return false;
+    }
+
+    @Override
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity) {
+        return SoundType.WOOL;
     }
 }

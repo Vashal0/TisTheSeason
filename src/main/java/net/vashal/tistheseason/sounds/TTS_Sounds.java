@@ -31,9 +31,37 @@ public class TTS_Sounds {
             SOUNDS.register("windturn", () -> new SoundEvent(
                     new ResourceLocation(TisTheSeason.MOD_ID, "windturn")));
 
+    public static final RegistryObject<SoundEvent> CORK =
+            SOUNDS.register("cork", () -> new SoundEvent(
+                    new ResourceLocation(TisTheSeason.MOD_ID, "cork")));
+
+    public static final RegistryObject<SoundEvent> DRUM =
+            SOUNDS.register("drum", () -> new SoundEvent(
+                    new ResourceLocation(TisTheSeason.MOD_ID, "drum")));
+
     public static final RegistryObject<SoundEvent> TOY_GEARS =
             SOUNDS.register("toygears", () -> new SoundEvent(
                     new ResourceLocation(TisTheSeason.MOD_ID, "toygears")));
+
+    public static final RegistryObject<SoundEvent> KRAMPUS =
+            SOUNDS.register("krampus", () -> new SoundEvent(
+                    new ResourceLocation(TisTheSeason.MOD_ID, "krampus")));
+
+    public static final RegistryObject<SoundEvent> KRAMPUS_HIT =
+            SOUNDS.register("krampus_hit", () -> new SoundEvent(
+                    new ResourceLocation(TisTheSeason.MOD_ID, "krampus_hit")));
+
+    public static final RegistryObject<SoundEvent> KRAMPUS_HURT =
+            SOUNDS.register("krampus_hurt", () -> new SoundEvent(
+                    new ResourceLocation(TisTheSeason.MOD_ID, "krampus_hurt")));
+
+    public static final RegistryObject<SoundEvent> GROWL =
+            SOUNDS.register("growl", () -> new SoundEvent(
+                    new ResourceLocation(TisTheSeason.MOD_ID, "growl")));
+
+    public static final RegistryObject<SoundEvent> SNARL =
+            SOUNDS.register("snarl", () -> new SoundEvent(
+                    new ResourceLocation(TisTheSeason.MOD_ID, "snarl")));
 
 }
 

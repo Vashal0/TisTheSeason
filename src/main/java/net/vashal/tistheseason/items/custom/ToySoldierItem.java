@@ -7,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -16,10 +15,12 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
+import net.vashal.tistheseason.entity.variant.ToySoldierVariant;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 public class ToySoldierItem extends Item {
 
@@ -56,14 +57,18 @@ public class ToySoldierItem extends Item {
             stack.setTag(new CompoundTag());
             worldIn.addFreshEntity(toyDrummer);
             stack.shrink(1);
+            toyDrummer.setVariant(ToySoldierVariant.byId(new Random().nextInt((2-1)+1)));
+            if (toyDrummer.getOwner() == null) {
+                toyDrummer.tame(player);
+            }
             return false;
         }
-        Entity entity = getEntityFromStack(stack, worldIn, true);
+        ToySoldierEntity toySoldier = getEntityFromStack(stack, worldIn, true);
         BlockPos blockPos = pos.relative(facing);
-        assert entity != null;
-        entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+        assert toySoldier != null;
+        toySoldier.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         stack.setTag(new CompoundTag());
-        worldIn.addFreshEntity(entity);
+        worldIn.addFreshEntity(toySoldier);
         stack.shrink(1);
         return true;
     }

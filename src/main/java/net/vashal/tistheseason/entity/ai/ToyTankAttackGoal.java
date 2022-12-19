@@ -4,7 +4,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
-import net.vashal.tistheseason.entity.custom.EvilToyTankEntity;
 import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 
 import javax.annotation.Nullable;
@@ -86,13 +85,11 @@ public class ToyTankAttackGoal extends RangedAttackGoal {
         } else {
             this.mob.getNavigation().moveTo(this.target, this.speedModifier);
         }
-
         this.mob.getLookControl().setLookAt(this.target, 10.0F, 10.0F);
         if (--this.attackTime == 0) {
             if (!flag) {
                 return;
             }
-
             float f = (float) Math.sqrt(d0) / this.attackRadius;
             float f1 = Mth.clamp(f, 0.1F, 1.0F);
 

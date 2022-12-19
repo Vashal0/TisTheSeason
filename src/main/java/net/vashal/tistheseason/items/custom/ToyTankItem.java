@@ -7,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -58,6 +57,7 @@ public class ToyTankItem extends Item {
             toyTank.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
             stack.setTag(new CompoundTag());
             worldIn.addFreshEntity(toyTank);
+            stack.shrink(1);
             toyTank.setVariant(ToyTankVariant.byId(new Random().nextInt((2-1)+1)));
             if (toyTank.getOwner() == null) {
                 toyTank.tame(player);

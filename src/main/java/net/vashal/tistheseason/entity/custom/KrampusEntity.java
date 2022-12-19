@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
@@ -37,6 +39,7 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -67,6 +70,9 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
                 .add(Attributes.MAX_HEALTH, KrampusConstants.MAX_HEALTH)
                 .add(Attributes.ATTACK_DAMAGE, KrampusConstants.ATTACK_DAMAGE)
                 .add(Attributes.ATTACK_SPEED, KrampusConstants.ATTACK_SPEED)
+                .add(Attributes.ARMOR_TOUGHNESS, KrampusConstants.ARMOR_TOUGHNESS)
+                .add(Attributes.ARMOR, KrampusConstants.ARMOR)
+                .add(Attributes.KNOCKBACK_RESISTANCE, KrampusConstants.KNOCKBACK_RESISTANCE)
                 .add(Attributes.MOVEMENT_SPEED, KrampusConstants.MOVEMENT_SPEED).build();
     }
 
@@ -81,19 +87,39 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
         AnimationController<KrampusEntity> walkController = new AnimationController<>(this, "walkController", 0, this::walkPredicate);
         AnimationController<KrampusEntity> deathController = new AnimationController<>(this, "deathController", 0, this::deathPredicate);
         AnimationController<KrampusEntity> meleeController = new AnimationController<>(this, "meleeController", 0, this::meleePredicate);
-
+        AnimationController<KrampusEntity> walkMeleeController = new AnimationController<>(this, "walkMeleeController", 0, this::walkMeleePredicate);
+        meleeController.registerSoundListener(this::soundListenerMelee);
         data.addAnimationController(walkController);
+        data.addAnimationController(walkMeleeController);
         data.addAnimationController(deathController);
         data.addAnimationController(meleeController);
     }
 
     private <E extends IAnimatable> PlayState walkPredicate(AnimationEvent<E> event) {
-        if (event.isMoving() && this.entityData.get(ATTACK_STATE) != 1) {
+        if (event.isMoving() && this.entityData.get(ATTACK_STATE) == 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.walk", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }
+
+    private <E extends IAnimatable> PlayState walkMeleePredicate(AnimationEvent<E> event) {
+        if (event.isMoving() && this.entityData.get(ATTACK_STATE) == 1) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.walkmelee", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
+        }
+        return PlayState.STOP;
+    }
+
+    private void soundListenerMelee(SoundKeyframeEvent<KrampusEntity> event) {
+        KrampusEntity krampus = event.getEntity();
+        if (this.level.isClientSide()) {
+            if (event.sound.equals("krampus_hit")) {
+                this.level.playLocalSound(krampus.getX(), krampus.getY(), krampus.getZ(), TTS_Sounds.KRAMPUS_HIT.get(), krampus.getSoundSource(), 0.8f, 0.8f, true);
+            }
+        }
+    }
+
 
     private <E extends IAnimatable> PlayState deathPredicate(AnimationEvent<E> event) {
         if (deathTime > 0 && this.isDeadOrDying()) {
@@ -103,7 +129,7 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     }
 
     private <E extends IAnimatable> PlayState meleePredicate(AnimationEvent<E> event) {
-        if (this.entityData.get(ATTACK_STATE) == 1 && !(this.dead || this.getHealth() < 0.01 || this.isDeadOrDying())) {
+        if (this.entityData.get(ATTACK_STATE) == 1 && this.deathTime == 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.melee", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
@@ -120,6 +146,18 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     }
 
 
+    @Override
+    public void startSeenByPlayer(@NotNull ServerPlayer pServerPlayer) {
+        setRoarTime(1);
+        this.playSound(TTS_Sounds.KRAMPUS.get());
+        super.startSeenByPlayer(pServerPlayer);
+    }
+
+    @Override
+    public void stopSeenByPlayer(@NotNull ServerPlayer pServerPlayer) {
+        setRoarTime(-1);
+        super.stopSeenByPlayer(pServerPlayer);
+    }
 
     @Nullable
     @Override
@@ -151,23 +189,47 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     }
 
     private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(KrampusEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ROAR_TIME = SynchedEntityData.defineId(KrampusEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> BONUS_ROAR = SynchedEntityData.defineId(KrampusEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ATTACK_STATE, 0);
+        this.entityData.define(ROAR_TIME, 0);
+        this.entityData.define(BONUS_ROAR, false);
     }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("AttackingState", this.getAttackingState());
+        tag.putInt("RoarTime", this.getRoarTime());
+        tag.putBoolean("BonusRoar", this.getBonusRoar());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setAttackingState(tag.getInt("AttackingState"));
+        this.setRoarTime(tag.getInt("RoarTime"));
+        this.setBonusRoar(tag.getBoolean("BonusRoar"));
+    }
+
+    public void setRoarTime(int time) {
+        this.entityData.set(ROAR_TIME, time);
+    }
+
+    public int getRoarTime() {
+        return this.entityData.get(ROAR_TIME);
+    }
+
+    public boolean getBonusRoar() {
+        return this.entityData.get(BONUS_ROAR);
+    }
+
+    public void setBonusRoar(boolean bool) {
+        this.entityData.set(BONUS_ROAR, bool);
     }
 
     public void setAttackingState(int state) {
@@ -182,6 +244,16 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     @Override
     public void tick() {
         super.tick();
+        if (this.getRoarTime() > 0) {
+            this.setRoarTime(this.getRoarTime()+1);
+        }
+        if (this.getRoarTime() < 30) {
+            this.setDeltaMovement(0,0,0);
+        }
+        if (this.getHealth() < this.getMaxHealth() / 2 && !this.getBonusRoar()) {
+            this.setBonusRoar(true);
+            this.playSound(TTS_Sounds.KRAMPUS.get(), 1.1f, 0.8f);
+        }
     }
 
     @Override
@@ -201,11 +273,12 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new KrampusAttackGoal(this, 1.0, 2));
+        this.goalSelector.addGoal(1, new KrampusAttackGoal(this, 1));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new FloatGoal(this));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         super.registerGoals();
     }
 
@@ -213,15 +286,19 @@ public class KrampusEntity extends Monster implements IAnimatable, IAnimationTic
     //sounds without a special use case
 
     protected void playStepSound(@NotNull BlockPos pos, @NotNull BlockState blockIn) {
-        this.playSound(SoundEvents.CHAIN_PLACE, KrampusConstants.STEP_SOUND_VOLUME, KrampusConstants.STEP_SOUND_PITCH);
+        this.playSound(SoundEvents.CHAIN_PLACE, KrampusConstants.STEP_SOUND_VOLUME, 0.8F);
+    }
+
+    protected SoundEvent getAmbientSound() {
+        return TTS_Sounds.GROWL.get();
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return SoundEvents.GOAT_HURT;
+        return TTS_Sounds.KRAMPUS_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.TOY_DEATH.get();
+        return TTS_Sounds.SNARL.get();
     }
 
     protected float getSoundVolume() {

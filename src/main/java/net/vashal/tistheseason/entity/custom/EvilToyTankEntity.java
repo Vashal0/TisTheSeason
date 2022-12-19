@@ -30,7 +30,6 @@ import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.entity.ai.EvilToyTankAttackGoal;
-import net.vashal.tistheseason.entity.ai.ToyTankAttackGoal;
 import net.vashal.tistheseason.entity.projectile.IronBall;
 import net.vashal.tistheseason.entity.variant.ToyTankVariant;
 import net.vashal.tistheseason.items.TTS_Items;
@@ -62,8 +61,9 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
     public static AttributeSupplier setAttributes() {
 
         return Monster.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, ToyTankConstants.MAX_HEALTH)
-                .add(Attributes.MOVEMENT_SPEED, ToyTankConstants.MOVEMENT_SPEED).build();
+                .add(Attributes.MAX_HEALTH, 20)
+                .add(Attributes.ARMOR, 6)
+                .add(Attributes.MOVEMENT_SPEED, 0.3f).build();
     }
 
     @Nullable
@@ -128,7 +128,7 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new EvilToyTankAttackGoal(this, 1.0D, 60, 10.0F));
+        this.goalSelector.addGoal(1, new EvilToyTankAttackGoal(this, 1.0D, 40, 10.0F));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
@@ -200,7 +200,7 @@ public class EvilToyTankEntity extends Monster implements IAnimatable, IAnimatio
         double d1 = pTarget.getY(0.3333333333) - ironBall.getY();
         double d2 = pTarget.getZ() - this.getZ();
         double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-        ironBall.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.1F, 1);
+        ironBall.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, 1);
         this.playSound(SoundEvents.GENERIC_EXPLODE, 0.1F, 1.2F);
         this.level.addFreshEntity(ironBall);
     }

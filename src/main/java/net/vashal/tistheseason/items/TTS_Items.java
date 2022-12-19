@@ -9,7 +9,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.block.TTS_Blocks;
-import net.vashal.tistheseason.block.custom.StockingBlock;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.custom.*;
 import net.vashal.tistheseason.items.custom.curios.*;
@@ -59,6 +58,9 @@ public class TTS_Items {
     public static final RegistryObject<Item> SNOWMAN_SLIPPERS = ITEMS.register("snowman_slippers",
             () -> new SnowmanSlipperItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
 
+    public static final RegistryObject<Item> SNOW_SHOVEL = ITEMS.register("snow_shovel",
+            () -> new SnowShovelItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
     public static final RegistryObject<Item> IRON_BALL_ITEM = ITEMS.register("iron_ball_item",
             () -> new IronBallItem(new Item.Properties()));
 
@@ -69,13 +71,34 @@ public class TTS_Items {
             () -> new StockingBlockItem(TTS_Blocks.STOCKING.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> TOY_PARTS = ITEMS.register("toy_parts",
-            () -> new ToyPartsItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(64)));
+            () -> new Item(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(64)));
+
+    public static final RegistryObject<Item> BROKEN_ROBOT = ITEMS.register("broken_toy_robot_item",
+            () -> new Item(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(64)));
+
+    public static final RegistryObject<Item> BROKEN_SOLDIER = ITEMS.register("broken_toy_soldier_item",
+            () -> new Item(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(64)));
+
+    public static final RegistryObject<Item> BROKEN_TANK = ITEMS.register("broken_toy_tank_item",
+            () -> new Item(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(64)));
 
     public static final RegistryObject<Item> CANDY_CANE = ITEMS.register("candy_cane",
             () -> new Item(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).food(TTSFoods.CANDY_CANE).stacksTo(64)));
 
-    public static final RegistryObject<Item> SUPER_SOAKER = ITEMS.register("super_soaker",
+    public static final RegistryObject<Item> LOLLIPOP = ITEMS.register("lollipop",
+            () -> new LollipopItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).food(TTSFoods.LOLLIPOP).stacksTo(1)));
+
+    public static final RegistryObject<Item> ENCHANTED_CANDY_CANE = ITEMS.register("enchanted_candy_cane",
+            () -> new EnchantedCandyCaneItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).food(TTSFoods.ENCHANTED_CANDY_CANE).stacksTo(64)));
+
+    public static final RegistryObject<Item> CARAMEL = ITEMS.register("caramel",
+            () -> new Item(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).food(TTSFoods.CARAMEL).stacksTo(64)));
+
+    public static final RegistryObject<Item> SUPER_SOAKER = ITEMS.register("super_soaker_item",
             () -> new SuperSoakerItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1)));
+
+    public static final RegistryObject<Item> POP_GUN = ITEMS.register("pop_gun",
+            () -> new PopGunItem(new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB).stacksTo(1).durability(500)));
 
     public static final RegistryObject<Item> TOY_ROBOT_SPAWN_EGG = ITEMS.register("eggs/toy_robot_spawn_egg",
             () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOY_ROBOT, 0x0096ff, 0xc70039,
@@ -97,12 +120,9 @@ public class TTS_Items {
             () -> new ForgeSpawnEggItem(TTS_EntityTypes.KRAMPUS, 0xc70039, 0x5A5A5A,
                     new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
 
-    /*
     public static final RegistryObject<Item> EVIL_TOY_SOLDIER_SPAWN_EGG = ITEMS.register("eggs/evil_toy_soldier_spawn_egg",
-            () -> new ForgeSpawnEggItem(TTS_EntityTypes.TOYSOLDIER, 0xc70039, 0xe8b923,
+            () -> new ForgeSpawnEggItem(TTS_EntityTypes.EVIL_TOY_SOLDIER, 0xc70039, 0xe8b923,
                     new Item.Properties().tab(TTS_CreativeModeTab.TISTHESEASON_TAB)));
-
-     */
 
     public static final RegistryObject<Item> EVIL_TOY_TANK_SPAWN_EGG = ITEMS.register("eggs/evil_toy_tank_spawn_egg",
             () -> new ForgeSpawnEggItem(TTS_EntityTypes.EVIL_TOY_TANK, 0x023020, 0x454b1b,

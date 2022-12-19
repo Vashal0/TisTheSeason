@@ -17,9 +17,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -28,7 +30,6 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -73,52 +74,57 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND && this.isOwnedBy(player)) {
-            ItemStack stack = player.getItemInHand(hand);
-            if (!player.isShiftKeyDown() && stack.isEmpty() && this.getTurretMode()) {
-                this.setDirectionState(this.getDirectionState() + 1);
-                if (this.getDirectionState() > 3) {
-                    this.setDirectionState(0);
-                }
-                return InteractionResult.SUCCESS;
-            } else if (stack.isEmpty() && player.isShiftKeyDown()) {
-                CompoundTag nbt = new CompoundTag();
-                nbt.putString("toy", EntityType.getKey(this.getType()).toString());
-                this.saveWithoutId(nbt);
-                player.setItemInHand(hand, TTS_Items.TOY_TANK_ITEM.get().getDefaultInstance());
-                ItemStack stack1 = player.getItemInHand(hand);
-                stack1.setTag(nbt);
-                this.remove(Entity.RemovalReason.KILLED);
-                return InteractionResult.SUCCESS;
-            } else if (!player.isShiftKeyDown()) {
-                if (stack.getItem() == Items.GUNPOWDER) {
-                    if (this.getAmmoCount() < 10000) {
-                        this.setAmmoCount(this.getAmmoCount() + 3);
+            if (this.getOwner() == null) {
+                this.tame(player);
+            }
+            if (this.isOwnedBy(player)) {
+                ItemStack stack = player.getItemInHand(hand);
+                if (!player.isShiftKeyDown() && stack.isEmpty() && this.getTurretMode()) {
+                    this.setDirectionState(this.getDirectionState() + 1);
+                    if (this.getDirectionState() > 3) {
+                        this.setDirectionState(0);
+                    }
+                    return InteractionResult.SUCCESS;
+                } else if (stack.isEmpty() && player.isShiftKeyDown()) {
+                    CompoundTag nbt = new CompoundTag();
+                    nbt.putString("toy", EntityType.getKey(this.getType()).toString());
+                    this.saveWithoutId(nbt);
+                    player.setItemInHand(hand, TTS_Items.TOY_TANK_ITEM.get().getDefaultInstance());
+                    ItemStack stack1 = player.getItemInHand(hand);
+                    stack1.setTag(nbt);
+                    this.remove(Entity.RemovalReason.KILLED);
+                    return InteractionResult.SUCCESS;
+                } else if (!player.isShiftKeyDown()) {
+                    if (stack.getItem() == Items.GUNPOWDER) {
+                        if (this.getAmmoCount() < 10000) {
+                            this.setAmmoCount(this.getAmmoCount() + 3);
+                            stack.shrink(1);
+                            return InteractionResult.SUCCESS;
+                        }
+                    } else if (stack.getItem() == Items.TNT && !this.getTurretMode()) {
+                        this.setTurretMode(true);
+                        stack.shrink(1);
+                        this.setShootingRange(this.getShootingRange() + 0.2f);
+                        return InteractionResult.SUCCESS;
+                    } else if (stack.getItem() == Items.TNT && this.getTurretMode() && this.getShootingRange() <= 1.0) {
+                        this.setShootingRange(this.getShootingRange() + 0.2f);
                         stack.shrink(1);
                         return InteractionResult.SUCCESS;
-                    }
-                } else if (stack.getItem() == Items.TNT && !this.getTurretMode()) {
-                    this.setTurretMode(true);
-                    stack.shrink(1);
-                    this.setShootingRange(this.getShootingRange() + 0.2f);
-                    return InteractionResult.SUCCESS;
-                } else if (stack.getItem() == Items.TNT && this.getTurretMode() && this.getShootingRange() <= 1.0) {
-                    this.setShootingRange(this.getShootingRange() + 0.2f);
-                    stack.shrink(1);
-                    return InteractionResult.SUCCESS;
-                } else if (stack.getItem() == Items.SHEARS && this.getTurretMode()) {
-                    this.setTurretMode(false);
-                    int amount = (int) (this.getShootingRange() * 10);
-                    if (stack.isDamageableItem()) {
-                        for (int i = 0; i < amount;i++) {
-                            stack.setDamageValue(stack.getDamageValue() + 1);
-                            ItemEntity itementity = this.spawnAtLocation(Items.TNT, 1);
-                            if (itementity != null) {
-                                itementity.setDeltaMovement(itementity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
+                    } else if (stack.getItem() == Items.SHEARS && this.getTurretMode()) {
+                        this.setTurretMode(false);
+                        int amount = (int) (this.getShootingRange() * 10);
+                        if (stack.isDamageableItem()) {
+                            for (int i = 0; i < amount; i++) {
+                                stack.setDamageValue(stack.getDamageValue() + 1);
+                                ItemEntity itementity = this.spawnAtLocation(Items.TNT, 1);
+                                if (itementity != null) {
+                                    itementity.setDeltaMovement(itementity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
+                                }
                             }
                         }
+                        this.setShootingRange(0);
+                        return InteractionResult.SUCCESS;
                     }
-                    this.setShootingRange(0);
-                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -126,10 +132,12 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
     }
 
 
+
     public static AttributeSupplier setAttributes() {
 
         return Monster.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, ToyTankConstants.MAX_HEALTH)
+                .add(Attributes.ARMOR, 3)
                 .add(Attributes.MOVEMENT_SPEED, ToyTankConstants.MOVEMENT_SPEED).build();
     }
 
@@ -145,7 +153,7 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource pSource) {
+    public boolean isInvulnerableTo(@NotNull DamageSource pSource) {
         super.isInvulnerableTo(pSource);
         return pSource.isExplosion();
     }
@@ -239,11 +247,6 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
 
 
     @Override
-    public void tick() { //tracks activated state
-        super.tick();
-    }
-
-    @Override
     protected void tickDeath() { //delays death long enough to play custom animation
         ++this.deathTime;
         if (this.deathTime == 60 && !this.level.isClientSide()) {
@@ -260,9 +263,11 @@ public class ToyTankEntity extends TamableAnimal implements IAnimatable, IAnimat
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 2.0D, 8, 3, false));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(6, new FloatGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         super.registerGoals();
     }
 

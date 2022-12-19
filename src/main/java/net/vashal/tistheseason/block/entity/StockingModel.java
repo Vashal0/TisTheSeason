@@ -18,6 +18,6 @@ public class StockingModel extends AnimatedGeoModel<StockingBlockEntity> {
 
     @Override
     public ResourceLocation getTextureResource(StockingBlockEntity entity) {
-        return new ResourceLocation(TisTheSeason.MOD_ID, "textures/block/stocking_texture_fat.png");
+        return new ResourceLocation(TisTheSeason.MOD_ID, "textures/block/stocking_texture.png");
     }
 }

@@ -42,14 +42,12 @@ public class SuperSoakerItem extends Item {
         if (player.tickCount % 2 == 0) {
             if (player instanceof Player playerentity) {
                 if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                    playerentity.getCooldowns().addCooldown(this, 2);
                     if (!worldIn.isClientSide) {
                         WaterStream waterStream = createWater(worldIn, playerentity);
-                        waterStream = water(waterStream);
                         waterStream.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(),
                                 0.0F, 3.0F, 0F);
-                        stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(player.getUsedItemHand()));
                         worldIn.addFreshEntity(waterStream);
+                        waterStream.setOwner(player);
                         this.useDurability(stack, worldIn, playerentity);
                     }
                 } else {
@@ -58,7 +56,6 @@ public class SuperSoakerItem extends Item {
             }
         }
     }
-
 
     @Override
     public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
@@ -100,10 +97,6 @@ public class SuperSoakerItem extends Item {
         return new WaterStream(worldIn, shooter);
     }
 
-    public WaterStream water(WaterStream waterStream) {
-        return waterStream;
-    }
-
     @Nonnull
     private InteractionResultHolder<ItemStack> checkRefill(@Nonnull ItemStack itemStack, Level world, Player player) {
         BlockHitResult rayTraceResult = Item.getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
@@ -127,7 +120,7 @@ public class SuperSoakerItem extends Item {
     public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
         if(Screen.hasShiftDown()) {
             components.add(Component.literal("Puts out fires and damages water weak mobs, refill by right clicking a water source").withStyle(ChatFormatting.AQUA));
-            components.add(Component.literal("Also knocks back players!").withStyle(ChatFormatting.GOLD));
+            components.add(Component.literal("Also knocks back mobs!").withStyle(ChatFormatting.GOLD));
         } else {
             components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD));
         }

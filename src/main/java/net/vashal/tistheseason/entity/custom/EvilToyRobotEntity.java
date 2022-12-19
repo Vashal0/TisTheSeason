@@ -3,6 +3,9 @@ package net.vashal.tistheseason.entity.custom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -12,7 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -23,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.ai.EvilToyRobotAttackGoal;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,12 +54,14 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
 
     public static AttributeSupplier setAttributes() {
         return Monster.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, ToyRobotConstants.MAX_HEALTH)
+                .add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.ATTACK_DAMAGE, ToyRobotConstants.ATTACK_DAMAGE)
                 .add(Attributes.ATTACK_SPEED, ToyRobotConstants.ATTACK_SPEED)
-                .add(Attributes.FOLLOW_RANGE, 35)
+                .add(Attributes.ARMOR, ToyRobotConstants.ARMOR)
                 .add(Attributes.MOVEMENT_SPEED, 0.35).build();
     }
+
+    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
 
     @Nullable
     public static EvilToyRobotEntity create(Level world) {
@@ -71,23 +77,47 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(ATTACK_STATE, 0);
     }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("AttackingState", this.getAttackingState());
     }
 
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setAttackingState(tag.getInt("AttackingState"));
+    }
+
+    public void setAttackingState(int state) {
+        this.entityData.set(ATTACK_STATE, state);
+    }
+
+    public int getAttackingState() {
+        return this.entityData.get(ATTACK_STATE);
     }
 
 
     @Override
     public void tick() {
         super.tick();
+        playModSounds();
     }
+
+    public void playModSounds() { //plays the walking sound much faster than normal
+        if (this.level.isClientSide() && deathTime == 0) {
+            if (tickCount % 3 == 0) {
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
+            }
+            if (tickCount % 512 == 0) {
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_GEARS.get(), this.getSoundSource(), 0.4f, 1.2f, true);
+            }
+        }
+    }
+
 
     @Override
     protected void tickDeath() { //delays death long enough to play custom animation
@@ -101,8 +131,9 @@ public class EvilToyRobotEntity extends Monster implements IAnimatable, IAnimati
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new EvilToyRobotAttackGoal(this, 1));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new FloatGoal(this));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));

@@ -7,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -58,14 +57,17 @@ public class ToyRobotItem extends Item {
             stack.setTag(new CompoundTag());
             worldIn.addFreshEntity(toyRobot);
             stack.shrink(1);
+            if (toyRobot.getOwner() == null) {
+                toyRobot.tame(player);
+            }
             return false;
         }
-        Entity entity = getEntityFromStack(stack, worldIn, true);
+        ToyRobotEntity toyRobot = getEntityFromStack(stack, worldIn, true);
         BlockPos blockPos = pos.relative(facing);
-        assert entity != null;
-        entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+        assert toyRobot != null;
+        toyRobot.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         stack.setTag(new CompoundTag());
-        worldIn.addFreshEntity(entity);
+        worldIn.addFreshEntity(toyRobot);
         stack.shrink(1);
         return true;
     }

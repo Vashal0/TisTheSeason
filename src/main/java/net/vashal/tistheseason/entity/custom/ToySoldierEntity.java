@@ -22,8 +22,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -71,6 +73,7 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
     public static AttributeSupplier setAttributes() {
         return TamableAnimal.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, ToySoldierConstants.MAX_HEALTH)
+                .add(Attributes.ARMOR, 3)
                 .add(Attributes.MOVEMENT_SPEED, ToySoldierConstants.MOVEMENT_SPEED).build();
     }
 
@@ -222,33 +225,51 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) { //every right click turns the wind on the back, after 10 the toy becomes active for 30 seconds
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            ItemStack stack = player.getItemInHand(hand);
-            if (!player.isShiftKeyDown()) {
-                if (this.getOwner() == null) {
-                    this.tame(player);
-                }
-                if (this.isOwnedBy(player)) {
+            if (this.getOwner() == null) {
+                this.tame(player);
+            }
+            if (this.isOwnedBy(player)) {
+                ItemStack stack = player.getItemInHand(hand);
+                if (!player.isShiftKeyDown() && stack.isEmpty()) {
                     if (getWindCount() < 9 && !getActivatedStatus()) {
                         this.setWind(getWindCount() + 1);
                         playSound(TTS_Sounds.WIND_TURN.get());
                     } else if (getWindCount() == 9 && !getActivatedStatus()) {
                         setActivationStatus(true);
                         setWind(getWindCount() - 9);
-                        setTickCount(600);
+                        setTickCount(6000);
                     } else {
                         return InteractionResult.CONSUME;
                     }
+                    return InteractionResult.SUCCESS;
+                } else if (stack.isEmpty()) {
+                    CompoundTag nbt = new CompoundTag();
+                    nbt.putString("toy", EntityType.getKey(this.getType()).toString());
+                    this.saveWithoutId(nbt);
+                    player.setItemInHand(hand, TTS_Items.TOY_SOLDIER_ITEM.get().getDefaultInstance());
+                    ItemStack stack1 = player.getItemInHand(hand);
+                    stack1.setTag(nbt);
+                    this.remove(Entity.RemovalReason.KILLED);
+                    return InteractionResult.SUCCESS;
                 }
-                return InteractionResult.SUCCESS;
-            } else if (stack.isEmpty()) {
-                CompoundTag nbt = new CompoundTag();
-                nbt.putString("toy", EntityType.getKey(this.getType()).toString());
-                this.saveWithoutId(nbt);
-                player.setItemInHand(hand, TTS_Items.TOY_SOLDIER_ITEM.get().getDefaultInstance());
-                ItemStack stack1 = player.getItemInHand(hand);
-                stack1.setTag(nbt);
-                this.remove(Entity.RemovalReason.KILLED);
-
+                if (stack.getItem() == Items.WHITE_WOOL && !this.getMuffled()) {
+                    this.setMuffled(true);
+                    stack.shrink(1);
+                    return InteractionResult.SUCCESS;
+                }
+                if (stack.getItem() == Items.SHEARS && this.getMuffled()) {
+                    if (this.getMuffled()) {
+                        this.setMuffled(false);
+                    }
+                    if (stack.isDamageableItem()) {
+                        stack.setDamageValue(stack.getDamageValue() + 1);
+                    }
+                    ItemEntity itementity = this.spawnAtLocation(Items.WHITE_WOOL, 1);
+                    if (itementity != null) {
+                        itementity.setDeltaMovement(itementity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
+                    }
+                    return InteractionResult.SUCCESS;
+                }
             }
         }
         return super.mobInteract(player, hand);
@@ -291,7 +312,10 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
     public void playModSounds() { //plays the walking sound much faster than normal
         if (this.level.isClientSide() && deathTime == 0) {
             if (tickCount % 3 == 0) {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_WALK.get(), this.getSoundSource(), 0.3f, 0.6f, true);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.TOY_WALK.get(), this.getSoundSource(), 0.025f, 0.6f, true);
+            }
+            if (tickCount % 6 == 0) {
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTS_Sounds.DRUM.get(), this.getSoundSource(), 0.5f, 2f, true);
             }
         }
     }
@@ -299,9 +323,8 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new ToySoldierFollow(this, 1.0f, 2.0f, 12.0f));
-        this.goalSelector.addGoal(3, new FloatGoal(this));
-
+        this.goalSelector.addGoal(1, new ToySoldierFollow(this, 1.0f, 2.0f, 12.0f));
+        this.goalSelector.addGoal(4, new FloatGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
 
@@ -366,7 +389,7 @@ public class ToySoldierEntity extends TamableAnimal implements IAnimatable, IAni
             AABB aabb = (new AABB(pPos)).inflate(8);
             List<Player> list = pLevel.getEntitiesOfClass(Player.class, aabb);
             for (Player player : list) {
-                player.addEffect(new MobEffectInstance(effect, 400, 0, true, false));
+                player.addEffect(new MobEffectInstance(effect, 400, 0, true, true));
             }
         }
     }

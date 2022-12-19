@@ -26,10 +26,18 @@ public class StockingGiftItems {
         this.goodGifts.add(TTS_Items.POWER_GLOVE.get());
         this.goodGifts.add(TTS_Items.SUPER_SOAKER.get());
         this.goodGifts.add(TTS_Items.REINDEER_SLIPPERS.get());
+        this.goodGifts.add(TTS_Items.SNOWMAN_SLIPPERS.get());
+        this.goodGifts.add(TTS_Items.POP_GUN.get());
+        this.goodGifts.add(TTS_Items.CARAMEL.get());
+        this.goodGifts.add(TTS_Items.LOLLIPOP.get());
+        this.goodGifts.add(TTS_Items.ENCHANTED_CANDY_CANE.get());
         this.goodGifts.add(TTS_Items.CANDY_CANE.get());
         this.mediumGifts.add(TTS_Blocks.PET_ROCK.get().asItem());
         this.mediumGifts.add(TTS_Items.HOBBY_HORSE.get());
         this.mediumGifts.add(TTS_Items.POWER_GLOVE.get());
+        this.mediumGifts.add(TTS_Items.SUPER_SOAKER.get());
+        this.mediumGifts.add(TTS_Items.CARAMEL.get());
+        this.mediumGifts.add(TTS_Items.LOLLIPOP.get());
         this.mediumGifts.add(TTS_Items.CANDY_CANE.get());
         this.badGifts.add(Items.CHARCOAL);
         this.badGifts.add(Items.COAL_ORE);

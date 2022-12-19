@@ -10,16 +10,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.block.entity.PetRockBlockEntity;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.client.models.ToyTankModel;
-import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 import net.vashal.tistheseason.entity.variant.ToyTankVariant;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +57,7 @@ public class ToyTankRenderer extends GeoEntityRenderer<ToyTankEntity> {
     }
 
     @Override
-    public void render(ToyTankEntity tank, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(@NotNull ToyTankEntity tank, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         super.render(tank, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         Component displayName = Component.translatable("Out of Gunpowder");
         if (tank.getAmmoCount() == 0 && tank.getTurretMode()) {

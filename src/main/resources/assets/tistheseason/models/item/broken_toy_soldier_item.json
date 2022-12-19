@@ -1,0 +1,6 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "tistheseason:item/broken_toy_soldier_item"
+	}
+}

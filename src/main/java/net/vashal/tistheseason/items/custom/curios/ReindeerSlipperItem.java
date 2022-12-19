@@ -33,7 +33,7 @@ public class ReindeerSlipperItem extends TTSCurios {
         if (slotContext.entity() instanceof Player player) {
             Vec3 vec3 = player.getDeltaMovement();
             if (!player.isOnGround() && vec3.y < 0.0D && !player.isShiftKeyDown() && !player.isInFluidType()) {
-                player.setDeltaMovement(vec3.multiply(1.0D, 0.5D, 1.0D));
+                player.setDeltaMovement(vec3.multiply(1.0D, 0.6D, 1.0D));
                 player.flyingSpeed += player.flyingSpeed * 1.5f;
                 if (player.tickCount % 4 == 0) {
                     if (player.getLevel() instanceof ServerLevel level) {

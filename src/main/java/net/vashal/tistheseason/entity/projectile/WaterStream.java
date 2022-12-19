@@ -11,15 +11,19 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.AbstractCandleBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
 import net.vashal.tistheseason.items.TTS_Items;
@@ -35,14 +39,12 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.function.Predicate;
+import javax.annotation.Nullable;
 
 public class WaterStream extends AbstractArrow implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private int life;
-    private ItemStack waterStream = new ItemStack(TTS_Items.WATER_STREAM.get());
-    public static final Predicate<LivingEntity> WATER_SENSITIVE = LivingEntity::isSensitiveToWater;
+    private final ItemStack waterStream = new ItemStack(TTS_Items.WATER_STREAM.get());
 
     public WaterStream(EntityType<? extends WaterStream> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -62,7 +64,7 @@ public class WaterStream extends AbstractArrow implements IAnimatable {
     @Override
     protected void tickDespawn() {
         ++this.life;
-        if (this.life >= 10) {
+        if (this.life >= 2) {
             this.discard();
         }
 
@@ -77,13 +79,20 @@ public class WaterStream extends AbstractArrow implements IAnimatable {
         BlockPos pos = hitResult.getBlockPos();
         BlockPos pos1 = pos.relative(direction);
         this.setSoundEvent(SoundEvents.POINTED_DRIPSTONE_DRIP_WATER);
-        this.dowseFire(pos1);
-        this.dowseFire(pos1.relative(direction.getOpposite()));
+        this.applyWater(pos1);
+        this.applyWater(pos1.relative(direction.getOpposite()));
         for(Direction direction1 : Direction.Plane.HORIZONTAL) {
-            this.dowseFire(pos1.relative(direction1));
-            this.dowseFire(pos.relative(direction1));
+            this.applyWater(pos1.relative(direction1));
+            this.applyWater(pos.relative(direction1));
         }
 
+        this.remove(RemovalReason.KILLED);
+
+    }
+
+    @Override
+    protected boolean tryPickup(@NotNull Player pPlayer) {
+        return false;
     }
 
     @Override
@@ -97,9 +106,39 @@ public class WaterStream extends AbstractArrow implements IAnimatable {
     }
 
 
+    public void setOwner(@Nullable Entity pEntity) {
+        super.setOwner(pEntity);
+    }
+
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
-        applyWater();
+        Entity entity = pResult.getEntity();
+        Entity entity1 = this.getOwner();
+        if (entity instanceof LivingEntity livingEntity) {
+            if (entity1 != null  && !livingEntity.isSensitiveToWater() && !(entity instanceof Player)) {
+                double d0 = Math.max(0.0D, 1.0D - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+                Vec3 vec3 = this.getDeltaMovement().multiply(1.0D, 1.0D, 1.0D).normalize().scale(2 * 0.6D * d0);
+                if (vec3.lengthSqr() > 0.0D) {
+                    livingEntity.push(vec3.x, 0.1D + vec3.y, vec3.z);
+                    remove(RemovalReason.KILLED);
+                }
+            }
+            if (this.tickCount > 3 && entity instanceof Player player) {
+                double d0 = Math.max(0.0D, 1.0D - player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+                Vec3 vec3 = this.getDeltaMovement().multiply(1.0D, 1.0D, 1.0D).normalize().scale(2 * 0.6D * d0);
+                if (vec3.lengthSqr() > 0.0D) {
+                    player.push(vec3.x, vec3.y, vec3.z);
+                }
+               }
+
+            if (livingEntity.isSensitiveToWater()) {
+                livingEntity.hurt(DamageSource.indirectMagic(this, this.getOwner()), 6.0F);
+            }
+            if (livingEntity.isOnFire()) {
+                livingEntity.clearFire();
+            }
+        }
+
     }
 
 
@@ -141,25 +180,9 @@ public class WaterStream extends AbstractArrow implements IAnimatable {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-    private void applyWater() {
-        AABB aabb = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
-        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, aabb, WATER_SENSITIVE);
-        if (!list.isEmpty()) {
-            for(LivingEntity livingentity : list) {
-                double d0 = this.distanceToSqr(livingentity);
-                if (d0 < 16.0D && livingentity.isSensitiveToWater()) {
-                    livingentity.hurt(DamageSource.indirectMagic(this, this.getOwner()), 4.0F);
-                }
-            }
-        }
 
-        for(Axolotl axolotl : this.level.getEntitiesOfClass(Axolotl.class, aabb)) {
-            axolotl.rehydrate();
-        }
 
-    }
-
-    private void dowseFire(BlockPos pPos) {
+    private void applyWater(BlockPos pPos) {
         BlockState blockstate = this.level.getBlockState(pPos);
         if (blockstate.is(BlockTags.FIRE)) {
             this.level.removeBlock(pPos, false);

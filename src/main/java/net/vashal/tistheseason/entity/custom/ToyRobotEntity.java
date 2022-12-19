@@ -18,7 +18,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -32,13 +32,13 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.ai.ToyRobotAttackGoal;
 import net.vashal.tistheseason.entity.ai.ToyRobotFollow;
 import net.vashal.tistheseason.entity.variant.ToyRobotVariant;
 import net.vashal.tistheseason.items.TTS_Items;
 import net.vashal.tistheseason.sounds.TTS_Sounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -52,7 +52,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -62,6 +61,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     private static final EntityDataAccessor<Boolean> IS_ACTIVATED = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> MUFFLED = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(ToyRobotEntity.class, EntityDataSerializers.INT);
 
 
     public ToyRobotEntity(EntityType<? extends ToyRobotEntity> entityType, Level level) {
@@ -111,7 +111,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     }
 
     private <E extends IAnimatable> PlayState idlePredicate(AnimationEvent<E> event) {
-        if (deathTime == 0) {
+        if (deathTime == 0 && this.entityData.get(ATTACK_STATE) == 0) {
             if (getActivatedStatus() && !this.isAggressive()) {
                 if (event.isMoving()) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation(ToyRobotConstants.ANIMATION_WALK, ILoopType.EDefaultLoopTypes.LOOP));
@@ -143,12 +143,11 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     }
 
     private <E extends IAnimatable> PlayState meleePredicate(AnimationEvent<E> event) {
-        if (this.swinging && deathTime == 0 && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
-            event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-            this.swinging = false;
+        if (this.entityData.get(ATTACK_STATE) == 1 && deathTime == 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.toyrobot.melee", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     @Nullable
@@ -160,6 +159,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(ATTACK_STATE, 0);
         this.entityData.define(WIND_POSITION, 0);
         this.entityData.define(ACTIVATED_TICKS, 0);
         this.entityData.define(IS_ACTIVATED, false);
@@ -170,6 +170,7 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("AttackingState", this.getAttackingState());
         tag.putInt("WindPosition", this.getWindCount());
         tag.putInt("ActivatedTicks", this.getActivatedTicks());
         tag.putBoolean("isActivated", this.getActivatedStatus());
@@ -180,12 +181,22 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setAttackingState(tag.getInt("AttackingState"));
         this.setWind(tag.getInt("WindPosition"));
         this.setTickCount(tag.getInt("ActivatedTicks"));
         this.setActivationStatus(tag.getBoolean("isActivated"));
         this.entityData.set(DATA_ID_TYPE_VARIANT, tag.getInt("Variant"));
         this.setMuffled(tag.getBoolean("Muffled"));
     }
+
+    public void setAttackingState(int state) {
+        this.entityData.set(ATTACK_STATE, state);
+    }
+
+    public int getAttackingState() {
+        return this.entityData.get(ATTACK_STATE);
+    }
+
 
     public boolean getMuffled() {
         return this.entityData.get(MUFFLED);
@@ -224,12 +235,12 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) { //every right click turns the wind on the back, after 10 the toy becomes active for 30 seconds
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            ItemStack stack = player.getItemInHand(hand);
-            if (!player.isShiftKeyDown()) {
-                if (this.getOwner() == null) {
-                    this.tame(player);
-                }
-                if (this.isOwnedBy(player)) {
+            if (this.getOwner() == null) {
+                this.tame(player);
+            }
+            if (this.isOwnedBy(player)) {
+                ItemStack stack = player.getItemInHand(hand);
+                if (!player.isShiftKeyDown() && stack.isEmpty()) {
                     if (getWindCount() < 9 && !getActivatedStatus()) {
                         this.setWind(getWindCount() + 1);
                         playSound(TTS_Sounds.WIND_TURN.get());
@@ -240,39 +251,44 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
                     } else {
                         return InteractionResult.CONSUME;
                     }
+                    return InteractionResult.SUCCESS;
+                } else if (stack.isEmpty()) {
+                    CompoundTag nbt = new CompoundTag();
+                    nbt.putString("toy", EntityType.getKey(this.getType()).toString());
+                    this.saveWithoutId(nbt);
+                    player.setItemInHand(hand, TTS_Items.TOY_ROBOT_ITEM.get().getDefaultInstance());
+                    ItemStack stack1 = player.getItemInHand(hand);
+                    stack1.setTag(nbt);
+                    stack1.getOrCreateTag().putInt("ActivatedTicks", 0);
+                    stack1.getOrCreateTag().putBoolean("isActivated", false);
+                    this.remove(Entity.RemovalReason.KILLED);
+                    return InteractionResult.SUCCESS;
                 }
-                return InteractionResult.SUCCESS;
-            } else if (stack.isEmpty()) {
-                CompoundTag nbt = new CompoundTag();
-                nbt.putString("toy", EntityType.getKey(this.getType()).toString());
-                this.saveWithoutId(nbt);
-                player.setItemInHand(hand, TTS_Items.TOY_ROBOT_ITEM.get().getDefaultInstance());
-                ItemStack stack1 = player.getItemInHand(hand);
-                stack1.setTag(nbt);
-                stack1.getOrCreateTag().putInt("ActivatedTicks", 0);
-                stack1.getOrCreateTag().putBoolean("isActivated", false);
-                this.remove(Entity.RemovalReason.KILLED);
-                return InteractionResult.CONSUME;
-            } else if (stack.getItem() == Items.WHITE_WOOL) {
-                this.setMuffled(true);
-                stack.shrink(1);
-                return InteractionResult.CONSUME;
-            } else if (stack.getItem() == Items.SHEARS) {
-                if (this.getMuffled()) {
-                    this.setMuffled(false);
+                if (stack.getItem() == Items.WHITE_WOOL && !this.getMuffled()) {
+                    this.setMuffled(true);
+                    stack.shrink(1);
+                    return InteractionResult.SUCCESS;
                 }
-                if (stack.isDamageableItem()) {
-                    stack.setDamageValue(stack.getDamageValue()+1);
+                if (stack.getItem() == Items.SHEARS && this.getMuffled()) {
+                    if (this.getMuffled()) {
+                        this.setMuffled(false);
+                    }
+                    if (stack.isDamageableItem()) {
+                        stack.setDamageValue(stack.getDamageValue() + 1);
+                    }
+                    ItemEntity itementity = this.spawnAtLocation(Items.WHITE_WOOL, 1);
+                    if (itementity != null) {
+                        itementity.setDeltaMovement(itementity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
+                    }
+                    return InteractionResult.SUCCESS;
                 }
-                ItemEntity itementity = this.spawnAtLocation(Items.WHITE_WOOL, 1);
-                if (itementity != null) {
-                    itementity.setDeltaMovement(itementity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
+                if (stack.getItem() instanceof DyeItem) {
+                    if (this.getVariant() != ToyRobotVariant.byId(Objects.requireNonNull(DyeColor.getColor(stack)).getId())) {
+                        this.setVariant(ToyRobotVariant.byId(Objects.requireNonNull(DyeColor.getColor(stack)).getId()));
+                        stack.shrink(1);
+                        return InteractionResult.SUCCESS;
+                    }
                 }
-                return InteractionResult.CONSUME;
-            } else if (stack.getItem() instanceof DyeItem) {
-                this.setVariant(ToyRobotVariant.byId(Objects.requireNonNull(DyeColor.getColor(stack)).getId()));
-                stack.shrink(1);
-                return InteractionResult.CONSUME;
             }
         }
         return super.mobInteract(player, hand);
@@ -315,14 +331,17 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     }
 
 
+
+
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new ToyMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(1, new ToyRobotAttackGoal(this, 1.0D));
         this.goalSelector.addGoal(2, new ToyRobotFollow(this, 1.5f, 2.0f, 12.0f));
-        this.goalSelector.addGoal(3, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new FloatGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 
         super.registerGoals();
     }
@@ -385,30 +404,6 @@ public class ToyRobotEntity extends TamableAnimal implements IAnimatable, IAnima
     @Override
     public int tickTimer() {
         return tickCount;
-    }
-
-    //prevents attacks while deactivated
-    public class ToyMeleeGoal extends MeleeAttackGoal {
-
-        public ToyMeleeGoal(PathfinderMob mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
-            super(mob, speedModifier, followingTargetEvenIfNotSeen);
-        }
-
-        @Override
-        public boolean canUse() {
-            if (!getActivatedStatus()) {
-                return false;
-            }
-            return super.canUse();
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            if (!getActivatedStatus()) {
-                return false;
-            }
-            return super.canContinueToUse();
-        }
     }
 
     // Variant stuff
