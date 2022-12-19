@@ -10,7 +10,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.event.ModEvents;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;

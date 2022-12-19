@@ -1,15 +1,12 @@
 package net.vashal.tistheseason.block.entity;
 
-import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Nameable;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PetRockBlockEntity extends BlockEntity implements IAnimatable, Nameable {
-    public Component name = Component.literal("");
+    public Component name = null;
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -39,23 +36,6 @@ public class PetRockBlockEntity extends BlockEntity implements IAnimatable, Name
         return factory;
     }
 
-    @Override
-    public void setChanged() {
-        super.setChanged();
-        if (level != null && !level.isClientSide) {
-            sync();
-        }
-    }
-
-    public void sync() {
-        Packet<ClientGamePacketListener> packet = this.getUpdatePacket();
-
-        if(packet != null && this.getLevel() instanceof ServerLevel serverLevel) {
-            serverLevel.getChunkSource().chunkMap
-                    .getPlayers(new ChunkPos(this.getBlockPos()), false)
-                    .forEach(e -> e.connection.send(packet));
-        }
-    }
 
     @Override
     public void load(@NotNull CompoundTag compound) {
@@ -66,11 +46,13 @@ public class PetRockBlockEntity extends BlockEntity implements IAnimatable, Name
     @Override
     public void saveAdditional(@NotNull CompoundTag compound) {
         super.saveAdditional(compound);
-        compound.putString("Name", name.getString());
+        if (name != null) {
+            compound.putString("Name", name.getString());
+        }
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public @NotNull CompoundTag getUpdateTag() {
         CompoundTag tag = super.getUpdateTag();
         this.saveAdditional(tag);
         return tag;
@@ -89,23 +71,20 @@ public class PetRockBlockEntity extends BlockEntity implements IAnimatable, Name
     @Nullable
     @Override
     public Component getCustomName() {
-        return name.getString().isEmpty() ? null : name;
+        return this.name;
     }
 
     @Override
     public @NotNull Component getName() {
-        return Component.translatable(this.getBlockState().getBlock().getDescriptionId());
-    }
+        return Component.translatable("block.tistheseason.pet_rock");
+    } //requires further testing
 
     @Nonnull
     @Override
     public Component getDisplayName() {
         if (hasCustomName()) {
-            Component customName = getCustomName();
-            if (customName != null)
-                return customName;
+            return this.name;
         }
         return getName();
     }
-
 }

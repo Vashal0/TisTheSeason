@@ -7,10 +7,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.vashal.tistheseason.entity.client.models.IronBallModel;
 import net.vashal.tistheseason.entity.client.models.WaterStreamModel;
-import net.vashal.tistheseason.entity.projectile.IronBall;
 import net.vashal.tistheseason.entity.projectile.WaterStream;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 
@@ -20,7 +19,7 @@ public class WaterStreamRenderer extends GeoProjectilesRenderer<WaterStream> {
         super(renderManagerIn, new WaterStreamModel());
     }
 
-    protected int getBlockLightLevel(WaterStream entityIn, BlockPos partialTicks) {
+    protected int getBlockLightLevel(@NotNull WaterStream entityIn, @NotNull BlockPos partialTicks) {
         return 15;
     }
 

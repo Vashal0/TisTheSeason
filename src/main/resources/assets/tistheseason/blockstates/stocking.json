@@ -9,11 +9,11 @@
       "model": "tistheseason:block/stocking"
     },
     "facing=east": {
-      "y": 90,
+      "y": 180,
       "model": "tistheseason:block/stocking"
     },
     "facing=west": {
-      "y": 270,
+      "y": 180,
       "model": "tistheseason:block/stocking"
     }
   }

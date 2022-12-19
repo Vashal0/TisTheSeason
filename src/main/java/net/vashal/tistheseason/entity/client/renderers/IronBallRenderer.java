@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.entity.client.models.IronBallModel;
 import net.vashal.tistheseason.entity.projectile.IronBall;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 
@@ -18,7 +19,7 @@ public class IronBallRenderer extends GeoProjectilesRenderer<IronBall> {
         super(renderManagerIn, new IronBallModel());
     }
 
-    protected int getBlockLightLevel(IronBall entityIn, BlockPos partialTicks) {
+    protected int getBlockLightLevel(@NotNull IronBall entityIn, @NotNull BlockPos partialTicks) {
         return 15;
     }
 

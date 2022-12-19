@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.vashal.tistheseason.TisTheSeason;
+import org.jetbrains.annotations.NotNull;
 
 public class StockingGUI extends AbstractContainerScreen<StockingContainerMenu> {
     private static final ResourceLocation TEXTURE =
@@ -18,7 +19,7 @@ public class StockingGUI extends AbstractContainerScreen<StockingContainerMenu> 
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int pMouseX, int pMouseY) {
+    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
@@ -29,12 +30,12 @@ public class StockingGUI extends AbstractContainerScreen<StockingContainerMenu> 
     }
 
     @Override
-    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+    protected void renderLabels(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY) {
         this.font.draw(pPoseStack, this.title, 84, 3, 747043);
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);

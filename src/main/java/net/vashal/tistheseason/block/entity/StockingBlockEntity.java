@@ -10,21 +10,29 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.vashal.tistheseason.screen.StockingContainerMenu;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class StockingBlockEntity extends RandomizableContainerBlockEntity {
+public class StockingBlockEntity extends RandomizableContainerBlockEntity implements IAnimatable {
 
     private UUID owner = null;
-
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     protected NonNullList<ItemStack> items;
 
     public StockingBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -65,7 +73,9 @@ public class StockingBlockEntity extends RandomizableContainerBlockEntity {
     @Override
     public boolean canOpen(@NotNull Player pPlayer) {
         if (pPlayer.isCreative()) return true;
+        if (this.getOwner() == null) return true;
         return this.isOwnedBy(pPlayer);
+
     }
 
     @Nullable
@@ -79,9 +89,10 @@ public class StockingBlockEntity extends RandomizableContainerBlockEntity {
                 this.owner = owner;
             }
             this.setChanged();
-            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
+
+
 
     @Override
     public @NotNull CompoundTag getUpdateTag() {
@@ -120,6 +131,24 @@ public class StockingBlockEntity extends RandomizableContainerBlockEntity {
         if (!this.remove && cap == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER)
             return itemHandler.cast();
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        AnimationController<StockingBlockEntity> swayController = new AnimationController<>(this, "swayController", 0, this::swayPredicate);
+        data.addAnimationController(swayController);
+    }
+
+
+    private <E extends IAnimatable> PlayState swayPredicate(AnimationEvent<E> event) {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.stocking.empty", ILoopType.EDefaultLoopTypes.LOOP));
+        return PlayState.CONTINUE;
+    }
+
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
     }
 }
 

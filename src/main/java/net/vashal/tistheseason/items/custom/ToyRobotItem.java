@@ -7,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -58,14 +57,17 @@ public class ToyRobotItem extends Item {
             stack.setTag(new CompoundTag());
             worldIn.addFreshEntity(toyRobot);
             stack.shrink(1);
+            if (toyRobot.getOwner() == null) {
+                toyRobot.tame(player);
+            }
             return false;
         }
-        Entity entity = getEntityFromStack(stack, worldIn, true);
+        ToyRobotEntity toyRobot = getEntityFromStack(stack, worldIn, true);
         BlockPos blockPos = pos.relative(facing);
-        assert entity != null;
-        entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+        assert toyRobot != null;
+        toyRobot.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         stack.setTag(new CompoundTag());
-        worldIn.addFreshEntity(entity);
+        worldIn.addFreshEntity(toyRobot);
         stack.shrink(1);
         return true;
     }
@@ -99,9 +101,10 @@ public class ToyRobotItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
         if(Screen.hasShiftDown()) {
-            components.add(Component.literal("Wind up your toy with right clicks after placing!").withStyle(ChatFormatting.DARK_RED));
+            components.add(Component.literal("Wind up your toy with right clicks after placing! \nUse dye to swap to 16 different variants \nUse White Wool to muffle the clicking, shears to remove").withStyle(ChatFormatting.DARK_RED));
         } else {
-            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.AQUA));
+            components.add(Component.literal("Shift-Right-Click with an empty hand to pick up").withStyle(ChatFormatting.DARK_AQUA));
+            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.BOLD));
         }
         super.appendHoverText(itemStack, level, components, isAdvanced);
     }

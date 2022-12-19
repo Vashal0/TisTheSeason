@@ -1,0 +1,111 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 2,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:group",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:ponder_goat_horn\"}"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:sing_goat_horn\"}"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:seek_goat_horn\"}"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:feel_goat_horn\"}"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:call_goat_horn\"}"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:admire_goat_horn\"}"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:yearn_goat_horn\"}"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "weight": 10,
+              "name": "minecraft:goat_horn",
+              "functions": [
+                {
+                  "function": "minecraft:set_nbt",
+                  "tag": "{instrument:\"minecraft:dream_goat_horn\"}"
+                }
+              ]
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1,
+              "add": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

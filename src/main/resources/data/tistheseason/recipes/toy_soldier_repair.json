@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tistheseason:toy_parts"
+    },
+    {
+      "item": "tistheseason:broken_toy_soldier_item"
+    }
+  ],
+  "result": {
+    "item": "tistheseason:toy_soldier_item"
+  }
+}

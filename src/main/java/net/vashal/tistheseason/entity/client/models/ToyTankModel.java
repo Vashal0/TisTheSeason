@@ -2,7 +2,6 @@ package net.vashal.tistheseason.entity.client.models;
 
 import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.entity.custom.EvilToyTankEntity;
 import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

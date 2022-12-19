@@ -4,14 +4,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
-import net.vashal.tistheseason.entity.custom.EvilToyTankEntity;
+import net.vashal.tistheseason.entity.custom.ToyTankEntity;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class ToyTankAttackGoal extends RangedAttackGoal {
     private final Mob mob;
-    private final EvilToyTankEntity toyTank;
+    private final ToyTankEntity toyTank;
     @Nullable
     private LivingEntity target;
     private int attackTime = -1;
@@ -22,11 +22,11 @@ public class ToyTankAttackGoal extends RangedAttackGoal {
     private final float attackRadius;
     private final float attackRadiusSqr;
 
-    public ToyTankAttackGoal(EvilToyTankEntity pToyTank, double pSpeedModifier, int pAttackInterval, float pAttackRadius) {
+    public ToyTankAttackGoal(ToyTankEntity pToyTank, double pSpeedModifier, int pAttackInterval, float pAttackRadius) {
         this(pToyTank, pSpeedModifier, pAttackInterval, pAttackInterval, pAttackRadius);
     }
 
-    public ToyTankAttackGoal(EvilToyTankEntity pToyTank, double pSpeedModifier, int pAttackIntervalMin, int pAttackIntervalMax, float pAttackRadius) {
+    public ToyTankAttackGoal(ToyTankEntity pToyTank, double pSpeedModifier, int pAttackIntervalMin, int pAttackIntervalMax, float pAttackRadius) {
         super(pToyTank, pSpeedModifier, pAttackIntervalMin, pAttackIntervalMax, pAttackRadius);
         this.toyTank = pToyTank;
         this.mob = pToyTank;
@@ -85,13 +85,11 @@ public class ToyTankAttackGoal extends RangedAttackGoal {
         } else {
             this.mob.getNavigation().moveTo(this.target, this.speedModifier);
         }
-
         this.mob.getLookControl().setLookAt(this.target, 10.0F, 10.0F);
         if (--this.attackTime == 0) {
             if (!flag) {
                 return;
             }
-
             float f = (float) Math.sqrt(d0) / this.attackRadius;
             float f1 = Mth.clamp(f, 0.1F, 1.0F);
 

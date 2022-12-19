@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,16 +26,9 @@ public class InvisibleRedstone extends Block {
     @Override
     public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         worldIn.removeBlock(pos, false);
-        worldIn.updateNeighborsAt(pos, this);
-        for (Direction d : Direction.values()) {
-            worldIn.updateNeighborsAt(pos.relative(d), this);
-        }
     }
 
-    @Override
-    public void onPlace(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean isMoving) {
-        super.onPlace(state, worldIn, pos, oldState, isMoving);
-    }
+
 
     public boolean isSignalSource(@NotNull BlockState state) {
         return true;
@@ -45,11 +37,6 @@ public class InvisibleRedstone extends Block {
     public int getSignal(@NotNull BlockState blockState, @NotNull BlockGetter blockAccess, @NotNull BlockPos pos, @NotNull Direction side) {
         return 15;
     }
-
-    public int getDirectSignal(@NotNull BlockState blockState, @NotNull BlockGetter blockAccess, @NotNull BlockPos pos, @NotNull Direction side) {
-        return 15;
-    }
-
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.INVISIBLE;
     }
@@ -57,7 +44,6 @@ public class InvisibleRedstone extends Block {
     public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return Shapes.empty();
     }
-
     @Deprecated
     @Override
     public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {

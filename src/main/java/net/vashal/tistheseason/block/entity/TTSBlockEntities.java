@@ -6,7 +6,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.vashal.tistheseason.TisTheSeason;
-import net.vashal.tistheseason.block.TTS_Blocks;
+import net.vashal.tistheseason.block.TTSBlocks;
 
 public class TTSBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
@@ -15,12 +15,12 @@ public class TTSBlockEntities {
     public static final RegistryObject<BlockEntityType<PetRockBlockEntity>> PET_ROCK =
             BLOCK_ENTITIES.register("pet_rock", () ->
                     BlockEntityType.Builder.of(PetRockBlockEntity::new,
-                            TTS_Blocks.PET_ROCK.get()).build(null));
+                            TTSBlocks.PET_ROCK.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<StockingBlockEntity>> STOCKING =
             BLOCK_ENTITIES.register("stocking", () ->
                     BlockEntityType.Builder.of(StockingBlockEntity::new,
-                            TTS_Blocks.STOCKING.get()).build(null));
+                            TTSBlocks.STOCKING.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {

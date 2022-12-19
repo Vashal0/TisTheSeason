@@ -2,11 +2,7 @@ package net.vashal.tistheseason.capabilities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
-import net.vashal.tistheseason.block.entity.StockingBlockEntity;
 
 import javax.annotation.Nullable;
 
@@ -16,8 +12,6 @@ public class NaughtyOrNice implements INaughtyOrNice {
 
     private BlockPos stocking;
 
-    private boolean hasStocking;
-
     private int score = 0;
 
     private int maxScore = 500;
@@ -25,6 +19,8 @@ public class NaughtyOrNice implements INaughtyOrNice {
     private int minScore = -500;
 
     private int festiveMultiplier = 1;
+
+    private int gameTime = 18000;
 
     private boolean status = false;
 
@@ -58,11 +54,21 @@ public class NaughtyOrNice implements INaughtyOrNice {
     }
 
     @Override
-    public int setScore(int score) {
+    public int getTime() {
+        return gameTime;
+    }
+
+    @Override
+    public void setTime(int time) {
+        this.gameTime = time;
+    }
+
+
+    @Override
+    public void setScore(int score) {
         if (score > getMaxScore()) {
             this.score = getMaxScore();
         } else this.score = Math.max(score, getMinScore());
-        return this.getCurrentScore();
     }
 
     @Override
@@ -88,15 +94,13 @@ public class NaughtyOrNice implements INaughtyOrNice {
     }
 
     @Override
-    public int addScore(int scoreToAdd) {
+    public void addScore(int scoreToAdd) {
         this.setScore(Math.min(score + scoreToAdd * this.festiveMultiplier, getMaxScore()));
-        return this.getCurrentScore();
     }
 
     @Override
-    public double removeScore(int scoreToRemove) {
+    public void removeScore(int scoreToRemove) {
         this.setScore(Math.max(score - scoreToRemove * this.festiveMultiplier, getMinScore()));
-        return this.getCurrentScore();
     }
 
     @Override
@@ -105,9 +109,13 @@ public class NaughtyOrNice implements INaughtyOrNice {
         tag.putInt("current", getCurrentScore());
         tag.putInt("max", getMaxScore());
         tag.putInt("min", getMinScore());
-        tag.putInt("X", getStocking().getX());
-        tag.putInt("Y", getStocking().getY());
-        tag.putInt("Z", getStocking().getZ());
+        tag.putInt("time", getTime());
+        if (stocking != null) {
+            tag.putInt("X", getStocking().getX());
+            tag.putInt("Y", getStocking().getY());
+            tag.putInt("Z", getStocking().getZ());
+        }
+        tag.putBoolean("ready",isReadyForGift());
         return tag;
     }
 
@@ -116,6 +124,8 @@ public class NaughtyOrNice implements INaughtyOrNice {
         setMaxScore(tag.getInt("max"));
         setScore(tag.getInt("current"));
         setMinScore(tag.getInt("min"));
+        setTime(tag.getInt("time"));
+        setGiftStatus(tag.getBoolean("ready"));
         setStocking(new BlockPos(tag.getInt("X"), tag.getInt("Y"), tag.getInt("Z")));
     }
 
@@ -125,7 +135,7 @@ public class NaughtyOrNice implements INaughtyOrNice {
     }
 
     @Override
-    public boolean IsReadyForGift() {
+    public boolean isReadyForGift() {
         return status;
     }
 

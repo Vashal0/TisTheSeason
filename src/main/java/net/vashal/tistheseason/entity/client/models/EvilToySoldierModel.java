@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.entity.client.renderers.ToySoldierRenderer;
 import net.vashal.tistheseason.entity.custom.EvilToySoldierEntity;
-import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import static net.vashal.tistheseason.constants.ToySoldierConstants.ANIMATION_RESOURCE;

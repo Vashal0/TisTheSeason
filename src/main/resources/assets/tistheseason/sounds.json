@@ -23,6 +23,41 @@
     "sounds": ["tistheseason:windturn"]
   },
 
+  "drum": {
+    "category": "master",
+    "sounds": ["tistheseason:drum"]
+  },
+
+  "cork": {
+    "category": "master",
+    "sounds": ["tistheseason:cork"]
+  },
+
+  "growl": {
+    "category": "master",
+    "sounds": ["tistheseason:growl"]
+  },
+
+  "snarl": {
+    "category": "master",
+    "sounds": ["tistheseason:snarl"]
+  },
+
+  "krampus": {
+    "category": "master",
+    "sounds": ["tistheseason:krampus"]
+  },
+
+  "krampus_hit": {
+    "category": "master",
+    "sounds": ["tistheseason:krampus_hit"]
+  },
+
+  "krampus_hurt": {
+    "category": "master",
+    "sounds": ["tistheseason:krampus_hurt"]
+  },
+
   "toygears": {
     "category": "master",
     "sounds": ["tistheseason:toygears"]

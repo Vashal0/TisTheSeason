@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#@#",
+    " $ "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "$": {
+      "item": "minecraft:stick"
+    },
+    "@": {
+      "item": "minecraft:orange_dye"
+    }
+  },
+  "result": {
+    "item": "tistheseason:snow_shovel"
+  }
+}

@@ -3,7 +3,6 @@ package net.vashal.tistheseason.capabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.vashal.tistheseason.block.entity.StockingBlockEntity;
 
 public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
 
@@ -17,13 +16,13 @@ public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
 
     void setMinScore(int min);
 
-    int setScore(final int score);
+    void setScore(final int score);
 
-    int addScore(final int scoreToAdd);
+    void addScore(final int scoreToAdd);
 
-    double removeScore(final int scoreToRemove);
+    void removeScore(final int scoreToRemove);
 
-    boolean IsReadyForGift();
+    boolean isReadyForGift();
 
     void setGiftStatus(boolean bool);
 
@@ -40,5 +39,10 @@ public interface INaughtyOrNice extends INBTSerializable<CompoundTag> {
     void removeStocking();
 
     BlockPos getStocking();
+
+    int getTime();
+
+    void setTime(int max);
+
 
 }

@@ -1,6 +1,9 @@
 package net.vashal.tistheseason.items.custom;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -10,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -22,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class SuperSoakerItem extends Item {
 
@@ -37,14 +42,12 @@ public class SuperSoakerItem extends Item {
         if (player.tickCount % 2 == 0) {
             if (player instanceof Player playerentity) {
                 if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                    playerentity.getCooldowns().addCooldown(this, 2);
                     if (!worldIn.isClientSide) {
                         WaterStream waterStream = createWater(worldIn, playerentity);
-                        waterStream = water(waterStream);
                         waterStream.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(),
                                 0.0F, 3.0F, 0F);
-                        stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(player.getUsedItemHand()));
                         worldIn.addFreshEntity(waterStream);
+                        waterStream.setOwner(player);
                         this.useDurability(stack, worldIn, playerentity);
                     }
                 } else {
@@ -53,7 +56,6 @@ public class SuperSoakerItem extends Item {
             }
         }
     }
-
 
     @Override
     public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
@@ -95,10 +97,6 @@ public class SuperSoakerItem extends Item {
         return new WaterStream(worldIn, shooter);
     }
 
-    public WaterStream water(WaterStream waterStream) {
-        return waterStream;
-    }
-
     @Nonnull
     private InteractionResultHolder<ItemStack> checkRefill(@Nonnull ItemStack itemStack, Level world, Player player) {
         BlockHitResult rayTraceResult = Item.getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
@@ -116,5 +114,16 @@ public class SuperSoakerItem extends Item {
             }
         }
         return new InteractionResultHolder<>(InteractionResult.PASS, itemStack);
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
+        if(Screen.hasShiftDown()) {
+            components.add(Component.literal("Puts out fires and damages water weak mobs, refill by right clicking a water source").withStyle(ChatFormatting.AQUA));
+            components.add(Component.literal("Also knocks back mobs!").withStyle(ChatFormatting.GOLD));
+        } else {
+            components.add(Component.literal("Press SHIFT for more info").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD));
+        }
+        super.appendHoverText(itemStack, level, components, isAdvanced);
     }
 }

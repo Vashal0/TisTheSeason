@@ -23,7 +23,7 @@ public class StockingContainerMenu extends AbstractContainerMenu {
     }
 
     public StockingContainerMenu(int id, Inventory playerInventory, Container inventory) {
-        super(TTS_MenuTypes.STOCKING_CONTAINER_MENU.get(), id);
+        super(TTSMenuTypes.STOCKING_CONTAINER_MENU.get(), id);
         this.inventory = inventory;
         checkContainerSize(inventory, 14);
 

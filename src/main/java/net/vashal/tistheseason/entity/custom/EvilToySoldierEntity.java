@@ -18,11 +18,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FollowMobGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.sensing.NearestLivingEntitySensor;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -32,9 +29,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.NetworkHooks;
 import net.vashal.tistheseason.constants.ToyRobotConstants;
 import net.vashal.tistheseason.constants.ToySoldierConstants;
-import net.vashal.tistheseason.entity.TTS_EntityTypes;
+import net.vashal.tistheseason.entity.TTSEntityTypes;
 import net.vashal.tistheseason.entity.variant.ToySoldierVariant;
-import net.vashal.tistheseason.sounds.TTS_Sounds;
+import net.vashal.tistheseason.sounds.TTSSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -53,7 +50,7 @@ import java.util.List;
 
 public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(ToySoldierEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(EvilToySoldierEntity.class, EntityDataSerializers.INT);
 
     public EvilToySoldierEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -62,14 +59,15 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
 
     public static AttributeSupplier setAttributes() {
         return Monster.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, ToyRobotConstants.MAX_HEALTH)
+                .add(Attributes.MAX_HEALTH, 20)
+                .add(Attributes.ARMOR, 4)
                 .add(Attributes.ATTACK_DAMAGE, 0)
-                .add(Attributes.MOVEMENT_SPEED, 0.35).build();
+                .add(Attributes.MOVEMENT_SPEED, 0.3).build();
     }
 
     @Nullable
     public static EvilToySoldierEntity create(Level world) {
-        return TTS_EntityTypes.EVIL_TOY_SOLDIER.get().create(world);
+        return TTSEntityTypes.EVIL_TOY_SOLDIER.get().create(world);
     }
 
 
@@ -111,6 +109,18 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
                 applyEffects(level, pos, MobEffects.DAMAGE_RESISTANCE);
             }
         }
+        playModSounds();
+    }
+
+    public void playModSounds() { //plays the walking sound much faster than normal
+        if (this.level.isClientSide() && deathTime == 0) {
+            if (tickCount % 3 == 0) {
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.TOY_WALK.get(), this.getSoundSource(), 0.025f, 0.6f, true);
+            }
+            if (tickCount % 6 == 0) {
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), TTSSounds.DRUM.get(), this.getSoundSource(), 0.5f, 2f, true);
+            }
+        }
     }
 
     @Override
@@ -126,7 +136,7 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FollowMobGoal(this, 1, 1, 5));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, KrampusEntity.class, true));
         super.registerGoals();
@@ -170,7 +180,7 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
 
     private <E extends IAnimatable> PlayState feetPredicate(AnimationEvent<E> event) {
         if (deathTime == 0) {
-                this.playSound(TTS_Sounds.TOY_WALK.get());
+                this.playSound(TTSSounds.TOY_WALK.get());
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ToySoldierConstants.ANIMATION_FEET_MOVEMENT, ILoopType.EDefaultLoopTypes.LOOP));
                 return PlayState.CONTINUE;
             }
@@ -186,11 +196,11 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
     }
 
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
-        return TTS_Sounds.TOY_HURT.get();
+        return TTSSounds.TOY_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return TTS_Sounds.TOY_DEATH.get();
+        return TTSSounds.TOY_DEATH.get();
     }
 
     protected float getSoundVolume() {
@@ -218,12 +228,12 @@ public class EvilToySoldierEntity extends Monster implements IAnimatable, IAnima
             if (effect == MobEffects.MOVEMENT_SLOWDOWN) {
                 List<Player> list = pLevel.getEntitiesOfClass(Player.class, aabb);
                 for (Player player : list) {
-                    player.addEffect(new MobEffectInstance(effect, 400, 1, true, true));
+                    player.addEffect(new MobEffectInstance(effect, 100, 1, true, true));
                 }
             } else {
                 List<Monster> list = pLevel.getEntitiesOfClass(Monster.class, aabb);
                 for (Monster monster : list) {
-                    monster.addEffect(new MobEffectInstance(effect, 400, 1, true, true));
+                    monster.addEffect(new MobEffectInstance(effect, 60, 1, true, true));
                 }
             }
         }
