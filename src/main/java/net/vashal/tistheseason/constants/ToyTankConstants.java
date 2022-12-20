@@ -21,6 +21,7 @@ public final class ToyTankConstants {
     //Animation constants
     public static final String ANIMATION_IDLE = "animation.toy_tank.idle";
     public static final String ANIMATION_ATTACK = "animation.toy_tank.attack";
+    public static final String ANIMATION_DEATH = "animation.model.death";
 
     //Sound constants
     public static final float SOUND_VOLUME = 0.8f;

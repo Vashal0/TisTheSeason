@@ -10,6 +10,7 @@ import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.client.models.EvilRobotModel;
 import net.vashal.tistheseason.entity.custom.EvilToyRobotEntity;
+import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -24,6 +25,10 @@ public class EvilRobotRenderer extends GeoEntityRenderer<EvilToyRobotEntity> {
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull EvilToyRobotEntity instance) {
         return new ResourceLocation(TisTheSeason.MOD_ID, "textures/entity/toyrobot/toy_robot_green.png");
+    }
+
+    public float getDeathMaxRotation(EvilToyRobotEntity instance) {
+        return 0f;
     }
 
     @Override

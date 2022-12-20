@@ -12,6 +12,7 @@ import net.vashal.tistheseason.TisTheSeason;
 import net.vashal.tistheseason.constants.ToyTankConstants;
 import net.vashal.tistheseason.entity.client.models.EvilToyTankModel;
 import net.vashal.tistheseason.entity.custom.EvilToyTankEntity;
+import net.vashal.tistheseason.entity.custom.ToySoldierEntity;
 import net.vashal.tistheseason.entity.variant.ToyTankVariant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +38,10 @@ public class EvilToyTankRenderer extends GeoEntityRenderer<EvilToyTankEntity> {
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull EvilToyTankEntity instance) {
         return LOCATION_BY_VARIANT.get(instance.getVariant());
+    }
+
+    public float getDeathMaxRotation(EvilToyTankEntity instance) {
+        return 0f;
     }
 
     @Override

@@ -129,7 +129,7 @@ public class NaughtyOrNiceEvents {
                         item.remove(Entity.RemovalReason.KILLED);
                     }
                     player.getCapability(TTSCapabilities.NAUGHTY_OR_NICE).ifPresent(niceScore -> {
-                        if (niceScore.getTime() > 200) { //TODO CHANGE BACK TO 18000
+                        if (niceScore.getTime() > 18000) {
                             if (!niceScore.isReadyForGift()) {
                                 if (niceScore.getCurrentScore() > 250) {
                                     player.displayClientMessage(Component.translatable("Santa: Ho Ho Ho! You've been very good this year!"), true);
