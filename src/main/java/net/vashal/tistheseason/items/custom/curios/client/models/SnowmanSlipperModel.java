@@ -32,7 +32,7 @@ public class SnowmanSlipperModel extends HumanoidModel<LivingEntity> {
 		PartDefinition part = mesh.getRoot();
 
 		PartDefinition LeftLeg = part.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(13, 0).addBox(-2.4175F, 9.5636F, -5.1063F, 5.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
-				.texOffs(6, 8).addBox(2.8325F, 9.5636F, -2.1813F, 0.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(6, 8).addBox(2.5825F, 9.5636F, -2.1813F, 0.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(11, 7).addBox(-2.4175F, 9.5636F, -2.1813F, 0.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 1).addBox(-2.4175F, 10.5636F, -2.1813F, 5.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(13, 10).addBox(-2.4175F, 9.5886F, 2.8188F, 5.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
