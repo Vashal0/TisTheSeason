@@ -35,7 +35,7 @@ public class ReindeerSlipperModel extends HumanoidModel<LivingEntity> {
 				.texOffs(15, 11).addBox(-0.4175F, 11.0136F, -5.6063F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(22, 25).addBox(2.5825F, 9.5636F, -2.1813F, 0.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(22, 25).addBox(-2.4175F, 9.5636F, -2.1813F, 0.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
-				.texOffs(14, 20).addBox(-2.4175F, 10.5636F, -2.1813F, 5.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(12, 20).addBox(-2.4175F, 10.5636F, -2.1813F, 5.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(14, 30).addBox(-2.4175F, 9.5886F, 2.8188F, 5.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0827F, 22.0919F, -1.025F));
 
 		PartDefinition RightLeg_r1 = LeftLeg.addOrReplaceChild("RightLeg_r1", CubeListBuilder.create().texOffs(2, 20).addBox(0.3583F, -1.4624F, -2.4562F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
@@ -54,7 +54,7 @@ public class ReindeerSlipperModel extends HumanoidModel<LivingEntity> {
 				.texOffs(17, 11).addBox(-2.563F, 9.5733F, -5.2938F, 5.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
 				.texOffs(22, 25).addBox(-2.563F, 9.5733F, -2.3688F, 0.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(14, 30).addBox(-2.563F, 9.5983F, 2.6313F, 5.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(14, 20).addBox(-2.563F, 10.5733F, -2.3688F, 5.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(12, 20).addBox(-2.563F, 10.5733F, -2.3688F, 5.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(22, 25).addBox(2.437F, 9.5983F, -2.3688F, 0.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.2282F, 22.0822F, -0.8375F));
 
 		PartDefinition RightLeg_r3 = rightleg.addOrReplaceChild("RightLeg_r3", CubeListBuilder.create().texOffs(2, 20).addBox(0.4643F, -1.4581F, -2.2813F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))

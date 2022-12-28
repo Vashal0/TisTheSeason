@@ -2,9 +2,9 @@
 modLoader="javafml"
 loaderVersion="[43,)"
 license="MIT License"
-[[mods]] #mandatory
+[[mods]]
 modId="tistheseason"
-version="1.0.0"
+version="1.0.3"
 displayName="Tis the Season"
 logoFile="icon.png"
 credits="Mod made for MMD WinterJam 2022"
